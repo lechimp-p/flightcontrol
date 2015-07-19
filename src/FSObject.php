@@ -26,7 +26,7 @@ class FSObject {
      * @param   \League\Flysystem\Filesytem             $filesystem
      * @param   string  $path
      */
-    function __construct(Flightcontrol $flightcontrol, \League\Flysystem\Filesystem $filesystem, $path) {
+    protected function __construct(Flightcontrol $flightcontrol, \League\Flysystem\Filesystem $filesystem, $path) {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
         $this->filesystem = $filesystem;
