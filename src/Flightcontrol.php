@@ -44,7 +44,7 @@ class Flightcontrol {
         }
 
         try {
-            $info = $this->filesystem->getMetadata($path, array("mimetype"));
+            $info = $this->filesystem->getMetadata($path);
             if ($info) {
                 if ($info["type"] == "file") {
                     return new File($this, $this->filesystem, $path);
