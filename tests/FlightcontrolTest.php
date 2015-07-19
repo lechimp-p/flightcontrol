@@ -24,4 +24,28 @@ class FlightcontrolTest extends _TestCaseBase {
         $this->assertNull($this->flightcontrol->get("/rootz/"));
         $this->assertNull($this->flightcontrol->get("/root/dir_1/foo_file"));
     } 
+
+    public function test_directory() {
+        $this->assertNotNull($this->flightcontrol->directory("/root"));
+        $this->assertNotNull($this->flightcontrol->directory("/root/dir_1"));
+        $this->assertNull($this->flightcontrol->directory("/root/dir_1/file_1_1"));
+        $this->assertNull($this->flightcontrol->directory("/root/dir_1/file_1_2"));
+        $this->assertNotNull($this->flightcontrol->directory("/root/dir_2"));
+        $this->assertNotNull($this->flightcontrol->directory("/root/dir_2/dir_2_1"));
+        $this->assertNull($this->flightcontrol->directory("/root/dir_2/dir_2_1/file_2_1_1"));
+        $this->assertNull($this->flightcontrol->directory("/root/dir_2/dir_2_1/file_2_1_2"));
+        $this->assertNull($this->flightcontrol->directory("/root/dir_2/file_2_1"));
+    }
+
+    public function test_file() {
+        $this->assertNull($this->flightcontrol->file("/root"));
+        $this->assertNull($this->flightcontrol->file("/root/dir_1"));
+        $this->assertNotNull($this->flightcontrol->file("/root/dir_1/file_1_1"));
+        $this->assertNotNull($this->flightcontrol->file("/root/dir_1/file_1_2"));
+        $this->assertNull($this->flightcontrol->file("/root/dir_2"));
+        $this->assertNull($this->flightcontrol->file("/root/dir_2/dir_2_1"));
+        $this->assertNotNull($this->flightcontrol->file("/root/dir_2/dir_2_1/file_2_1_1"));
+        $this->assertNotNull($this->flightcontrol->file("/root/dir_2/dir_2_1/file_2_1_2"));
+        $this->assertNotNull($this->flightcontrol->file("/root/dir_2/file_2_1"));
+    }
 }
