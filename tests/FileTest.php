@@ -9,9 +9,9 @@
 
 class FileTest extends _TestCaseBase {
     public function test_file() {
-        $obj = $this->flightcontrol->get("/root/dir_1/file_1_1")->toFile();
-        $this->assertEquals("/root/dir_1/file_1_1", $obj->path());
-        $this->assertEquals("file_1_1", $obj->name());
+        $file = $this->flightcontrol->get("/root/dir_1/file_1_1")->toFile();
+        $this->assertEquals("/root/dir_1/file_1_1", $file->path());
+        $this->assertEquals("file_1_1", $file->name());
     }
 
     public function test_mimetype() {
@@ -26,7 +26,7 @@ class FileTest extends _TestCaseBase {
     }
 
     public function test_toDirectory() {
-        $file = $this->flightcontrol->get("/root/dir_1/file_1_1")->toFile();
+        $file = $this->flightcontrol->get("/root/dir_1/file_1_1");
         $this->assertNull($file->toDirectory());
     }
 
