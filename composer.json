@@ -21,5 +21,8 @@
     },
     "require": {
         "league/flysystem": "^1.0"
+    },
+    "require-dev": {
+        "league/flysystem-ziparchive": "^1.0"
     }
 }

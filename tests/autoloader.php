@@ -7,9 +7,14 @@
  * a copy of the along with the code.
  */
 
-spl_autoload_register(function($className) {
-    $parts = explode("\\", $className);
-    // remove Lechimp\\??
+spl_autoload_register(function($classname) {
+    if ($classname == "_TestCaseBase") {
+        require_once("tests/_TestCaseBase.php");
+        return;
+    }
+
+    $parts = explode("\\", $classname);
+    // remove Lechimp\\Flightcontrol
     array_shift($parts);
     array_shift($parts);
 
@@ -18,5 +23,7 @@ spl_autoload_register(function($className) {
         require_once($path);
     }
 });
+
+require_once("vendor/autoload.php");
 
 ?>
