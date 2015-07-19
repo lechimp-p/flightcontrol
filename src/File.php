@@ -21,6 +21,13 @@ class File extends FSObject {
     }
 
     /**
+     * @return
+     */
+    public function content() {
+        return $this->filesystem->read($this->path);
+    }
+
+    /**
      * @inheritdoc
      */
     public function toFile() {
