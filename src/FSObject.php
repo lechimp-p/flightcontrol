@@ -26,11 +26,11 @@ class FSObject {
      * @param   \League\Flysystem\Filesytem             $filesystem
      * @param   string  $path
      */
-    protected function __construct(Flightcontrol $flightcontrol, \League\Flysystem\Filesystem $filesystem, $path) {
+    public function __construct(Flightcontrol $flightcontrol, \League\Flysystem\Filesystem $filesystem, $path) {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
         $this->filesystem = $filesystem;
-        $this->path = $path;
+        $this->path = self::normalize($path);
     }
 
     /**
@@ -60,5 +60,12 @@ class FSObject {
      */
     public function toDirectory() {
         return null;
+    }
+
+    static private function normalize($path) {
+        if (substr($path, -1) == "/") {
+            $path = substr($path, 0, strlen($path) - 1);
+        }
+        return $path;
     }
 }
