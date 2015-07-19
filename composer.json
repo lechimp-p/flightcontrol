@@ -1,11 +1,11 @@
 {
-    "name": "lechimp-p/php-??",
-    "version": "0.7.0",
-    "description": "DESCRIPTION"
-    "keywords": ["form", "formlet"],
+    "name": "lechimp-p/flightcontrol",
+    "version": "0.1.0",
+    "description": "An iterator interface over the leagues flysystem.",
+    "keywords": ["filesystem", "flysystem"],
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/lechimp-p/php-??",
+    "homepage": "https://github.com/lechimp-p/flightcontrol",
     "authors": [
         {
             "name": "Richard Klees",
@@ -13,10 +13,13 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/lechimp-p/php-??/internal/issues",
-        "source": "https://github.com/lechimp-p/php-??"
+        "issues": "https://github.com/lechimp-p/flightcontrol/internal/issues",
+        "source": "https://github.com/lechimp-p/flightcontrol"
     },
     "autoload" : {
-        "psr-4" : { "Lechimp\\??\\" : "src" }
+        "psr-4" : { "Lechimp\\Flightcontrol\\" : "src" }
+    },
+    "require": {
+        "league/flysystem": "^1.0"
     }
 }
