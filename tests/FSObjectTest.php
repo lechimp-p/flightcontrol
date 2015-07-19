@@ -14,6 +14,18 @@ class FSObjectTest extends _TestCaseBase {
         $this->assertEquals("root", $obj->name());
     }
 
+    public function test_directory2() {
+        $obj = $this->flightcontrol->get("/root/dir_2/dir_2_1");
+        $this->assertEquals("/root/dir_2/dir_2_1", $obj->path());
+        $this->assertEquals("dir_2_1", $obj->name());
+    }
+
+    public function test_directoryNaming() {
+        $obj = $this->flightcontrol->get("/root/dir_2/");
+        $this->assertEquals("/root/dir_2", $obj->path());
+        $this->assertEquals("dir_2", $obj->name());
+    }
+
     public function test_file() {
         $obj = $this->flightcontrol->get("/root/dir_1/file_1_1");
         $this->assertEquals("/root/dir_1/file_1_1", $obj->path());
