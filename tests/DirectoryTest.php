@@ -14,6 +14,33 @@ class DirectoryTest extends _TestCaseBase {
         $this->assertEquals("root", $dir->name());
     }
 
+    public function test_directory2() {
+        $obj = $this->flightcontrol->get("/root/dir_2/dir_2_1")->toDirectory();
+        $this->assertEquals("/root/dir_2/dir_2_1", $obj->path());
+        $this->assertEquals("dir_2_1", $obj->name());
+    }
+
+    public function test_directoryNaming() {
+        $obj = $this->flightcontrol->get("/root/dir_2/")->toDirectory();
+        $this->assertEquals("/root/dir_2", $obj->path());
+        $this->assertEquals("dir_2", $obj->name());
+    }
+
+    public function test_contents() {
+        $dir = $this->flightcontrol->get("/root")->toDirectory();
+        $contents = $dir->contents();
+        $this->assertCount(2, $contents);
+        foreach ($contents as $content) {
+            $this->assertInstanceOf("Directory", $content);
+            if ($content->name() != "dir_1") {
+                $this->assertEquals("dir_2", $content->name());
+            }
+            else {
+                $this->assertEquals("dir_1", $content->name());
+            }
+        }
+    }
+
     public function test_toFile() {
         $dir = $this->flightcontrol->get("/root");
         $this->assertNull($dir->toFile());
