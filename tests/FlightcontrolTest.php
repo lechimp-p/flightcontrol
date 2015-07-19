@@ -9,7 +9,7 @@
 
 class FlightcontrolTest extends _TestCaseBase {
     public function test_getExisting() {
-        $this->assertNotNull($this->flightcontrol->get("/root/"));
+        $this->assertNotNull($this->flightcontrol->get("/root"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1/file_1_1"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1/file_1_2"));

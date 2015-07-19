@@ -40,16 +40,16 @@ class Flightcontrol {
         // For ZipArchiveAdapter this is required to get the directories correctly,
         // as Filesystem::get will raise.
         if ($this->filesystem->listContents($path)) {
-            return true; //new Directory($this, $this->filesystem, $path);
+            return new Directory($this, $this->filesystem, $path);
         }
 
         try {
             $info = $this->filesystem->getMetadata($path, array("mimetype"));
             if ($info) {
                 if ($info["type"] == "file") {
-                    return true; //new File($this, $this->filesystem, $path);
+                    return new File($this, $this->filesystem, $path);
                 }
-                return true; //new Directory($this, $this->filesystem, $path);
+                return new Directory($this, $this->filesystem, $path);
             }
         }
         catch (\League\Flysystem\FileNotFoundException $e) {
