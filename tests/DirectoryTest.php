@@ -41,6 +41,22 @@ class DirectoryTest extends _TestCaseBase {
         }
     }
 
+    public function test_contents2() {
+        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $contents = $dir->contents();
+        $this->assertCount(2, $contents);
+        foreach ($contents as $content) {
+            if ($content->name() != "dir_2_1") {
+                $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\File", $content);
+                $this->assertEquals("file_2_1", $content->name());
+            }
+            else {
+                $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\Directory", $content);
+                $this->assertEquals("dir_2_1", $content->name());
+            }
+        }
+    }
+
     public function test_toFile() {
         $dir = $this->flightcontrol->get("/root");
         $this->assertNull($dir->toFile());
