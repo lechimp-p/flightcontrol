@@ -62,7 +62,7 @@ class FSObject {
         return null;
     }
 
-    static private function normalize($path) {
+    private static function normalize($path) {
         if (substr($path, -1) == "/") {
             $path = substr($path, 0, strlen($path) - 1);
         }
