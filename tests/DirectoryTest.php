@@ -31,7 +31,7 @@ class DirectoryTest extends _TestCaseBase {
         $contents = $dir->contents();
         $this->assertCount(2, $contents);
         foreach ($contents as $content) {
-            $this->assertInstanceOf("Directory", $content);
+            $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\Directory", $content);
             if ($content->name() != "dir_1") {
                 $this->assertEquals("dir_2", $content->name());
             }
