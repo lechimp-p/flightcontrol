@@ -22,13 +22,13 @@ class WithContentsTest extends _TestCaseBase {
     }
 
     public function test_correctContents2() {
-        $root = $this->flightcontrol->directory("/root/dir_2");
+        $dir_2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
-        $root->withContents()
-             ->perform(function (\Lechimp\Flightcontrol\FSObject $obj) use(&$accu) {
+        $dir_2->withContents()
+              ->perform(function (\Lechimp\Flightcontrol\FSObject $obj) use(&$accu) {
                     $accu[] = $obj->name();
                 })
-             ->run();
+              ->run();
         $this->assertCount(2, $accu);
         $this->assertContains("dir_2_1", $accu);
         $this->assertContains("file_2_1", $accu);
