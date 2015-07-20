@@ -7,7 +7,7 @@ namespace Lechimp\Flightcontrol;
  */
 class File extends FSObject {
     /**
-     * @return int
+     * @return string 
      */
     public function timestamp() {
         return $this->filesystem->getTimestamp($this->path);
