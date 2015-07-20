@@ -26,4 +26,13 @@ class Directory extends FSObject {
     public function toDirectory() {
         return $this;
     }
+
+    /**
+     * Get an iterator over the content of this directory.
+     *
+     * @return DirectoryIterator
+     */
+    public function withContents() {
+        return new RawDirectoryIterator($this);
+    }
 }
