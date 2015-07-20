@@ -12,6 +12,7 @@ abstract class DirectoryIterator {
      * @return DirectoryIterator 
      */
     public function withContents() {
+        return new WithContentsDirectoryIterator($this);
     }
 
     /**

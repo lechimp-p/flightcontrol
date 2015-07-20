@@ -25,11 +25,27 @@ class WithContentsTest extends _TestCaseBase {
         $dir_2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
         $dir_2->withContents()
-              ->perform(function (\Lechimp\Flightcontrol\FSObject $obj) use(&$accu) {
+              ->perform(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
                     $accu[] = $obj->name();
                 })
               ->run();
         $this->assertCount(2, $accu);
+        $this->assertContains("dir_2_1", $accu);
+        $this->assertContains("file_2_1", $accu);
+    }
+
+    public function test_correctContents3() {
+        $root = $this->flightcontrol->directory("/root");
+        $accu = array();
+        $root->withContents()
+             ->withContents()
+             ->perform(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                    $accu[] = $obj->name();
+                })
+             ->run();
+        $this->assertCount(4, $accu);
+        $this->assertContains("file_1_1", $accu);
+        $this->assertContains("file_1_2", $accu);
         $this->assertContains("dir_2_1", $accu);
         $this->assertContains("file_2_1", $accu);
     }
