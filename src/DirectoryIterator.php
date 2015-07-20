@@ -16,11 +16,26 @@ abstract class DirectoryIterator {
     }
 
     /**
+     * Get an iterator for every content in the current iterator
+     * for which the provided predicate returns true.
+     *
+     * @param  \Closure             $predicate  (FSObject -> Bool)
+     * @return DirectoryIterator
+     */
+    public function filter(\Closure $predicate) {
+        return new FilterDirectoryIterator($predicate, $this);
+    }
+    
+
+    /**
      * Get an iterator for every directory in the current iterator.
      *
      * @return DirectoryIterator
      */
-    public function directories() {
+    public function directoriesOnly() {
+        return $this->filter(function(FSObject $obj) {
+            return $obj->toDirectory() !== null;
+        });
     }
 
     /**
@@ -28,7 +43,10 @@ abstract class DirectoryIterator {
      *
      * @return DirectoryIterator
      */
-    public function files() {
+    public function filesOnly() {
+        return $this->filter(function(FSObject $obj) {
+            return $obj->toFile() !== null;
+        });
     }
 
     /**
@@ -65,7 +83,7 @@ abstract class DirectoryIterator {
     }
 
     /**
-     * With every content in the iterator do some thing.
+     * With every content in the iterator do some action.
      *
      * @param   \Closure    $action
      * @return  null
