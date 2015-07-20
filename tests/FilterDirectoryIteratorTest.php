@@ -46,4 +46,16 @@ class FilterDirectoryIteratorTest extends _TestCaseBase {
         $this->assertEquals(array("file_2_1"), $accu);
     }
 
+    public function test_filterNamed() {
+        $dir2 = $this->flightcontrol->directory("/root/dir_2");
+        $accu = array();
+        $dir2->withContents()
+             ->named("dir.*")
+             ->perform(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                    $accu[] = $obj->name();
+                })
+             ->run();
+        $this->assertEquals(array("dir_2_1"), $accu);
+
+    }
 }
