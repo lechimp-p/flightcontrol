@@ -14,6 +14,7 @@ class RecursionTest extends _TestCaseBase {
             ->foldFiles()
             ->with(array(), function($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name(); 
+                return $accu;
             });
 
         $this->assertCount(5, $result);
@@ -33,6 +34,7 @@ class RecursionTest extends _TestCaseBase {
             })
             ->with(array(), function($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name(); 
+                return $accu;
             });
 
         $this->assertCount(2, $result);
@@ -47,6 +49,7 @@ class RecursionTest extends _TestCaseBase {
             ->named(".*_1")
             ->with(array(), function($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name(); 
+                return $accu;
             });
 
         $this->assertCount(3, $result);
