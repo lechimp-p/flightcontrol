@@ -14,13 +14,26 @@ namespace Lechimp\Flightcontrol;
 * I don't know if the name really fits.
 */
 class DirectoryRecursor {
+    use NamedFilterTrait;
+
     /**
-     * @var DirectoryIterator
+     * @var DirectoryIterator|DirectoryRecursor
      */
-    protected $iterator;
+    protected $previous;
 
     public function __construct(DirectoryIterator $iterator) {
-        $this->iterator = $iterator;        
+        $this->previous = $iterator;
+    }
+
+    /**
+     * Get a recursor that folds all files in this recursor that match the
+     * provided predicate.
+     *
+     * @param  \Closure             $predicate  (FSObject -> Bool)
+     * @return DirectoryRecursor
+     */
+    public function filter(\Closure $predicate) {
+        return new FilterDirectoryRecursor($predicate, $this);
     }
 
     /**
@@ -49,8 +62,7 @@ class DirectoryRecursor {
                     ->onContents($recurse[0]);  // RECURSE!
             }
         };
-        $this->iterator->onContents($recurse[0]);
+        $this->previous->onContents($recurse[0]);
         return $value[0];
     }
-
 }

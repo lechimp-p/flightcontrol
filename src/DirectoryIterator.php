@@ -6,6 +6,8 @@ namespace Lechimp\Flightcontrol;
 * An iterator on a directory.
 */
 abstract class DirectoryIterator {
+    use NamedFilterTrait;
+
     /**
      * Iterate over the contents of the current iterator.
      *
@@ -46,24 +48,6 @@ abstract class DirectoryIterator {
     public function filesOnly() {
         return $this->filter(function(FSObject $obj) {
             return $obj->toFile() !== null;
-        });
-    }
-
-    /**
-     * Get an iterator for every item in the current iterator where the name
-     * matches the provided regular expression.
-     *
-     * The regexp will be embedded as such "%^$regexp$%" before it is passed
-     * to preg_match.
-     *
-     * @param   string              $regexp
-     * @return  DirectoryIterator
-     */
-    public function named($regexp) {
-        assert(is_string($regexp));
-        $regexp = "%^$regexp$%";
-        return $this->filter(function(FSObject $obj) use ($regexp) {
-            return preg_match($regexp, $obj->name());
         });
     }
 
