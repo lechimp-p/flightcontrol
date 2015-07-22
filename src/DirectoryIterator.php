@@ -87,6 +87,16 @@ abstract class DirectoryIterator {
     }
 
     /**
+     * Get an object that can perform a fold operation on all files in this
+     * iterator. 
+     *
+     * @return  DirectoryRecursor 
+     */
+    public function foldFiles() {
+        return new DirectoryRecursor($this);
+    }
+
+    /**
      * With every content in the iterator do some action.
      *
      * @param   \Closure    $action

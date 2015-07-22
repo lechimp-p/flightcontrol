@@ -35,4 +35,14 @@ class Directory extends FSObject {
     public function withContents() {
         return new RawDirectoryIterator($this);
     }
+
+    /**
+     * Get an object that can perform a fold operation on all files in this
+     * iterator. 
+     *
+     * @return  DirectoryRecursor 
+     */
+    public function foldFiles() {
+        return $this->withContents()->foldFiles();
+    }
 }
