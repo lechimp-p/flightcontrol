@@ -60,6 +60,7 @@ abstract class DirectoryIterator {
      * @return  DirectoryIterator
      */
     public function named($regexp) {
+        assert(is_string($regexp));
         $regexp = "%^$regexp$%";
         return $this->filter(function(FSObject $obj) use ($regexp) {
             return preg_match($regexp, $obj->name());
