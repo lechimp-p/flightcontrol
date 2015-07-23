@@ -78,7 +78,7 @@ abstract class DirectoryIterator {
      * @return  DirectoryRecursor 
      */
     public function foldFiles() {
-        return new DirectoryRecursor($this);
+        return new RawDirectoryRecursor($this);
     }
 
     /**

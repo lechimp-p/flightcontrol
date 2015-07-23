@@ -13,17 +13,8 @@ namespace Lechimp\Flightcontrol;
 * This object can perform a recursion on the files in a directory.
 * I don't know if the name really fits.
 */
-class DirectoryRecursor {
+abstract class DirectoryRecursor {
     use NamedFilterTrait;
-
-    /**
-     * @var DirectoryIterator|DirectoryRecursor
-     */
-    protected $previous;
-
-    public function __construct(DirectoryIterator $iterator) {
-        $this->previous = $iterator;
-    }
 
     /**
      * Get a recursor that folds all files in this recursor that match the
@@ -47,22 +38,5 @@ class DirectoryRecursor {
      * @param \Closure      $collapse   ($start_t, File) -> $start_t
      * @return $start_t
      */
-    public function with($init, \Closure $collapse) {
-        $value = array();
-        $value[0] = $init;
-
-        $recurse = array();
-        $recurse[0] = function(FSObject $obj) use ($collapse, &$value, &$recurse) {
-            if ($file = $obj->toFile()) {
-                $value[0] = $collapse($value[0], $file);
-            } 
-            else {
-                $obj->toDirectory()     // This will succeed, but well, checks...
-                    ->withContents()    // This returns an iterator on the directory.
-                    ->onContents($recurse[0]);  // RECURSE!
-            }
-        };
-        $this->previous->onContents($recurse[0]);
-        return $value[0];
-    }
+    abstract public function with($init, \Closure $collapse);
 }

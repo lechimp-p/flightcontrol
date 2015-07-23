@@ -14,6 +14,11 @@ namespace Lechimp\Flightcontrol;
  */
 class FilterDirectoryRecursor {
     /**
+     * @var DirectoryRecursor
+     */
+    protected $previous;
+
+    /**
      * @var \Closure
      */
     protected $predicate;
