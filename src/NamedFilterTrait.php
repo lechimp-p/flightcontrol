@@ -26,4 +26,12 @@ trait NamedFilterTrait {
             return preg_match($regexp, $obj->name());
         });
     }
+
+    /**
+     * This should actually return a filtered version of the object.
+     * 
+     * @param   \Closure    $predicate
+     * @return  mixed
+     */
+    abstract public function filter(\Closure $predicate);
 }
