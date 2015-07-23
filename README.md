@@ -4,7 +4,8 @@
 
 # Flightcontrol 
 
-**An iterator interface over the Leagues [flysystem](https://github.com/thephpleague/flysystem).**
+**An interface for iteration and recursion over the Leagues 
+  [flysystem](https://github.com/thephpleague/flysystem).**
 
 
 *This README.md is also a literate PHP-file.*
