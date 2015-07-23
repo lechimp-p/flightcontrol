@@ -1,6 +1,6 @@
 {
     "name": "lechimp-p/flightcontrol",
-    "version": "0.1.0",
+    "version": "0.7.0",
     "description": "An iterator interface over the leagues flysystem.",
     "keywords": ["filesystem", "flysystem"],
     "type": "library",
