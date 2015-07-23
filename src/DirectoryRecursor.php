@@ -30,13 +30,29 @@ abstract class DirectoryRecursor {
     /**
      * Finally collaps the files fitting this recursor. 
      *
-     * Give an initial value of a type $start_t and a function from $start_t and
-     * File to another $start_t. Will then recursively feed any file below the
-     * directory and the successive $start_t values to the function.
+     * Give an initial value of a any type and a function from that type and
+     * File to another value of the type. Will then recursively feed any file 
+     * below the directory and the successive values to the function.
      *
-     * @param $start_t      $init
-     * @param \Closure      $collapse   ($start_t, File) -> $start_t
-     * @return $start_t
+     * Returns the value that is retreived from the function after the last
+     * File was given to it.
+     *
+     * @example
+     *
+     * \\ Collect all file names in a directory:
+     * $init = array();     \\ Start with an empty array
+     * $function = function($array, $file) { 
+     *      $array[] = $file->name();
+     *      return $array();
+     * };
+     *      
+     * $result = $directory->foldFiles()->with($init, $function);
+     * // $result will be the names of all files in $directory and the directories
+     * // below it.
+     *
+     * @param mixed         $init
+     * @param \Closure      $collapse   (mixed, File) -> mixed 
+     * @return mixed 
      */
     abstract public function with($init, \Closure $collapse);
 }
