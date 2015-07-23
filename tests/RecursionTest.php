@@ -63,4 +63,10 @@ class RecursionTest extends _TestCaseBase {
         $recursor = $root->withContents()->foldFiles();
         $this->assertInstanceOf("\Lechimp\Flightcontrol\DirectoryRecursor", $recursor);
     }
+
+    public function test_filteredIsRecursor() {
+        $root = $this->flightcontrol->directory("/root");
+        $recursor = $root->foldFiles()->filter(function($a) {});
+        $this->assertInstanceOf("\Lechimp\Flightcontrol\DirectoryRecursor", $recursor);
+    }
 }

@@ -12,7 +12,7 @@ namespace Lechimp\Flightcontrol;
 /**
  * Only folds files that match a certain predicate.
  */
-class FilterDirectoryRecursor {
+class FilterDirectoryRecursor extends DirectoryRecursor {
     /**
      * @var DirectoryRecursor
      */
