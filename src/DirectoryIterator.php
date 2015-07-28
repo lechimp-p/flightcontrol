@@ -72,6 +72,14 @@ abstract class DirectoryIterator {
     }
 
     /**
+     * Get an recursor over the content of this directory iterator.
+     *
+     * @return DirectoryRecursor
+     */
+    public function recurseOn() {
+        return new RawDirectoryRecursor($this);
+    }
+    /**
      * Get an object that can perform a fold operation on all files in this
      * iterator. 
      *
@@ -88,4 +96,11 @@ abstract class DirectoryIterator {
      * @return  null
      */
     abstract public function onContents(\Closure $action);
+
+    /**
+     * Get the subjacent directory.
+     *
+     * @return Directory
+     */
+    abstract public function subjacentDirectory();
 }

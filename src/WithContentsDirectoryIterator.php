@@ -24,4 +24,11 @@ class WithContentsDirectoryIterator extends DirectoryIterator {
             }
         }); 
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function subjacentDirectory() {
+        return $this->prev->underlyingDirectory();
+    }
 }

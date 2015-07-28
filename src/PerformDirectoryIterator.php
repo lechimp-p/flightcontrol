@@ -28,4 +28,11 @@ class PerformDirectoryIterator extends DirectoryIterator {
             $action($obj);
         }); 
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function subjacentDirectory() {
+        return $this->prev->underlyingDirectory();
+    }
 }

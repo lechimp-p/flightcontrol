@@ -37,4 +37,11 @@ class RawDirectoryIterator extends DirectoryIterator {
             $action($content);
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function subjacentDirectory() {
+        return $this->dir;
+    }
 }
