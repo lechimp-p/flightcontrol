@@ -69,4 +69,42 @@ class RecursionTest extends _TestCaseBase {
         $recursor = $root->foldFiles()->filter(function($a) {});
         $this->assertInstanceOf("\Lechimp\Flightcontrol\DirectoryRecursor", $recursor);
     }
+
+    public function test_cata1() {
+        $root = $this->flightcontrol->directory("/root");
+        $result = $root
+            ->cata(function(\Lechimp\Flightcontrol\FSObject $obj) {
+                $file = $obj->toFile();
+                if ($file !== null) {
+                    return array($file->name() => $file->name());
+                }
+                $merged = call_user_func_array("array_merge", $obj->fcontents());
+                return array( $obj->name() => $merged);
+            });
+        
+        $expected = array
+            ( "root" => array
+                ( "dir_1"   => array
+                    ( "file_1_1" => "file_1_1"
+                    , "file_1_2" => "file_1_2"
+                    )
+                , "dir_2" => array
+                    ( "dir_2_1" => array
+                        ( "file_2_1_1" => "file_2_1_1"
+                        , "file_2_1_2" => "file_2_1_2"
+                        )
+                    , "file_2_1" => "file_2_1"
+                    )
+                )
+            );
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /*public function test_generalRecursion() {
+        $root = $this->flightcontrol->directory("/root");
+        $result = $root
+            ->recurse()
+            ->with(function (
+    }*/
 }
