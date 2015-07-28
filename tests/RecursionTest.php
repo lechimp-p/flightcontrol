@@ -101,10 +101,61 @@ class RecursionTest extends _TestCaseBase {
         $this->assertEquals($expected, $result);
     }
 
-    /*public function test_generalRecursion() {
+    public function test_generalRecursion() {
         $root = $this->flightcontrol->directory("/root");
         $result = $root
-            ->recurse()
-            ->with(function (
-    }*/
+            ->recurseOn()
+            ->with(function(\Lechimp\Flightcontrol\FSObject $obj) {
+                $file = $obj->toFile();
+                if ($file !== null) {
+                    return array($file->name() => $file->name());
+                }
+                $merged = call_user_func_array("array_merge", $obj->fcontents());
+                return array( $obj->name() => $merged);
+            });
+        
+        $expected = array
+            ( "root" => array
+                ( "dir_1"   => array
+                    ( "file_1_1" => "file_1_1"
+                    , "file_1_2" => "file_1_2"
+                    )
+                , "dir_2" => array
+                    ( "dir_2_1" => array
+                        ( "file_2_1_1" => "file_2_1_1"
+                        , "file_2_1_2" => "file_2_1_2"
+                        )
+                    , "file_2_1" => "file_2_1"
+                    )
+                )
+            );
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test_filteredRecursion() {
+        $root = $this->flightcontrol->directory("/root");
+        $result = $root
+            ->recurseOn()
+            ->named("dir.*") 
+            ->with(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                $file = $obj->toFile();
+                if ($file !== null) {
+                    $this->assertTrue(false);
+                }
+                $merged = call_user_func_array("array_merge", $obj->fcontents());
+                return array( $obj->name() => $merged);
+            });
+        
+        $expected = array
+            ( "root" => array
+                ( "dir_1"   => array()
+                , "dir_2" => array
+                    ( "dir_2_1" => array()
+                    )
+                )
+            );
+
+        $this->assertEquals($expected, $result);
+    }
 }

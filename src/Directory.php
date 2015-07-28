@@ -44,6 +44,15 @@ class Directory extends FSObject {
     }
 
     /**
+     * Get an recursor over the content of this directory.
+     *
+     * @return DirectoryRecursor
+     */
+    public function recurseOn() {
+        return $this->foldFiles();
+    }
+
+    /**
      * Get an object that can perform a fold operation on all files in this
      * iterator. 
      *
