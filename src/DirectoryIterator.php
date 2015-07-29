@@ -9,6 +9,19 @@ abstract class DirectoryIterator {
     use NamedFilterTrait;
 
     /**
+     * Get all content included in this iterator.
+     *
+     * @return FSObject[]
+     */
+    public function contents() {
+        $returns = array();
+        $this->onContents(function($obj) use (&$returns) {
+            $returns[] = $obj;
+        });
+        return $returns;
+    }
+
+    /**
      * Iterate over the contents of the current iterator.
      *
      * @return DirectoryIterator 
