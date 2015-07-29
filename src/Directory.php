@@ -49,7 +49,7 @@ class Directory extends FSObject {
      * @return DirectoryRecursor
      */
     public function recurseOn() {
-        return $this->foldFiles();
+        return $this->withContents()->recurseOn();
     }
 
     /**
@@ -68,7 +68,7 @@ class Directory extends FSObject {
      * @return FDirectory
      */
     public function unfix() {
-        return new FDirectory($this, $this->contents());
+        return $this->recurseOn()->unfix();
     }
 
     /**
@@ -87,13 +87,6 @@ class Directory extends FSObject {
      * @return  mixed
      */
     public function cata(\Closure $trans) {
-        return $trans( $this->unfix()->fmap(function(FSObject $obj) use ($trans) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $trans($file);
-            }
-            assert($obj instanceof Directory);
-            return $obj->cata($trans);
-        }));
+        $this->recurseOn()->cata($trans);
     }
 }
