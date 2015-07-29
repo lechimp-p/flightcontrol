@@ -24,6 +24,7 @@ class FilterDirectoryRecursor extends DirectoryRecursor {
     protected $predicate;
 
     public function __construct(\Closure $predicate, DirectoryRecursor $previous) {
+        parent::__construct($previous->flightcontrol, $previous->filesystem, $previous->path);
         $this->predicate = $predicate;        
         $this->previous = $previous;        
     }
@@ -31,13 +32,24 @@ class FilterDirectoryRecursor extends DirectoryRecursor {
     /**
      * @inheritdoc
      */
-    public function with($init, \Closure $collapse) {
-        $predicate = $this->predicate;
-        return $this->previous->with($init, function($accu, File $file) use ($predicate, $collapse){
-            if ($predicate($file)) {
-                return $collapse($accu, $file);
-            }
-            return $accu;
-        });
+    public function unfix() {
+        $unfixed_prev = $this->previous->unfix();
+        $content = $unfixed_prev->fcontents();
+        // Pick out the interesting objects.
+        $filtered_content = array_filter($content, $this->predicate);
+        // When those are unfixed, the filter has to apply as well on
+        // the contents.
+        $filtered_content 
+            = array_map(function($obj) {
+                            $file = $obj->toFile();
+                            if ($file !== null) {
+                                return $file;
+                            }
+                            return $obj->recurseOn()
+                                       ->filter($this->predicate);
+                        }
+                        , $filtered_content);
+
+        return new FDirectory($unfixed_prev, $filtered_content);
     }
 }

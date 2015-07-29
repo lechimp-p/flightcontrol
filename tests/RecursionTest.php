@@ -143,7 +143,13 @@ class RecursionTest extends _TestCaseBase {
                 if ($file !== null) {
                     $this->assertTrue(false);
                 }
-                $merged = call_user_func_array("array_merge", $obj->fcontents());
+                $fcontents = $obj->fcontents();
+                if (empty($fcontents)) {
+                    $merged = $fcontents;
+                }
+                else {
+                    $merged = call_user_func_array("array_merge", $fcontents);
+                }
                 return array( $obj->name() => $merged);
             });
         

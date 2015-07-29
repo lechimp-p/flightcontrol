@@ -16,28 +16,17 @@ class RawDirectoryRecursor extends DirectoryRecursor {
     protected $iterator;
 
     public function __construct(DirectoryIterator $iterator) {
+        $dir = $iterator->subjacentDirectory();
+        parent::__construct($dir->flightcontrol, $dir->filesystem, $dir->path);
         $this->iterator = $iterator;
     }
 
     /**
      * @inheritdoc
      */
-    public function with($init, \Closure $collapse) {
-        $value = array();
-        $value[0] = $init;
-
-        $recurse = array();
-        $recurse[0] = function(FSObject $obj) use ($collapse, &$value, &$recurse) {
-            if ($file = $obj->toFile()) {
-                $value[0] = $collapse($value[0], $file);
-            } 
-            else {
-                $obj->toDirectory()     // This will succeed, but well, checks...
-                    ->withContents()    // This returns an iterator on the directory.
-                    ->onContents($recurse[0]);  // RECURSE!
-            }
-        };
-        $this->iterator->onContents($recurse[0]);
-        return $value[0];
+    public function unfix() {
+        return new FDirectory( $this
+                             , $this->iterator->contents()
+                             );
     }
 }
