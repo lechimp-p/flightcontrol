@@ -8,7 +8,7 @@
  */
 
 class RecursionTest extends _TestCaseBase {
-    public function test_foldFiles() {
+/*    public function test_foldFiles() {
         $root = $this->flightcontrol->directory("/root");
         $result = $root
             ->foldFiles()
@@ -69,14 +69,14 @@ class RecursionTest extends _TestCaseBase {
         $recursor = $root->foldFiles()->filter(function($a) {});
         $this->assertInstanceOf("\Lechimp\Flightcontrol\DirectoryRecursor", $recursor);
     }
-
+*/
     public function test_cata1() {
         $root = $this->flightcontrol->directory("/root");
         $result = $root
             ->cata(function(\Lechimp\Flightcontrol\FSObject $obj) {
                 $file = $obj->toFile();
                 if ($file !== null) {
-                    return array($file->name() => $file->name());
+                    return array( $file->name() => $file->name() );
                 }
                 $merged = call_user_func_array("array_merge", $obj->fcontents());
                 return array( $obj->name() => $merged);
