@@ -87,6 +87,6 @@ class Directory extends FSObject {
      * @return  mixed
      */
     public function cata(\Closure $trans) {
-        $this->recurseOn()->cata($trans);
+        return $this->recurseOn()->cata($trans);
     }
 }
