@@ -55,11 +55,6 @@ abstract class FSObject {
         return $this->filesystem->getMimetype($this->path);
     }
 
-    /**
-     * @return bool
-     */
-    abstract function isFile();
-
     // Helper
 
     private static function normalize($path) {
@@ -70,6 +65,7 @@ abstract class FSObject {
     }
 
     // Remove these:
+    // They will be good for a typechecker.
 
     /**
      * @return File|null
@@ -84,5 +80,13 @@ abstract class FSObject {
     public function toDirectory() {
         return null;
     }
+
+    // Or this:
+    // This will be a little less verbose when implementing stuff.
+
+    /**
+     * @return bool
+     */
+    abstract function isFile();
 
 }
