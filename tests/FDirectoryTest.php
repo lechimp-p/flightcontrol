@@ -50,7 +50,7 @@ class FDirectoryTest extends _TestCaseBase {
     }
 
     /**
-     * @expectedException UnexpextedValueException
+     * @expectedException UnexpectedValueException
      */
     public function test_outer_fmap_throws() {
         $root = $this->flightcontrol->directory("/root/dir_2");

@@ -71,6 +71,22 @@ class FDirectory extends FSObject {
     }
 
     /**
+     * We could also map the complete array to a new array, e.g. to
+     * filter it, make it longer or shorter.
+     *
+     * @param   \Closure    $trans  [a] -> [b]
+     * @throws  UnexpectedValueException    in case $trans returns no error
+     * @return  FDirectory
+     */
+    public function outer_fmap(\Closure $trans) {
+        $new_fcontents = $trans($this->fcontents());
+        if (!is_array($new_fcontents)) {
+            throw new \UnexpectedValueException('Expected $trans to return an array.');
+        }
+        return new FDirectory($this, $new_fcontents);
+    }
+
+    /**
      * The contents of this directory.
      *
      * It should really return type any[], as we do want to return an array
