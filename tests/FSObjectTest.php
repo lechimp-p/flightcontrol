@@ -12,12 +12,16 @@ class FSObjectTest extends _TestCaseBase {
         $obj = $this->flightcontrol->get("/root");
         $this->assertEquals("/root", $obj->path());
         $this->assertEquals("root", $obj->name());
+        $this->assertEquals("directory", $obj->mimetype());
+        $this->assertFalse($obj->isFile());
     }
 
     public function test_directory2() {
         $obj = $this->flightcontrol->get("/root/dir_2/dir_2_1");
         $this->assertEquals("/root/dir_2/dir_2_1", $obj->path());
         $this->assertEquals("dir_2_1", $obj->name());
+        $this->assertEquals("directory", $obj->mimetype());
+        $this->assertFalse($obj->isFile());
     }
 
     public function test_directoryNaming() {
@@ -30,5 +34,7 @@ class FSObjectTest extends _TestCaseBase {
         $obj = $this->flightcontrol->get("/root/dir_1/file_1_1");
         $this->assertEquals("/root/dir_1/file_1_1", $obj->path());
         $this->assertEquals("file_1_1", $obj->name());
+        $this->assertEquals("text/plain", $obj->mimetype());
+        $this->assertTrue($obj->isFile());
     }
 }

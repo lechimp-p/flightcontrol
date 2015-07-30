@@ -5,7 +5,7 @@ namespace Lechimp\Flightcontrol;
 /**
  * Some object on the filesystem.
  */
-class FSObject {
+abstract class FSObject {
     /**
      * @var Flightcontrol 
      */
@@ -49,6 +49,29 @@ class FSObject {
     }
 
     /**
+     * @return string
+     */
+    public function mimetype() {
+        return $this->filesystem->getMimetype($this->path);
+    }
+
+    /**
+     * @return bool
+     */
+    abstract function isFile();
+
+    // Helper
+
+    private static function normalize($path) {
+        if (substr($path, -1) == "/") {
+            $path = substr($path, 0, strlen($path) - 1);
+        }
+        return $path;
+    }
+
+    // Remove these:
+
+    /**
      * @return File|null
      */
     public function toFile() {
@@ -62,10 +85,4 @@ class FSObject {
         return null;
     }
 
-    private static function normalize($path) {
-        if (substr($path, -1) == "/") {
-            $path = substr($path, 0, strlen($path) - 1);
-        }
-        return $path;
-    }
 }

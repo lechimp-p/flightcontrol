@@ -30,6 +30,20 @@ class Directory extends FSObject {
     /**
      * @inheritdoc
      */
+    public function mimetype() {
+        return "directory";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isFile() {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function toDirectory() {
         return $this;
     }

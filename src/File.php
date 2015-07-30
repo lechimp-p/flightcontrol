@@ -30,6 +30,13 @@ class File extends FSObject {
     /**
      * @inheritdoc
      */
+    public function isFile() {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function toFile() {
         return $this;
     }
