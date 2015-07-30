@@ -39,6 +39,27 @@ class FDirectoryTest extends _TestCaseBase {
         $this->assertContains("file_2_1", $names);
     }
 
+    public function test_outer_fmap() {
+        $root = $this->flightcontrol->directory("/root/dir_2");
+        $f_root = $root->unfix()
+            ->outer_fmap(function(array $content) {
+                return array();
+            });
+        $fcontents = $f_root->fcontents();
+        $this->assertEquals(array(), $fcontents);
+    }
+
+    /**
+     * @expectedException UnexpextedValueException
+     */
+    public function test_outer_fmap_throws() {
+        $root = $this->flightcontrol->directory("/root/dir_2");
+        $f_root = $root->unfix()
+            ->outer_fmap(function(array $content) {
+                return "foo"; 
+            });
+    }
+
     public function test_fsObjectProps() {
         $obj = $this->flightcontrol->get("/root/dir_2/");
         $this->assertEquals("/root/dir_2", $obj->path());
