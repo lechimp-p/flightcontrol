@@ -82,7 +82,7 @@ class Directory extends FSObject {
      * @return FDirectory
      */
     public function unfix() {
-        return $this->recurseOn()->unfix();
+        return new FDirectory($this, $this->contents());
     }
 
     /**
