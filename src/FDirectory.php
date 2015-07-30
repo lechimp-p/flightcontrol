@@ -87,6 +87,19 @@ class FDirectory extends FSObject {
     }
 
     /**
+     * We could filter the FDirectory by a $predicate-
+     *
+     * @param   \Closure    $predicate  a -> bool
+     * @return  FDirectory
+     */
+    public function filter(\Closure $predicate) {
+        return 
+        $this->outer_fmap(function($fcontents) use ($predicate) {
+            return array_filter($fcontents, $predicate); 
+        });
+    }
+
+    /**
      * The contents of this directory.
      *
      * It should really return type any[], as we do want to return an array

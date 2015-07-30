@@ -60,6 +60,19 @@ class FDirectoryTest extends _TestCaseBase {
             });
     }
 
+    public function test_filter() {
+        $root = $this->flightcontrol->directory("/root/dir_2");
+        $f_root = $root->unfix()
+            ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
+                return $obj->mimetype() == "directory"; 
+            })
+            ->fmap(function(\Lechimp\Flightcontrol\FSObject $obj) {
+                return $obj->name();
+            });
+        $fcontents = $f_root->fcontents();
+        $this->assertEquals(array("dir_2_1"), $fcontents);
+    }
+
     public function test_fsObjectProps() {
         $obj = $this->flightcontrol->get("/root/dir_2/");
         $this->assertEquals("/root/dir_2", $obj->path());
