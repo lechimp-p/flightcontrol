@@ -28,6 +28,16 @@ class Directory extends FSObject {
     }
 
     /**
+     * Only regard contents that match the predicate.
+     * 
+     * @param   \Closure    $predicate  File|Directory -> bool
+     * @return  Directory
+     */
+    public function filter(\Closure $predicate) {
+        return new FilteredDirectory($this, $predicate); 
+    }
+
+    /**
      * @inheritdoc
      */
     public function mimetype() {
@@ -47,6 +57,35 @@ class Directory extends FSObject {
     public function toDirectory() {
         return $this;
     }
+    /**
+     * See documentation of FDirectory.
+     * 
+     * @return FDirectory
+     */
+    public function unfix() {
+        return new FDirectory($this, $this->contents());
+    }
+
+    /**
+     * We could also use the catamorphism on this to do recursion, as we
+     * have an unfix and an underlying fmap from the FDirectory.
+     *
+     * Supply a function $trans from File|FDirectory a to a that flattens 
+     * (folds) a directory. Will start the directories where only files are 
+     * included, folds them and then proceeds upwards.
+     * 
+     * The return type should be 'a' (from the function $trans) instead 
+     * of mixed, but we can't express that fact correctly in the docstring
+     * typing.
+     *
+     * @param   \Closure    $trans      File|FDirectory a -> a
+     * @return  mixed
+     */
+    public function cata(\Closure $trans) {
+        return $this->recurseOn()->cata($trans);
+    }
+
+    // Maybe remove these? Certainly reimplement them...
 
     /**
      * Get an iterator over the content of this directory.
@@ -76,31 +115,5 @@ class Directory extends FSObject {
         return $this->withContents()->foldFiles();
     }
 
-    /**
-     * See documentation of FDirectory.
-     * 
-     * @return FDirectory
-     */
-    public function unfix() {
-        return new FDirectory($this, $this->contents());
-    }
 
-    /**
-     * We could also use the catamorphism on this to do recursion, as we
-     * have an unfix and an underlying fmap from the FDirectory.
-     *
-     * Supply a function $trans from File|FDirectory a to a that flattens 
-     * (folds) a directory. Will start the directories where only files are 
-     * included, folds them and then proceeds upwards.
-     * 
-     * The return type should be 'a' (from the function $trans) instead 
-     * of mixed, but we can't express that fact correctly in the docstring
-     * typing.
-     *
-     * @param   \Closure    $trans      File|FDirectory a -> a
-     * @return  mixed
-     */
-    public function cata(\Closure $trans) {
-        return $this->recurseOn()->cata($trans);
-    }
 }

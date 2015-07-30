@@ -57,6 +57,31 @@ class DirectoryTest extends _TestCaseBase {
         }
     }
 
+    public function test_filterContents() {
+        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $contents = $dir
+            ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                return $obj->name() == "dir_2_1";
+            })
+            ->contents();
+
+        $contents = array_map(function($obj) { return $obj->name(); }, $contents);
+        $this->assertEquals(array("dir_2_1"), $contents);
+    }
+
+    public function test_filterContents2() {
+        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $contents = $dir
+            ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                return $obj->name() == "dir_2_1";
+            })
+            ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                return false;
+            })
+            ->contents();
+        $this->assertEquals(array(), $contents);
+    }
+
     public function test_toFile() {
         $dir = $this->flightcontrol->get("/root");
         $this->assertNull($dir->toFile());
