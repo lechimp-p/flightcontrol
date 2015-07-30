@@ -85,6 +85,16 @@ class Directory extends FSObject {
         return $this->recurseOn()->cata($trans);
     }
 
+    /**
+     * Get an recursor over the content of this directory.
+     *
+     * @return DirectoryRecursor
+     */
+    public function recurseOn() {
+        return new DirectoryRecursor($this);
+    }
+
+
     // Maybe remove these? Certainly reimplement them...
 
     /**
@@ -97,15 +107,6 @@ class Directory extends FSObject {
     }
 
     /**
-     * Get an recursor over the content of this directory.
-     *
-     * @return DirectoryRecursor
-     */
-    public function recurseOn() {
-        return $this->withContents()->recurseOn();
-    }
-
-    /**
      * Get an object that can perform a fold operation on all files in this
      * iterator. 
      *
@@ -114,6 +115,4 @@ class Directory extends FSObject {
     public function foldFiles() {
         return $this->withContents()->foldFiles();
     }
-
-
 }
