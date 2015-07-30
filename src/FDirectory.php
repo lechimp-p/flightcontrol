@@ -82,4 +82,11 @@ class FDirectory extends FSObject {
     public function fcontents() {
         return $this->fcontents;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function isFile() {
+        return false;
+    }
 }

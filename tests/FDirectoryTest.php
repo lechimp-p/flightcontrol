@@ -38,4 +38,12 @@ class FDirectoryTest extends _TestCaseBase {
         $this->assertContains("dir_2_1", $names);
         $this->assertContains("file_2_1", $names);
     }
+
+    public function test_fsObjectProps() {
+        $obj = $this->flightcontrol->get("/root/dir_2/");
+        $this->assertEquals("/root/dir_2", $obj->path());
+        $this->assertEquals("dir_2", $obj->name());
+        $this->assertFalse($obj->isFile());
+        $this->assertEquals("directory", $obj->mimetype());
+    }
 }
