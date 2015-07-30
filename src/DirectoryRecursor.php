@@ -13,8 +13,18 @@ namespace Lechimp\Flightcontrol;
 * This object can perform a recursion on the files in a directory.
 * I don't know if the name really fits.
 */
-abstract class DirectoryRecursor extends FSObject {
+class DirectoryRecursor extends FSObject {
     use NamedFilterTrait;
+
+    /**
+     * @var Directory
+     */
+    protected $directory;
+
+    public function __construct(Directory $directory) {
+        parent::__construct($directory->flightcontrol, $directory->filesystem, $directory->path);
+        $this->directory = $directory;
+    }
 
     /**
      * Get a recursor that folds all files in this recursor that match the
@@ -24,7 +34,7 @@ abstract class DirectoryRecursor extends FSObject {
      * @return DirectoryRecursor
      */
     public function filter(\Closure $predicate) {
-        return new FilterDirectoryRecursor($predicate, $this);
+        return new FilteredDirectoryRecursor($this, $predicate);
     }
 
     /**
@@ -34,7 +44,18 @@ abstract class DirectoryRecursor extends FSObject {
      * 
      * @return FDirectory
      */
-    abstract public function unfix();
+    public function unfix() {
+        $new_contents = array_map(function(FSObject $obj) {
+            $file = $obj->toFile();
+            if ($file !== null) {
+                return $file;
+            }
+            assert($obj instanceof Directory);
+            return $this->copyOnDirectory($obj);
+        }, $this->contents());
+
+        return new FDirectory($this, $new_contents); 
+    }
 
     /**
      * We could also use the catamorphism on this to do recursion, as we
@@ -70,5 +91,35 @@ abstract class DirectoryRecursor extends FSObject {
      */
     public function with(\Closure $trans) {
         return $this->cata($trans);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isFile() {
+        return false;
+    }
+
+    // Helpers
+
+    /**
+     * Create a copy of this recursor, but on a different path.
+     */
+    protected function copyOnDirectory(Directory $directory) {
+        return new DirectoryRecursor($directory);
+    }
+
+    /**
+     * Get the contents from the directory of this recursor
+     */
+    protected function contents() {
+        return $this->directory->contents();
+    }
+
+    /**
+     * Get the directory from the recursor.
+     */
+    protected function directory() {
+        return $this->directory;
     }
 }
