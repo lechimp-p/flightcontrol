@@ -13,6 +13,8 @@ namespace Lechimp\Flightcontrol;
  * Only folds files that match a certain predicate.
  */
 class FilteredDirectoryRecursor extends DirectoryRecursor {
+    use FilteredTrait;
+
     /**
      * @var DirectoryRecursor
      */
@@ -44,7 +46,7 @@ class FilteredDirectoryRecursor extends DirectoryRecursor {
      * Get the filtered contents from the directory of this recursor.
      */
     protected function contents() {
-        return array_filter($this->previous->contents(), $this->predicate);
+        return $this->_filter($this->previous->contents());
     }
 
     /**
