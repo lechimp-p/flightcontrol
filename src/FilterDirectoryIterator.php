@@ -3,37 +3,35 @@
 namespace Lechimp\Flightcontrol;
 
 class FilterDirectoryIterator extends DirectoryIterator {
-    /**
-     * @var \Closure
-     */
-    protected $predicate;
+    use FilteredTrait;
 
     /**
      * @var DirectoryIterator
      */
-    protected $prev;
+    protected $previous;
 
-    public function __construct(\Closure $predicate, DirectoryIterator $prev) {
-        $this->prev = $prev;
+    public function __construct(\Closure $predicate, DirectoryIterator $previous) {
+        $this->previous = $previous;
         $this->predicate = $predicate; 
     }
 
     /**
-     * @inheritdoc
+     * Hmm, kinda duplicate.
      */
-    public function onContents(\Closure $action) {
-        $predicate = $this->predicate;
-        $this->prev->onContents(function(FSObject $obj) use ($predicate, $action) {
-            if ($predicate($obj)) {
-                $action($obj);
-            }
-        }); 
-    }
+    public function unfix() {
+        return 
+        $this
+        ->previous
+        ->unfix()
+        ->outer_fmap(function($a) { 
+            return $this->_filter($a); 
+        });
+    } 
 
     /**
      * @inheritdoc
      */
     public function subjacentDirectory() {
-        return $this->prev->underlyingDirectory();
+        return $this->prev->subjacentDirectory();
     }
 }

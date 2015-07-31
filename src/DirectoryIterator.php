@@ -9,15 +9,12 @@ class DirectoryIterator {
     use NamedFilterTrait;
 
     /**
-     * @var Directory|DirectoryIterator
+     * @var Directory
      */
-    protected $previous;
+    protected $directory;
 
-    public function __construct($previous) {
-        assert(  $previous instanceof Directory
-              || $previous instanceof DirectoryIterator
-              );
-        $this->previous = $previous;
+    public function __construct(Directory $directory) {
+        $this->directory = $directory;
     }   
 
     /**
@@ -27,7 +24,7 @@ class DirectoryIterator {
      */
     public function contents() {
         $returns = array();
-        $this->onContents(function($obj) use (&$returns) {
+        $this->with(function($obj) use (&$returns) {
             $returns[] = $obj;
         });
         return $returns;
@@ -39,7 +36,7 @@ class DirectoryIterator {
      * @return DirectoryIterator 
      */
     public function iterateOn() {
-        return new DirectoryIterator($this);
+        return new SubDirectoryIterator($this);
     }
 
     /**
@@ -57,10 +54,25 @@ class DirectoryIterator {
      * Define the function to be iterated with and close this level
      * of iteration.
      * 
-     * @param   \Closure    $iteration  File -> ()
+     * @param   \Closure    $iteration  a -> File -> a
+     * @return  DirectoryIterator|a
+     */
+    public function fold($start_value, $iteration) {
+        $contents = $this->unfix()->fcontents();
+        foreach($contents as $content) {
+            $start_value = $iteration($start_value, $content);
+        }
+        return $start_value;
+    }
+
+    /**
+     * Like fold, but with no start value or return.
+     *
+     * @param   \Closure    $iteration  a -> File -> a
      * @return  DirectoryIterator|null
      */
     public function with($iteration) {
+        return $this->fold(null, function($_, $f) use ($iteration) { $iteration($f); });
     }
     
     /**
@@ -70,6 +82,13 @@ class DirectoryIterator {
      */
     public function run() {
         $this->with(function($obj) {});
+    }
+
+    /**
+     * Hmm duplicate.
+     */
+    public function unfix() {
+        return $this->directory->unfix();
     }
 
     /**

@@ -119,6 +119,6 @@ class Directory extends FSObject {
      * @return DirectoryIterator
      */
     public function iterateOn() {
-        return new RawDirectoryIterator($this);
+        return new DirectoryIterator($this);
     }
 }
