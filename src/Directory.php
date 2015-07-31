@@ -95,7 +95,7 @@ class Directory extends FSObject {
      *
      * @param   mixed       $start_value
      * @param   \Closure    $fold_with      a -> File -> a
-     * @return  DirectoryRecursor 
+     * @return  Recursor 
      */
     public function foldFiles($start_value, \Closure $fold_with) {
         return $this->recurseOn()->foldFiles($start_value, $fold_with);
@@ -104,10 +104,10 @@ class Directory extends FSObject {
     /**
      * Get an recursor over the content of this directory.
      *
-     * @return DirectoryRecursor
+     * @return Recursor
      */
     public function recurseOn() {
-        return new DirectoryRecursor($this);
+        return new Recursor($this);
     }
 
 

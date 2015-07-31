@@ -87,19 +87,19 @@ abstract class DirectoryIterator {
     /**
      * Get an recursor over the content of this directory iterator.
      *
-     * @return DirectoryRecursor
+     * @return Recursor
      */
     public function recurseOn() {
-        return new RawDirectoryRecursor($this);
+        return new RawRecursor($this);
     }
     /**
      * Get an object that can perform a fold operation on all files in this
      * iterator. 
      *
-     * @return  DirectoryRecursor 
+     * @return  Recursor 
      */
     public function foldFiles() {
-        return new RawDirectoryRecursor($this);
+        return new RawRecursor($this);
     }
 
     /**

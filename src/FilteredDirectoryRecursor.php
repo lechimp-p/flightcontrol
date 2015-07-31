@@ -12,11 +12,11 @@ namespace Lechimp\Flightcontrol;
 /**
  * Only folds files that match a certain predicate.
  */
-class FilteredDirectoryRecursor extends DirectoryRecursor {
+class FilteredRecursor extends Recursor {
     use FilteredTrait;
 
     /**
-     * @var DirectoryRecursor
+     * @var Recursor
      */
     protected $previous;
 
@@ -25,8 +25,8 @@ class FilteredDirectoryRecursor extends DirectoryRecursor {
      */
     protected $predicate;
 
-    public function __construct(DirectoryRecursor $previous, \Closure $predicate) {
-        // Don't use DirectoryRecursors constructor, as it expects a Directory.
+    public function __construct(Recursor $previous, \Closure $predicate) {
+        // Don't use Recursors constructor, as it expects a Directory.
         parent::__construct($previous->directory());
         $this->predicate = $predicate;        
         $this->previous = $previous;        
@@ -38,7 +38,7 @@ class FilteredDirectoryRecursor extends DirectoryRecursor {
      * Create a copy of this recursor, but on a different path.
      */
     protected function copyOnDirectory(Directory $directory) {
-        return new FilteredDirectoryRecursor( $this->previous->copyOnDirectory($directory)
+        return new FilteredRecursor( $this->previous->copyOnDirectory($directory)
                                             , $this->predicate);
     }
 

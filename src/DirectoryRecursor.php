@@ -13,7 +13,7 @@ namespace Lechimp\Flightcontrol;
 * This object can perform a recursion on the files in a directory.
 * I don't know if the name really fits.
 */
-class DirectoryRecursor extends FSObject {
+class Recursor extends FSObject {
     use NamedFilterTrait;
 
     /**
@@ -34,10 +34,10 @@ class DirectoryRecursor extends FSObject {
      * Won't recurse over directories that do not match the predicate!
      *
      * @param  \Closure             $predicate  (FSObject -> Bool)
-     * @return DirectoryRecursor
+     * @return Recursor
      */
     public function filter(\Closure $predicate) {
-        return new FilteredDirectoryRecursor($this, $predicate);
+        return new FilteredRecursor($this, $predicate);
     }
 
     /**
@@ -81,7 +81,7 @@ class DirectoryRecursor extends FSObject {
             if ($file !== null) {
                 return $trans($file);
             }
-            assert($obj instanceof Directory || $obj instanceof DirectoryRecursor);
+            assert($obj instanceof Directory || $obj instanceof Recursor);
             return $obj->cata($trans);
         }));
     }
@@ -105,7 +105,7 @@ class DirectoryRecursor extends FSObject {
      *
      * @param   mixed       $start_value
      * @param   \Closure    $fold_with      a -> File -> a
-     * @return  DirectoryRecursor 
+     * @return  Recursor 
      */
     public function foldFiles($start_value, \Closure $fold_with) {
         foreach ($this->allFiles() as $file) {
@@ -148,7 +148,7 @@ class DirectoryRecursor extends FSObject {
      * Create a copy of this recursor, but on a different path.
      */
     protected function copyOnDirectory(Directory $directory) {
-        return new DirectoryRecursor($directory);
+        return new Recursor($directory);
     }
 
     /**
