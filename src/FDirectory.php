@@ -28,7 +28,7 @@ namespace Lechimp\Flightcontrol;
  *      data File = File Metadata Content
  *
  * and a real filesystem then is
- *      newtype Fix f = Fix (f (Fix f))
+ *      newtype Fix f = Fix { unfix :: f (Fix f) }
  *      type Directory = Fix FDirectory
  *
  * As a real implementation in PHP the metadata part is captured in the

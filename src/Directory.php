@@ -60,7 +60,7 @@ class Directory extends FSObject {
     /**
      * See documentation of FDirectory.
      * 
-     * @return FDirectory
+     * @return FDirectory File
      */
     public function unfix() {
         return new FDirectory($this, $this->contents());
