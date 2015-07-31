@@ -32,7 +32,7 @@ class WithContentsTest extends _TestCaseBase {
         $this->assertContains("file_2_1", $accu);
     }
 
-    public function test_correctContents3() {
+/*    public function test_correctContents3() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
         $root->iterateOn()
@@ -46,7 +46,7 @@ class WithContentsTest extends _TestCaseBase {
         $this->assertContains("file_1_2", $accu);
         $this->assertContains("dir_2_1", $accu);
         $this->assertContains("file_2_1", $accu);
-    }
+    }*/
 
     public function test_filterWorks() {
         $root = $this->flightcontrol->directory("/root");

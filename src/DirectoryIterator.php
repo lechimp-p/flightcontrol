@@ -5,8 +5,20 @@ namespace Lechimp\Flightcontrol;
 /**
 * An iterator on a directory.
 */
-abstract class DirectoryIterator {
+class DirectoryIterator {
     use NamedFilterTrait;
+
+    /**
+     * @var Directory|DirectoryIterator
+     */
+    protected $previous;
+
+    public function __construct($previous) {
+        assert(  $previous instanceof Directory
+              || $previous instanceof DirectoryIterator
+              );
+        $this->previous = $previous;
+    }   
 
     /**
      * Get all content included in this iterator.
@@ -26,8 +38,8 @@ abstract class DirectoryIterator {
      *
      * @return DirectoryIterator 
      */
-    public function withContents() {
-        return new WithContentsDirectoryIterator($this);
+    public function iterateOn() {
+        return new DirectoryIterator($this);
     }
 
     /**
@@ -40,48 +52,24 @@ abstract class DirectoryIterator {
     public function filter(\Closure $predicate) {
         return new FilterDirectoryIterator($predicate, $this);
     }
+
+    /**
+     * Define the function to be iterated with and close this level
+     * of iteration.
+     * 
+     * @param   \Closure    $iteration  File -> ()
+     * @return  DirectoryIterator|null
+     */
+    public function with($iteration) {
+    }
     
-
     /**
-     * Get an iterator for every directory in the current iterator.
+     * Close a level of iteration without an iteration function.
      *
-     * @return DirectoryIterator
-     */
-    public function directoriesOnly() {
-        return $this->filter(function(FSObject $obj) {
-            return $obj->toDirectory() !== null;
-        });
-    }
-
-    /**
-     * Get an iterator for every file in the current iterator.
-     *
-     * @return DirectoryIterator
-     */
-    public function filesOnly() {
-        return $this->filter(function(FSObject $obj) {
-            return $obj->toFile() !== null;
-        });
-    }
-
-    /**
-     * Feed every item in the current directory to the provided function while
-     * iterating.
-     *
-     * @param   \Closure            $action
-     * @return  DirectoryIterator
-     */
-    public function perform(\Closure $action) {
-        return new PerformDirectoryIterator($action, $this);
-    }
-
-    /**
-     * Actually run the defined iteration.
-     *
-     * @return  null
+     * @return  DirectoryIterator|null
      */
     public function run() {
-        $this->onContents(function() {});
+        $this->with(function($obj) {});
     }
 
     /**
@@ -89,18 +77,19 @@ abstract class DirectoryIterator {
      *
      * @return Recursor
      */
-    public function recurseOn() {
+/*    public function recurseOn() {
         return new RawRecursor($this);
-    }
+    }*/
+
     /**
      * Get an object that can perform a fold operation on all files in this
      * iterator. 
      *
      * @return  Recursor 
      */
-    public function foldFiles() {
+/*    public function foldFiles() {
         return new RawRecursor($this);
-    }
+    }*/
 
     /**
      * With every content in the iterator do some action.
@@ -108,12 +97,12 @@ abstract class DirectoryIterator {
      * @param   \Closure    $action
      * @return  null
      */
-    abstract public function onContents(\Closure $action);
+//    abstract public function onContents(\Closure $action);
 
     /**
      * Get the subjacent directory.
      *
      * @return Directory
      */
-    abstract public function subjacentDirectory();
+//    abstract public function subjacentDirectory();
 }

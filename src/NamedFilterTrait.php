@@ -28,6 +28,28 @@ trait NamedFilterTrait {
     }
 
     /**
+     * Get an iterator for every directory in the current iterator.
+     *
+     * @return DirectoryIterator
+     */
+    public function directoriesOnly() {
+        return $this->filter(function(FSObject $obj) {
+            return $obj->toDirectory() !== null;
+        });
+    }
+
+    /**
+     * Get an iterator for every file in the current iterator.
+     *
+     * @return DirectoryIterator
+     */
+    public function filesOnly() {
+        return $this->filter(function(FSObject $obj) {
+            return $obj->toFile() !== null;
+        });
+    }
+
+    /**
      * This should actually return a filtered version of the object.
      * 
      * @param   \Closure    $predicate
