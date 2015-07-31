@@ -86,6 +86,22 @@ class Directory extends FSObject {
     }
 
     /**
+     * Fold over all files in this directory and subjacent
+     * directories.
+     *
+     * Start with an initial value of some type and a function from that type
+     * and File to a new value of the type. Will successively feed all files
+     * and the resulting values to that function.
+     *
+     * @param   mixed       $start_value
+     * @param   \Closure    $fold_with      a -> File -> a
+     * @return  DirectoryRecursor 
+     */
+    public function foldFiles($start_value, \Closure $fold_with) {
+        return $this->recurseOn()->foldFiles($start_value, $fold_with);
+    }
+
+    /**
      * Get an recursor over the content of this directory.
      *
      * @return DirectoryRecursor
@@ -104,15 +120,5 @@ class Directory extends FSObject {
      */
     public function withContents() {
         return new RawDirectoryIterator($this);
-    }
-
-    /**
-     * Get an object that can perform a fold operation on all files in this
-     * iterator. 
-     *
-     * @return  DirectoryRecursor 
-     */
-    public function foldFiles() {
-        return $this->withContents()->foldFiles();
     }
 }

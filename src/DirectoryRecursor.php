@@ -28,7 +28,10 @@ class DirectoryRecursor extends FSObject {
 
     /**
      * Get a recursor that folds all files in this recursor that match the
-     * provided predicate.
+     * provided predicate and the objects below that match the predicate as
+     * well.
+     *
+     * Won't recurse over directories that do not match the predicate!
      *
      * @param  \Closure             $predicate  (FSObject -> Bool)
      * @return DirectoryRecursor
@@ -92,6 +95,45 @@ class DirectoryRecursor extends FSObject {
     public function with(\Closure $trans) {
         return $this->cata($trans);
     }
+
+    /**
+     * Fold over all files in this directory and subjacent directories.
+     *
+     * Start with an initial value of some type and a function from that type
+     * and File to a new value of the type. Will successively feed all files
+     * and the resulting values to that function.
+     *
+     * @param   mixed       $start_value
+     * @param   \Closure    $fold_with      a -> File -> a
+     * @return  DirectoryRecursor 
+     */
+    public function foldFiles($start_value, \Closure $fold_with) {
+        foreach ($this->allFiles() as $file) {
+            $start_value = $fold_with($start_value, $file);
+        }
+        return $start_value;
+    }
+
+    /**
+     * Get a list of all files in the directory and subjacent directories.
+     *
+     * @return File[]
+     */
+    public function allFiles() {
+        return $this->cata(function(FSObject $obj) {
+            $file = $obj->toFile();
+            if ($file !== null) {
+                return array($file);
+            }
+            assert($obj instanceof FSObject);
+            $fcontents = $obj->fcontents();
+            if (empty($fcontents)) {
+                return $fcontents;
+            }
+            return call_user_func_array("array_merge", $fcontents);
+        });
+    }
+     
 
     /**
      * @inheritdoc

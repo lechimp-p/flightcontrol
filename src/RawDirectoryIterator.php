@@ -14,7 +14,7 @@ class RawDirectoryIterator extends DirectoryIterator {
     /**
      * Initialize an iterator over the directory.
      *
-     * @param   Directory
+     * @param   Directory   $dir
      */
     public function __construct(Directory $dir)  {
         $this->dir = $dir;
