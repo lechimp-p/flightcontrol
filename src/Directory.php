@@ -40,6 +40,7 @@ class Directory extends FixedFDirectory {
     public function toDirectory() {
         return $this;
     }
+
     /**
      * See documentation of FDirectory.
      * 
