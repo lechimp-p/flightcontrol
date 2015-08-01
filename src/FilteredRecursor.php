@@ -20,11 +20,6 @@ class FilteredRecursor extends Recursor {
      */
     protected $previous;
 
-    /**
-     * @var \Closure
-     */
-    protected $predicate;
-
     public function __construct(Recursor $previous, \Closure $predicate) {
         // Don't use Recursors constructor, as it expects a Directory.
         parent::__construct($previous->directory());
