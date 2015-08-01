@@ -106,12 +106,4 @@ class Directory extends FixedFDirectory {
 
     // Maybe remove these? Certainly reimplement them...
 
-    /**
-     * Get an iterator over the content of this directory.
-     *
-     * @return Iterator
-     */
-    public function iterateOn() {
-        return new Iterator($this);
-    }
 }

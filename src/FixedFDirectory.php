@@ -18,6 +18,15 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     abstract public function unfix();
 
     /**
+     * Get an iterator over the content of this directory.
+     *
+     * @return Iterator
+     */
+    public function iterateOn() {
+        return new Iterator($this);
+    }
+
+    /**
      * @inheritdoc
      */
     public function isFile() {
