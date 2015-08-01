@@ -68,7 +68,7 @@ class DirectoryIterator {
     /**
      * Like fold, but with no start value or return.
      *
-     * @param   \Closure    $iteration  a -> File -> a
+     * @param   \Closure    $iteration  File -> () 
      * @return  DirectoryIterator|null
      */
     public function with($iteration) {
