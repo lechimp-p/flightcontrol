@@ -16,26 +16,24 @@ class SubIterator extends Iterator {
     /**
      * @var Iterator
      */
-    protected $previous;
+    protected $top;
 
-    public function __construct(Iterator $previous) {
-        $this->previous = $previous;
-    }
-
-    protected function depth() {
-        return $this->previous->depth() + 1;
+    public function __construct(Iterator $top) {
+        $this->top= $top;
     }
 
     /**
      * @inheritdoc 
      */
-    public function fold($start_value, $iteration) {
-        return $this->previous->map(function($v) use ($start_value, $iteration) {
-            if ($v instanceof Directory) {
-                return $v->iterateOn()->fold($start_value, $iteration);
-            } 
-            return $v;
-        });
+    public function contents() {
+        die("NYI: contents");
+    }
+
+    /**
+     * @inheritdoc 
+     */
+    public function filter(\Closure $predicate) {
+        die("NYI: filter");
     }
 
     /**
@@ -48,13 +46,15 @@ class SubIterator extends Iterator {
     }
 
     /**
-     * Create a copy of this recursor, but on a different path.
-     *
-     * TODO: I need some real type hint here...
+     * @inheritdoc 
      */
-    protected function copyOnFDirectory(FDirectory $directory) {
-        $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $directory->fcontents());
-        return new Iterator($directory);
+    public function fold($start_value, $iteration) {
+        return $this->top->map(function($v) use ($start_value, $iteration) {
+            if ($v instanceof Directory) {
+                return $v->iterateOn()->fold($start_value, $iteration);
+            } 
+            return $v;
+        });
     }
 }
 

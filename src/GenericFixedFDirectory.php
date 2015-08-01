@@ -18,11 +18,11 @@ class GenericFixedFDirectory extends FixedFDirectory {
     // TODO: This should directly take an FDirectory.
     public function __construct(FDirectory $fdirectory) {
         parent::__construct($fdirectory->flightcontrol, $fdirectory->filesystem, $fdirectory->path);
-        $this->contents = $contents;
+        $this->fdirectory = $fdirectory;
     }
 
     public function unfix() {
-        return new FDirectory($this, $this->contents);
+        return $this->fdirectory;
     }
 
     public function isFile() {
