@@ -26,34 +26,30 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function filter(\Closure $predicate) {
-        return new SubIterator(
-            $this->top->map(function(FSObject $obj) use ($predicate) {
-                $file = $obj->toFile();
-                if ($file !== null) {
-                    return $file;
-                }
-                assert($obj instanceof FixedFDirectory);
-                return $obj->filter($predicate);
-            })
-        );
+        return $this->wrappedMapTop(function(FSObject $obj) use ($predicate) {
+            $file = $obj->toFile();
+            if ($file !== null) {
+                return $file;
+            }
+            assert($obj instanceof FixedFDirectory);
+            return $obj->filter($predicate);
+        });
     }
 
     /**
      * @inheritdoc 
      */
     public function map(\Closure $trans) {
-        return new SubIterator(
-            $this->top->map(function(FSObject $obj) use ($trans) {
-                $file = $obj->toFile();
-                if ($file !== null) {
-                    return $file;
-                }
-                assert($obj instanceof FixedFDirectory);
-                return new GenericFixedFDirectory(
-                    $obj->unfix()->fmap($trans)
-                );
-            })
-        );
+        return $this->wrappedMapTop(function(FSObject $obj) use ($trans) {
+            $file = $obj->toFile();
+            if ($file !== null) {
+                return $file;
+            }
+            assert($obj instanceof FixedFDirectory);
+            return new GenericFixedFDirectory(
+                $obj->unfix()->fmap($trans)
+            );
+        });
     }
 
     /**
@@ -69,6 +65,16 @@ class SubIterator extends Iterator {
             assert($v instanceof File);
             return $v;
         });
+    }
+
+    // Helpers
+
+    function mapTop(\Closure $trans) {
+        return $this->top->map($trans);
+    }
+
+    function wrappedMapTop(\Closure $trans) {
+        return new SubIterator($this->mapTop($trans));
     }
 }
 
