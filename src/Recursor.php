@@ -17,11 +17,11 @@ class Recursor extends FSObject {
     use NamedFilterTrait;
 
     /**
-     * @var Directory
+     * @var FixedFDirectory
      */
     protected $directory;
 
-    public function __construct(Directory $directory) {
+    public function __construct(FixedFDirectory $directory) {
         parent::__construct($directory->flightcontrol, $directory->filesystem, $directory->path);
         $this->directory = $directory;
     }
