@@ -26,12 +26,7 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function filter(\Closure $predicate) {
-        return $this->wrappedMapTop(function(FSObject $obj) use ($predicate) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $file;
-            }
-            assert($obj instanceof FixedFDirectory);
+        return $this->wrappedMapTopOnNonFiles(function($obj) use ($predicate) {
             return $obj->filter($predicate);
         });
     }
@@ -40,12 +35,7 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function map(\Closure $trans) {
-        return $this->wrappedMapTop(function(FSObject $obj) use ($trans) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $file;
-            }
-            assert($obj instanceof FixedFDirectory);
+        return $this->wrappedMapTopOnNonFiles(function ($obj) use ($trans) {
             return new GenericFixedFDirectory(
                 $obj->unfix()->fmap($trans)
             );
@@ -75,6 +65,17 @@ class SubIterator extends Iterator {
 
     function wrappedMapTop(\Closure $trans) {
         return new SubIterator($this->mapTop($trans));
+    }
+
+    function wrappedMapTopOnNonFiles(\Closure $trans) {
+        return $this->wrappedMapTop(function($obj) use ($trans) {
+            $file = $obj->toFile();
+            if ($file !== null) {
+                return $file;
+            }
+            assert($obj instanceof FixedFDirectory);
+            return $trans($obj);
+        });
     }
 }
 
