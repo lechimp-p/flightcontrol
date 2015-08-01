@@ -33,7 +33,7 @@ namespace Lechimp\Flightcontrol;
  *
  * As a real implementation in PHP the metadata part is captured in the
  * FSObject class. As there are no type parameters in PHP, we define FDirectory
- * and Directory as separate classes, where unfix is implemented on Directory.
+ * and Directory as separate classes, where unfix is implemented on FixedFDirectory.
  */
 class FDirectory extends FSObject {
     /**

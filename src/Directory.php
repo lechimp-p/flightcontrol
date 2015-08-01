@@ -12,7 +12,7 @@ namespace Lechimp\Flightcontrol;
 /**
  * This class represents a directory in the FS.
  */
-class Directory extends FSObject {
+class Directory extends FixedFDirectory {
     /**
      * Get the objects inside the directory.
      *
@@ -42,13 +42,6 @@ class Directory extends FSObject {
      */
     public function mimetype() {
         return "directory";
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isFile() {
-        return false;
     }
 
     /**

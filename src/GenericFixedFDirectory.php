@@ -9,15 +9,15 @@
 
 namespace Lechimp\Flightcontrol;
 
-class GenericFixedFDirectory extends FSObject {
+class GenericFixedFDirectory extends FixedFDirectory {
     /**
-     * @var mixed[]     - should really be something like any[]
+     * @var FDirectory
      */
-    protected $contents;
+    protected $fdirectory;
 
     // TODO: This should directly take an FDirectory.
-    public function __construct(FSObject $base, array $contents) {
-        parent::__construct($base->flightcontrol, $base->filesystem, $base->path);
+    public function __construct(FDirectory $fdirectory) {
+        parent::__construct($fdirectory->flightcontrol, $fdirectory->filesystem, $fdirectory->path);
         $this->contents = $contents;
     }
 
