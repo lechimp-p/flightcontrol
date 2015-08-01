@@ -26,6 +26,9 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function filter(\Closure $predicate) {
+        // As we are working somewhere down the iteration, we have to apply
+        // the filter on all non files in the iterator above and return
+        // something similar to this.
         return $this->wrappedMapTopOnNonFiles(function($obj) use ($predicate) {
             return $obj->filter($predicate);
         });
@@ -35,6 +38,9 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function map(\Closure $trans) {
+        // As we are working somewhere down the iteration, we have to map 
+        // the transformation on all non files in the iterator above and return
+        // something similar to this.
         return $this->wrappedMapTopOnNonFiles(function ($obj) use ($trans) {
             return new GenericFixedFDirectory(
                 $obj->unfix()->fmap($trans)
@@ -46,6 +52,9 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function fold($start_value, $iteration) {
+        // As this unwraps one layer of the iteration, we need to apply the fold
+        // function to the things in the iterator above and return something
+        // similar to the iterator above.
         return $this->mapTopOnNonFiles(function($v) use ($start_value, $iteration) {
             return new GenericFixedFDirectory(
                 new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
