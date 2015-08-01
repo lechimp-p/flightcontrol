@@ -7,7 +7,7 @@
  * a copy of the along with the code.
  */
 
-class WithContentsTest extends _TestCaseBase {
+class IterationTest extends _TestCaseBase {
     public function test_correctContents() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
