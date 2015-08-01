@@ -54,9 +54,9 @@ class IterationTest extends _TestCaseBase {
         $accu1 = array();
         $accu2 = array();
         $accu3 = array();
-        $in_1 = array(false);
-        $in_2 = array(false);
-        $in_3 = array(false);
+        $in1 = array(false);
+        $in2 = array(false);
+        $in3 = array(false);
         $root
             ->iterateOn()
                 ->iterateOn()

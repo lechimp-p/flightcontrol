@@ -37,9 +37,14 @@ namespace Lechimp\Flightcontrol;
  */
 class FDirectory extends FSObject {
     /**
-     * @var mixed[]     Is really any[], see comment at __construct.
+     * @var \Closure
      */
-    protected $fcontents; 
+    protected $contents_lazy; 
+
+    /**
+     * @var mixed
+     */
+    protected $contents = null;
 
     /**
      * As we need the metadata from FSObject, we need one of those. The
@@ -49,12 +54,11 @@ class FDirectory extends FSObject {
      * a list from things of the same type.
      *
      * @param   FSObject    $fs_object
-     * @param   mixed[]     $contents
+     * @param   \Closure    $contents_lazy
      */
-    public function __construct(FSObject $fs_object, array $contents) {
-        //TODO: A thing like lazy content might come in handy...
+    public function __construct(FSObject $fs_object, \Closure $contents_lazy) {
         parent::__construct($fs_object->flightcontrol, $fs_object->filesystem, $fs_object->path);
-        $this->fcontents = $contents;
+        $this->contents_lazy = $contents_lazy;
     }
 
     /**
@@ -67,7 +71,9 @@ class FDirectory extends FSObject {
      * @return  FDirectory          
      */
     public function fmap(\Closure $trans) {
-        return new FDirectory($this, array_map($trans, $this->fcontents()));
+        return new FDirectory($this, function() use ($trans) { 
+            return array_map($trans, $this->fcontents());
+        });
     }
 
     /**
@@ -79,11 +85,9 @@ class FDirectory extends FSObject {
      * @return  FDirectory
      */
     public function outer_fmap(\Closure $trans) {
-        $new_fcontents = $trans($this->fcontents());
-        if (!is_array($new_fcontents)) {
-            throw new \UnexpectedValueException('Expected $trans to return an array.');
-        }
-        return new FDirectory($this, $new_fcontents);
+        return new FDirectory($this, function() use ($trans) {
+            return $trans($this->fcontents());
+        });
     }
 
     /**
@@ -109,7 +113,11 @@ class FDirectory extends FSObject {
      * @return  mixed[]     for an FDirectory a
      */
     public function fcontents() {
-        return $this->fcontents;
+        if ($this->contents === null) {
+            $cl = $this->contents_lazy;
+            $this->contents = $cl();
+        }
+        return $this->contents;
     }
 
     /**

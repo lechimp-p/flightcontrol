@@ -55,6 +55,12 @@ abstract class Iterator {
             array(), 
             function($a, $f) use ($iteration) { 
                 $iteration($f); 
+                // As the subjacent FDirectory is lazy, we need to evaluate
+                // the contents, as there might be additional computations
+                // hidden.
+                if (!$f->isFile()) {
+                    $f->contents();
+                }
                 $a[] = $f; // Do not disturb the structure of
                 return $a; // the directory tree.
             }

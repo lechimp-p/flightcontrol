@@ -57,7 +57,9 @@ class SubIterator extends Iterator {
         // similar to the iterator above.
         return $this->mapTopOnNonFiles(function($v) use ($start_value, $iteration) {
             return new GenericFixedFDirectory(
-                new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
+                new FDirectory($v, function() use ($v, $start_value, $iteration) {
+                    return $v->iterateOn()->fold($start_value, $iteration);
+                })
             );
         });
     }
