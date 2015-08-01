@@ -32,32 +32,34 @@ class WithContentsTest extends _TestCaseBase {
         $this->assertContains("file_2_1", $accu);
     }
 
-/*    public function test_correctContents3() {
+    public function test_correctContents3() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
-        $root->iterateOn()
+        $root
+            ->iterateOn()
                 ->iterateOn()
                 ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
                     $accu[] = $obj->name();
                 })
-                ->run();
+            ->run();
         $this->assertCount(4, $accu);
         $this->assertContains("file_1_1", $accu);
         $this->assertContains("file_1_2", $accu);
         $this->assertContains("dir_2_1", $accu);
         $this->assertContains("file_2_1", $accu);
-    }*/
+    }
 
     public function test_filterWorks() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
-        $root->iterateOn()
-             ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
+        $root
+            ->iterateOn()
+            ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name() == "dir_1";
-             })
-             ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+            })
+            ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
                 $accu[] = $obj->name();
-             });
+            });
         $this->assertEquals(array("dir_1"), $accu);
     } 
 
