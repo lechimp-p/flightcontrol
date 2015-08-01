@@ -12,13 +12,13 @@ namespace Lechimp\Flightcontrol;
 /**
  * An iterator on each of the contents of another iterator.
  */
-class SubDirectoryIterator extends DirectoryIterator {
+class SubIterator extends Iterator {
     /**
-     * @var DirectoryIterator
+     * @var Iterator
      */
     protected $previous;
 
-    public function __construct(DirectoryIterator $previous) {
+    public function __construct(Iterator $previous) {
         $this->previous = $previous;
     }
 
@@ -42,7 +42,7 @@ class SubDirectoryIterator extends DirectoryIterator {
      * @inheritdoc 
      */
     public function map(\Closure $trans) {
-        return new SubDirectoryIterator(
+        return new SubIterator(
             $this->previous->map($trans)
         );
     }
@@ -54,7 +54,7 @@ class SubDirectoryIterator extends DirectoryIterator {
      */
     protected function copyOnFDirectory(FDirectory $directory) {
         $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $directory->fcontents());
-        return new DirectoryIterator($directory);
+        return new Iterator($directory);
     }
 }
 

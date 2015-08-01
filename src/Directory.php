@@ -109,9 +109,9 @@ class Directory extends FixedFDirectory {
     /**
      * Get an iterator over the content of this directory.
      *
-     * @return DirectoryIterator
+     * @return Iterator
      */
     public function iterateOn() {
-        return new DirectoryIterator($this);
+        return new Iterator($this);
     }
 }

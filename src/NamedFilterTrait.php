@@ -30,7 +30,7 @@ trait NamedFilterTrait {
     /**
      * Get an iterator for every directory in the current iterator.
      *
-     * @return DirectoryIterator
+     * @return Iterator
      */
     public function directoriesOnly() {
         return $this->filter(function(FSObject $obj) {
@@ -41,7 +41,7 @@ trait NamedFilterTrait {
     /**
      * Get an iterator for every file in the current iterator.
      *
-     * @return DirectoryIterator
+     * @return Iterator
      */
     public function filesOnly() {
         return $this->filter(function(FSObject $obj) {

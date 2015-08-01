@@ -2,15 +2,15 @@
 
 namespace Lechimp\Flightcontrol;
 
-class FilterDirectoryIterator extends DirectoryIterator {
+class FilterIterator extends Iterator {
     use FilteredTrait;
 
     /**
-     * @var DirectoryIterator
+     * @var Iterator
      */
     protected $previous;
 
-    public function __construct(\Closure $predicate, DirectoryIterator $previous) {
+    public function __construct(\Closure $predicate, Iterator $previous) {
         $this->previous = $previous;
         $this->predicate = $predicate; 
     }

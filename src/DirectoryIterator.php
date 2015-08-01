@@ -5,7 +5,7 @@ namespace Lechimp\Flightcontrol;
 /**
 * An iterator on a directory.
 */
-class DirectoryIterator {
+class Iterator {
     use NamedFilterTrait;
 
     /**
@@ -33,10 +33,10 @@ class DirectoryIterator {
     /**
      * Iterate over the contents of the current iterator.
      *
-     * @return DirectoryIterator 
+     * @return Iterator 
      */
     public function iterateOn() {
-        return new SubDirectoryIterator($this);
+        return new SubIterator($this);
     }
 
     /**
@@ -44,22 +44,22 @@ class DirectoryIterator {
      * for which the provided predicate returns true.
      *
      * @param  \Closure             $predicate  (FSObject -> Bool)
-     * @return DirectoryIterator
+     * @return Iterator
      */
     public function filter(\Closure $predicate) {
-        return new FilterDirectoryIterator($predicate, $this);
+        return new FilterIterator($predicate, $this);
     }
 
     /**
      * Map a function over the objects inside the iterator.
      *
      * @param   \Closure    $trans      File|Directory -> a
-     * @return  DirectoryIterator
+     * @return  Iterator
      */
     public function map(\Closure $trans) {
         $fcontents = $this->directory->unfix()->fmap($trans)->fcontents();
         $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $fcontents);
-        return new DirectoryIterator($fixed);
+        return new Iterator($fixed);
     }
 
     /**
@@ -67,7 +67,7 @@ class DirectoryIterator {
      * of iteration.
      * 
      * @param   \Closure    $iteration  a -> File|Directory -> a
-     * @return  DirectoryIterator|a
+     * @return  Iterator|a
      */
     public function fold($start_value, $iteration) {
         $contents = $this->unfix()->fcontents();
@@ -81,7 +81,7 @@ class DirectoryIterator {
      * Like fold, but with no start value or return.
      *
      * @param   \Closure    $iteration  File|Directory -> () 
-     * @return  DirectoryIterator|null
+     * @return  Iterator|null
      */
     public function with($iteration) {
         return $this->fold(array(), function($a, $f) use ($iteration) { 
@@ -94,7 +94,7 @@ class DirectoryIterator {
     /**
      * Close a level of iteration without an iteration function.
      *
-     * @return  DirectoryIterator|null
+     * @return  Iterator|null
      */
     public function run() {
         $this->with(function($obj) {});
@@ -124,7 +124,7 @@ class DirectoryIterator {
      */
     protected function copyOnFDirectory(FDirectory $directory) {
         $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $directory->fcontents());
-        return new DirectoryIterator($directory);
+        return new Iterator($directory);
     }
 
     /**
