@@ -41,7 +41,11 @@ class SubIterator extends Iterator {
      */
     public function map(\Closure $trans) {
         return new SubIterator(
-            $this->top->map($trans)
+            $this->top->map(function(FixedFDirectory $dir) use ($trans) {
+                return new GenericFixedFDirectory(
+                    $dir->unfix()->fmap($trans)
+                );
+            })
         );
     }
 
@@ -55,6 +59,7 @@ class SubIterator extends Iterator {
                     new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
                 );
             } 
+            assert($v instanceof File);
             return $v;
         });
     }

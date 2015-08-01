@@ -54,22 +54,31 @@ class IterationTest extends _TestCaseBase {
         $accu1 = array();
         $accu2 = array();
         $accu3 = array();
+        $in_1 = array(false);
+        $in_2 = array(false);
+        $in_3 = array(false);
         $root
             ->iterateOn()
                 ->iterateOn()
                     ->iterateOn()
-                    ->with(function($obj) use (&$accu3) {
+                    ->with(function($obj) use (&$accu3, &$in3) {
+                        $in3[0] = true;
                         $accu3[] = $obj->name();
                     })
-                ->with(function($obj) use (&$accu2) {
+                ->with(function($obj) use (&$accu2, &$in2) {
+                    $in2[0] = true;
                     $accu2[] = $obj->name();
                 })
-            ->with(function($obj) use (&$accu1) {
+            ->with(function($obj) use (&$accu1, &$in1) {
+                $in1[0] = true;
                 $accu1[] = $obj->name();
-            });
-        $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
-        $this->assertEquals(array("file_1_1", "file_1_2", "dir_2_1", "file_2_1"), $accu2);
+            });    
+        $this->assertTrue($in1[0]);
+        $this->assertTrue($in2[0]);
+        $this->assertTrue($in3[0]);
         $this->assertEquals(array("dir_1", "dir_2"), $accu1);
+        $this->assertEquals(array("file_1_1", "file_1_2", "dir_2_1", "file_2_1"), $accu2);
+        $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
     }
 
     public function test_filterWorks() {
