@@ -9,25 +9,25 @@
 
 class DirectoryTest extends _TestCaseBase {
     public function test_directory() {
-        $dir = $this->flightcontrol->get("/root")->toDirectory();
+        $dir = $this->flightcontrol->directory("/root");
         $this->assertEquals("/root", $dir->path());
         $this->assertEquals("root", $dir->name());
     }
 
     public function test_directory2() {
-        $obj = $this->flightcontrol->get("/root/dir_2/dir_2_1")->toDirectory();
+        $obj = $this->flightcontrol->directory("/root/dir_2/dir_2_1");
         $this->assertEquals("/root/dir_2/dir_2_1", $obj->path());
         $this->assertEquals("dir_2_1", $obj->name());
     }
 
     public function test_directoryNaming() {
-        $obj = $this->flightcontrol->get("/root/dir_2/")->toDirectory();
+        $obj = $this->flightcontrol->directory("/root/dir_2/");
         $this->assertEquals("/root/dir_2", $obj->path());
         $this->assertEquals("dir_2", $obj->name());
     }
 
     public function test_contents() {
-        $dir = $this->flightcontrol->get("/root")->toDirectory();
+        $dir = $this->flightcontrol->directory("/root");
         $contents = $dir->contents();
         $this->assertCount(2, $contents);
         foreach ($contents as $content) {
@@ -42,7 +42,7 @@ class DirectoryTest extends _TestCaseBase {
     }
 
     public function test_contents2() {
-        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir->contents();
         $this->assertCount(2, $contents);
         foreach ($contents as $content) {
@@ -58,7 +58,7 @@ class DirectoryTest extends _TestCaseBase {
     }
 
     public function test_filterContents() {
-        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name() == "dir_2_1";
@@ -70,7 +70,7 @@ class DirectoryTest extends _TestCaseBase {
     }
 
     public function test_filterContents2() {
-        $dir = $this->flightcontrol->get("/root/dir_2")->toDirectory();
+        $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name() == "dir_2_1";
@@ -82,14 +82,8 @@ class DirectoryTest extends _TestCaseBase {
         $this->assertEquals(array(), $contents);
     }
 
-    public function test_toFile() {
+    public function test_isFile() {
         $dir = $this->flightcontrol->get("/root");
-        $this->assertNull($dir->toFile());
-    }
-
-    public function test_toDirectory() {
-        $dir = $this->flightcontrol->get("/root");
-        $this->assertNotNull($dir->toDirectory());
-        $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\Directory", $dir->toDirectory());
+        $this->assertFalse($dir->isFile());
     }
 }

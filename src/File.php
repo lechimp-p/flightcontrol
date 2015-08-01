@@ -33,11 +33,4 @@ class File extends FSObject {
     public function isFile() {
         return true;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function toFile() {
-        return $this;
-    }
 }

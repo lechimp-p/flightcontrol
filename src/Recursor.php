@@ -41,13 +41,13 @@ class Recursor extends FSObject {
         $filter[0] = function(FixedFDirectory $dir) use (&$filter, $predicate) {
             return new GenericFixedFDirectory(
                 $dir->filter($predicate)
-                    ->unfix()->fmap(function(FSObject $obj) use (&$filter) {
-                        $file = $obj->toFile();
-                        if ($file !== null) {
-                            return $file;
+                    ->unfix()
+                    ->fmap(function(FSObject $obj) use (&$filter) {
+                        if ($obj->isFile()) {
+                            return $obj;
                         }
                         return $filter[0]($obj);
-                })
+                    })
             );
         };
         return new Recursor(
@@ -73,11 +73,11 @@ class Recursor extends FSObject {
     public function cata(\Closure $trans) {
         return $trans( $this->directory->unfix()->fmap(function(FSObject $obj) use ($trans) {
             return $obj->patternMatch(
-                function(File $obj) use ($trans) { 
-                    return $trans($obj); 
+                function(File $file) use ($trans) { 
+                    return $trans($file); 
                 },
-                function(FixedFDirectory $obj) use ($trans) {
-                    return $obj->cata($trans);
+                function(FixedFDirectory $dir) use ($trans) {
+                    return $dir->cata($trans);
                 }
             );
         }));
@@ -118,11 +118,10 @@ class Recursor extends FSObject {
      */
     public function allFiles() {
         return $this->cata(function(FSObject $obj) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return array($file);
+            if ($obj->isFile()) {
+                return array($obj);
             }
-            assert($obj instanceof FSObject);
+
             $fcontents = $obj->fcontents();
             if (empty($fcontents)) {
                 return $fcontents;

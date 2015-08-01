@@ -68,8 +68,9 @@ class Flightcontrol {
      * @return  Directory|null
      */
     public function directory($path) {
-        if ($obj = $this->get($path)) {
-            return $obj->toDirectory();
+        $obj = $this->get($path);
+        if ($obj !== null && !$obj->isFile()) {
+            return $obj;
         }
         return null;
     }
@@ -81,8 +82,9 @@ class Flightcontrol {
      * @return  File|null
      */
     public function file($path) {
-        if ($obj = $this->get($path)) {
-            return $obj->toFile();
+        $obj = $this->get($path);
+        if ($obj !== null && $obj->isFile()) {
+            return $obj;
         }
         return null;
     }

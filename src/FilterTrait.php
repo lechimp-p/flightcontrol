@@ -34,7 +34,7 @@ trait FilterTrait {
      */
     public function directoriesOnly() {
         return $this->filter(function(FSObject $obj) {
-            return $obj->toDirectory() !== null;
+            return !$obj->isFile();
         });
     }
 
@@ -45,7 +45,7 @@ trait FilterTrait {
      */
     public function filesOnly() {
         return $this->filter(function(FSObject $obj) {
-            return $obj->toFile() !== null;
+            return $obj->isFile();
         });
     }
 

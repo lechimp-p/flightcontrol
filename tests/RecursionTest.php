@@ -27,7 +27,7 @@ class RecursionTest extends _TestCaseBase {
             ->recurseOn()
             ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
                 return substr($obj->name(), -1) != "1"
-                    || ($obj->toFile() === null)
+                    || !$obj->isFile()
                     ;
             })
             ->allFiles();
@@ -61,7 +61,7 @@ class RecursionTest extends _TestCaseBase {
             ->recurseOn()
             ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
                 return substr($obj->name(), -1) != "1"
-                    || ($obj->toFile() === null)
+                    || !$obj->isFile()
                     ;
             })
             ->foldFiles(array(), function($accu, \Lechimp\Flightcontrol\File $file) {
@@ -104,9 +104,8 @@ class RecursionTest extends _TestCaseBase {
         $root = $this->flightcontrol->directory("/root");
         $result = $root
             ->cata(function(\Lechimp\Flightcontrol\FSObject $obj) {
-                $file = $obj->toFile();
-                if ($file !== null) {
-                    return array( $file->name() => $file->name() );
+                if ($obj->isFile()) {
+                    return array( $obj->name() => $obj->name() );
                 }
                 $merged = call_user_func_array("array_merge", $obj->fcontents());
                 return array( $obj->name() => $merged);
@@ -136,9 +135,8 @@ class RecursionTest extends _TestCaseBase {
         $result = $root
             ->recurseOn()
             ->with(function(\Lechimp\Flightcontrol\FSObject $obj) {
-                $file = $obj->toFile();
-                if ($file !== null) {
-                    return array($file->name() => $file->name());
+                if ($obj->isFile()) {
+                    return array($obj->name() => $obj->name());
                 }
                 $merged = call_user_func_array("array_merge", $obj->fcontents());
                 return array( $obj->name() => $merged);
@@ -169,10 +167,10 @@ class RecursionTest extends _TestCaseBase {
             ->recurseOn()
             ->named("dir.*") 
             ->with(function (\Lechimp\Flightcontrol\FSObject $obj) {
-                $file = $obj->toFile();
-                if ($file !== null) {
+                if ($obj->isFile()) {
                     $this->assertTrue(false);
                 }
+
                 $fcontents = $obj->fcontents();
                 if (empty($fcontents)) {
                     $merged = $fcontents;

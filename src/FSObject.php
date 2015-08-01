@@ -81,27 +81,6 @@ abstract class FSObject {
         return $path;
     }
 
-    // Remove these:
-    // They will be good for a typechecker.
-
-
-    /**
-     * @return File|null
-     */
-    public function toFile() {
-        return null;
-    }
-
-    /**
-     * @return Directory|null
-     */
-    public function toDirectory() {
-        return null;
-    }
-
-    // Or this:
-    // This will be a little less verbose when implementing stuff.
-
     /**
      * @return bool
      */

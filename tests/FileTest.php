@@ -9,7 +9,7 @@
 
 class FileTest extends _TestCaseBase {
     public function test_file() {
-        $file = $this->flightcontrol->get("/root/dir_1/file_1_1")->toFile();
+        $file = $this->flightcontrol->file("/root/dir_1/file_1_1");
         $this->assertEquals("/root/dir_1/file_1_1", $file->path());
         $this->assertEquals("file_1_1", $file->name());
     }
@@ -32,14 +32,8 @@ class FileTest extends _TestCaseBase {
         $this->assertEquals("file_2_1_1", $file_2_1_1->content());
     }
 
-    public function test_toDirectory() {
+    public function test_isFile() {
         $file = $this->flightcontrol->get("/root/dir_1/file_1_1");
-        $this->assertNull($file->toDirectory());
-    }
-
-    public function test_toFile() {
-        $file = $this->flightcontrol->get("/root/dir_1/file_1_1");
-        $this->assertNotNull($file->toFile());
-        $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\File", $file->toFile());
+        $this->assertTrue($file->isFile());
     }
 }
