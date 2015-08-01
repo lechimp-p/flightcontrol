@@ -67,9 +67,9 @@ class IterationTest extends _TestCaseBase {
             ->with(function($obj) use (&$accu1) {
                 $accu1[] = $obj->name();
             });
-        $this->assertEquals(array("dir_1", "dir_2"), $accu1);
-        $this->assertEquals(array("file_1_1", "file_1_2", "dir_2_1", "file_2_1"), $accu2);
         $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
+        $this->assertEquals(array("file_1_1", "file_1_2", "dir_2_1", "file_2_1"), $accu2);
+        $this->assertEquals(array("dir_1", "dir_2"), $accu1);
     }
 
     public function test_filterWorks() {

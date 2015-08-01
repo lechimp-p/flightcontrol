@@ -41,7 +41,7 @@ class SubIterator extends Iterator {
      */
     public function map(\Closure $trans) {
         return new SubIterator(
-            $this->previous->map($trans)
+            $this->top->map($trans)
         );
     }
 
@@ -50,8 +50,10 @@ class SubIterator extends Iterator {
      */
     public function fold($start_value, $iteration) {
         return $this->top->map(function($v) use ($start_value, $iteration) {
-            if ($v instanceof Directory) {
-                return $v->iterateOn()->fold($start_value, $iteration);
+            if ($v instanceof FixedFDirectory) {
+                return new GenericFixedFDirectory(
+                    new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
+                );
             } 
             return $v;
         });
