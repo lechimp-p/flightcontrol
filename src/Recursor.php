@@ -56,26 +56,6 @@ class Recursor extends FSObject {
     }
 
     /**
-     * Get a functor representation of this recursor.
-     *
-     * Also see documentation of FDirectory.
-     * 
-     * @return FDirectory
-     */
-    public function unfix() {
-        $new_contents = array_map(function(FSObject $obj) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $file;
-            }
-            assert($obj instanceof FixedFDirectory);
-            return $this->copyOnDirectory($obj);
-        }, $this->contents());
-
-        return new FDirectory($this, $new_contents); 
-    }
-
-    /**
      * We could also use the catamorphism on this to do recursion, as we
      * have an unfix and an underlying fmap from the FDirectory.
      *
@@ -91,7 +71,7 @@ class Recursor extends FSObject {
      * @return  mixed
      */
     public function cata(\Closure $trans) {
-        return $trans( $this->unfix()->fmap(function(FSObject $obj) use ($trans) {
+        return $trans( $this->directory->unfix()->fmap(function(FSObject $obj) use ($trans) {
             $file = $obj->toFile();
             if ($file !== null) {
                 return $trans($file);
@@ -155,28 +135,5 @@ class Recursor extends FSObject {
      */
     public function isFile() {
         return false;
-    }
-
-    // Helpers
-
-    /**
-     * Create a copy of this recursor, but on a different path.
-     */
-    protected function copyOnDirectory(FixedFDirectory $directory) {
-        return new Recursor($directory);
-    }
-
-    /**
-     * Get the contents from the directory of this recursor
-     */
-    protected function contents() {
-        return $this->directory->contents();
-    }
-
-    /**
-     * Get the directory from the recursor.
-     */
-    protected function directory() {
-        return $this->directory;
     }
 }
