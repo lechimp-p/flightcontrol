@@ -47,7 +47,7 @@ class Iterator {
      * @return Iterator
      */
     public function filter(\Closure $predicate) {
-        return new FilteredIterator($predicate, $this);
+        return new Iterator($this->directory->filter($predicate));
     }
 
     /**
@@ -72,7 +72,7 @@ class Iterator {
      * @return  Iterator|a
      */
     public function fold($start_value, $iteration) {
-        $contents = $this->unfix()->fcontents();
+        $contents = $this->directory->unfix()->fcontents();
         foreach($contents as $content) {
             $start_value = $iteration($start_value, $content);
         }
@@ -102,42 +102,8 @@ class Iterator {
         $this->with(function($obj) {});
     }
 
-    /**
-     * Hmm duplicate.
-     */
-    public function unfix() {
-        return $this->directory->unfix();
-    }
-
     // Helpers
     
-    /**
-     * Get the depth of an iterator, that is the level of nested
-     * iterations we're in.
-     */
-    protected function depth() {
-        return 1;
-    }
-
-    /**
-     * Create a copy of this recursor, but on a different path.
-     *
-     * TODO: I need some real type hint here...
-     */
-    protected function copyOnFDirectory(FDirectory $directory) {
-        $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $directory->fcontents());
-        return new Iterator($directory);
-    }
-
-    /**
-     * Get the subjacent directory.
-     *
-     * @return Directory
-     */
-    public function subjacentDirectory() {
-        return $this->directory;
-    }
-
     /**
      * Get an recursor over the content of this directory iterator.
      *
