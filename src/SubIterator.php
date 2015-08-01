@@ -70,12 +70,14 @@ class SubIterator extends Iterator {
 
     protected function mapTopOnNonFiles(\Closure $trans) {
         return $this->mapTop(function($obj) use ($trans) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $file;
-            }
-            assert($obj instanceof FixedFDirectory);
-            return $trans($obj);
+            return $obj->patternMatch(
+                function(File $file) {
+                    return $file;
+                },
+                function(FixedFDirectory $dir) use ($trans) {
+                    return $trans($dir);
+                }
+            );
         });
     }
 

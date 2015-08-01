@@ -72,12 +72,14 @@ class Recursor extends FSObject {
      */
     public function cata(\Closure $trans) {
         return $trans( $this->directory->unfix()->fmap(function(FSObject $obj) use ($trans) {
-            $file = $obj->toFile();
-            if ($file !== null) {
-                return $trans($file);
-            }
-            assert($obj instanceof FixedFDirectory || $obj instanceof Recursor);
-            return $obj->cata($trans);
+            return $obj->patternMatch(
+                function(File $obj) use ($trans) { 
+                    return $trans($obj); 
+                },
+                function(FixedFDirectory $obj) use ($trans) {
+                    return $obj->cata($trans);
+                }
+            );
         }));
     }
 
