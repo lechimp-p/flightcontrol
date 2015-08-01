@@ -25,15 +25,17 @@ class SubIterator extends Iterator {
     /**
      * @inheritdoc 
      */
-    public function contents() {
-        die("NYI: contents");
-    }
-
-    /**
-     * @inheritdoc 
-     */
     public function filter(\Closure $predicate) {
-        die("NYI: filter");
+        return new SubIterator(
+            $this->top->map(function(FSObject $obj) use ($predicate) {
+                $file = $obj->toFile();
+                if ($file !== null) {
+                    return $file;
+                }
+                assert($obj instanceof FixedFDirectory);
+                return $obj->filter($predicate);
+            })
+        );
     }
 
     /**
@@ -41,9 +43,14 @@ class SubIterator extends Iterator {
      */
     public function map(\Closure $trans) {
         return new SubIterator(
-            $this->top->map(function(FixedFDirectory $dir) use ($trans) {
+            $this->top->map(function(FSObject $obj) use ($trans) {
+                $file = $obj->toFile();
+                if ($file !== null) {
+                    return $file;
+                }
+                assert($obj instanceof FixedFDirectory);
                 return new GenericFixedFDirectory(
-                    $dir->unfix()->fmap($trans)
+                    $obj->unfix()->fmap($trans)
                 );
             })
         );

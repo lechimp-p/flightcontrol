@@ -12,26 +12,24 @@ namespace Lechimp\Flightcontrol;
 /**
  * This class represents a directory in the FS.
  */
-class FilteredDirectory extends Directory {
+class FilteredDirectory extends FixedFDirectory {
     use FilteredTrait;
 
     /**
-     * @var Directory
+     * @var FixedFDirectory
      */
     protected $previous;
 
-    public function __construct(Directory $previous, \Closure $predicate) {
+    public function __construct(FixedFDirectory $previous, \Closure $predicate) {
         parent::__construct($previous->flightcontrol, $previous->filesystem, $previous->path);
         $this->previous = $previous;
         $this->predicate = $predicate;
     }
 
     /**
-     * Get the objects inside the directory.
-     *
-     * @return FSObject[]
+     * @inheritdoc
      */
-    public function contents() {
-        return $this->_filter($this->previous->contents());
+    public function unfix() {
+        return new FDirectory($this, $this->_filter($this->previous->contents()));
     }
 }

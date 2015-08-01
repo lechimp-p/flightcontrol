@@ -32,4 +32,23 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     public function isFile() {
         return false;
     }
+
+    /**
+     * Only regard contents that match the predicate.
+     * 
+     * @param   \Closure    $predicate  File|Directory -> bool
+     * @return  Directory
+     */
+    public function filter(\Closure $predicate) {
+        return new FilteredDirectory($this, $predicate); 
+    }
+
+    /**
+     * Get the the things inside this abstract directory.
+     *
+     * @return mixed[]  should really be any[]
+     */
+     public function contents() {
+        return $this->unfix()->fcontents();
+     } 
 }

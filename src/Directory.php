@@ -28,16 +28,6 @@ class Directory extends FixedFDirectory {
     }
 
     /**
-     * Only regard contents that match the predicate.
-     * 
-     * @param   \Closure    $predicate  File|Directory -> bool
-     * @return  Directory
-     */
-    public function filter(\Closure $predicate) {
-        return new FilteredDirectory($this, $predicate); 
-    }
-
-    /**
      * @inheritdoc
      */
     public function mimetype() {
@@ -102,8 +92,4 @@ class Directory extends FixedFDirectory {
     public function recurseOn() {
         return new Recursor($this);
     }
-
-
-    // Maybe remove these? Certainly reimplement them...
-
 }

@@ -81,6 +81,38 @@ class IterationTest extends _TestCaseBase {
         $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
     }
 
+    public function test_filteredLayeredIteration() {
+        $root = $this->flightcontrol->directory("/root");
+        $accu1 = array();
+        $accu2 = array();
+        $accu3 = array();
+        $root
+            ->iterateOn()
+            ->filter(function($obj) {
+                return substr($obj->name(), -1) == "1";
+            })
+                ->iterateOn()
+                ->filter(function($obj) {
+                    return substr($obj->name(), -1) == "1";
+                })
+                    ->iterateOn()
+                    ->filter(function($obj) {
+                        return substr($obj->name(), -1) == "1";
+                    })
+                    ->with(function($obj) use (&$accu3) {
+                        $accu3[] = $obj->name();
+                    })
+                ->with(function($obj) use (&$accu2) {
+                    $accu2[] = $obj->name();
+                })
+            ->with(function($obj) use (&$accu1) {
+                $accu1[] = $obj->name();
+            });    
+        $this->assertEquals(array("dir_1"), $accu1);
+        $this->assertEquals(array("file_1_1"), $accu2);
+        $this->assertEquals(array(), $accu3);
+    }
+
     public function test_filterWorks() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
