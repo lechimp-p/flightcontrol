@@ -51,6 +51,18 @@ class DirectoryIterator {
     }
 
     /**
+     * Map a function over the objects inside the iterator.
+     *
+     * @param   \Closure    $trans      File|Directory -> a
+     * @return  DirectoryIterator
+     */
+    public function map(\Closure $trans) {
+        $fcontents = $this->directory->unfix()->fmap($trans)->fcontents();
+        $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $fcontents);
+        return new DirectoryIterator($fixed);
+    }
+
+    /**
      * Define the function to be iterated with and close this level
      * of iteration.
      * 
