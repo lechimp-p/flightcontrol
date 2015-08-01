@@ -6,7 +6,7 @@ namespace Lechimp\Flightcontrol;
 * An iterator on a directory.
 */
 abstract class Iterator {
-    use NamedFilterTrait;
+    use FilterTrait;
 
     /**
      * Iterate on the contents of the this iterator.
@@ -73,7 +73,7 @@ abstract class Iterator {
     // Helpers
     
     /**
-     * Get an recursor over the content of this directory iterator.
+     * Recurse into every content of this directory.
      *
      * @return Recursor
      */

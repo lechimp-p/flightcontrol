@@ -12,7 +12,7 @@ namespace Lechimp\Flightcontrol;
 /**
  * Capture similarities for objects that could be filtered for name.
  */
-trait NamedFilterTrait {
+trait FilterTrait {
     /**
      * Get a recursor/iterator filters on the name of the objects it works on.
      *

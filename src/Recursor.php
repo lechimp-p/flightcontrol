@@ -14,7 +14,7 @@ namespace Lechimp\Flightcontrol;
 * I don't know if the name really fits.
 */
 class Recursor extends FSObject {
-    use NamedFilterTrait;
+    use FilterTrait;
 
     /**
      * @var FixedFDirectory

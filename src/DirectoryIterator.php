@@ -6,8 +6,6 @@ namespace Lechimp\Flightcontrol;
 * An iterator on a directory.
 */
 class DirectoryIterator extends Iterator {
-    use NamedFilterTrait;
-
     /**
      * @var FixedFDirectory a
      */
