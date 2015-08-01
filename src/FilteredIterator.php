@@ -2,7 +2,7 @@
 
 namespace Lechimp\Flightcontrol;
 
-class FilterIterator extends Iterator {
+class FilteredIterator extends Iterator {
     use FilteredTrait;
 
     /**
