@@ -23,7 +23,7 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @return Iterator
      */
     public function iterateOn() {
-        return new Iterator($this);
+        return new DirectoryIterator($this);
     }
 
     /**

@@ -5,8 +5,17 @@ namespace Lechimp\Flightcontrol;
 /**
 * An iterator on a directory.
 */
-abstract class Iterator {
+class DirectoryIterator extends Iterator {
     use NamedFilterTrait;
+
+    /**
+     * @var FixedFDirectory a
+     */
+    protected $directory;
+
+    public function __construct(FixedFDirectory $directory) {
+        $this->directory = $directory;
+    }   
 
     /**
      * Iterate on the contents of the this iterator.
@@ -24,7 +33,9 @@ abstract class Iterator {
      * @param  \Closure             $predicate  (a -> Bool)
      * @return Iterator
      */
-    abstract public function filter(\Closure $predicate);
+    public function filter(\Closure $predicate) {
+        return new DirectoryIterator($this->directory->filter($predicate));
+    }
 
     /**
      * Map a function over the objects inside the iterator.
@@ -32,7 +43,13 @@ abstract class Iterator {
      * @param   \Closure    $trans      a -> b
      * @return  Iterator
      */
-    abstract public function map(\Closure $trans);
+    public function map(\Closure $trans) {
+        return new DirectoryIterator(
+            new GenericFixedFDirectory(
+                $this->directory->unfix()->fmap($trans)
+            )
+        ); 
+    }
 
     /**
      * Define the function to be iterated with and close this level
@@ -41,33 +58,12 @@ abstract class Iterator {
      * @param   \Closure    $iteration  a -> File|Directory -> a
      * @return  Iterator|a
      */
-    abstract public function fold($start_value, $iteration);
-
-    /**
-     * Like fold, but with no start value or return.
-     *
-     * @param   \Closure    $iteration  File|Directory -> () 
-     * @return  Iterator|null
-     */
-    public function with($iteration) {
-        return $this
-        ->fold(
-            array(), 
-            function($a, $f) use ($iteration) { 
-                $iteration($f); 
-                $a[] = $f; // Do not disturb the structure of
-                return $a; // the directory tree.
-            }
-        );
-    }
-    
-    /**
-     * Close a level of iteration without an iteration function.
-     *
-     * @return  Iterator|null
-     */
-    public function run() {
-        $this->with(function($obj) {});
+    public function fold($start_value, $iteration) {
+        $contents = $this->directory->unfix()->fcontents();
+        foreach($contents as $content) {
+            $start_value = $iteration($start_value, $content);
+        }
+        return $start_value;
     }
 
     // Helpers
