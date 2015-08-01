@@ -37,21 +37,16 @@ class Recursor extends FSObject {
      * @return Recursor
      */
     public function filter(\Closure $predicate) {
-        $filter = array();
-        $filter[0] = function(FixedFDirectory $dir) use (&$filter, $predicate) {
-            return new GenericFixedFDirectory(
-                $dir->filter($predicate)
-                    ->unfix()
-                    ->fmap(function(FSObject $obj) use (&$filter) {
-                        if ($obj->isFile()) {
-                            return $obj;
-                        }
-                        return $filter[0]($obj);
-                    })
-            );
-        };
         return new Recursor(
-            $filter[0]($this->directory)
+            $this->cata(function(FSObject $obj) use ($predicate) {
+                if ($obj->isFile()) {
+                    return $obj;
+                }
+
+                return new GenericFixedFDirectory(
+                    $obj->filter($predicate)
+                );
+            })
         );
     }
 
