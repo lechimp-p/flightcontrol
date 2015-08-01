@@ -47,7 +47,7 @@ class Iterator {
      * @return Iterator
      */
     public function filter(\Closure $predicate) {
-        return new FilterIterator($predicate, $this);
+        return new FilteredIterator($predicate, $this);
     }
 
     /**
