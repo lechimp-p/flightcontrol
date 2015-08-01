@@ -49,6 +49,29 @@ class WithContentsTest extends _TestCaseBase {
         $this->assertContains("file_2_1", $accu);
     }
 
+    public function test_layeredIteration() {
+        $root = $this->flightcontrol->directory("/root");
+        $accu1 = array();
+        $accu2 = array();
+        $accu3 = array();
+        $root
+            ->iterateOn()
+                ->iterateOn()
+                    ->iterateOn()
+                    ->with(function($obj) use (&$accu3) {
+                        $accu3[] = $obj->name();
+                    })
+                ->with(function($obj) use (&$accu2) {
+                    $accu2[] = $obj->name();
+                })
+            ->with(function($obj) use (&$accu1) {
+                $accu1[] = $obj->name();
+            });
+        $this->assertEquals(array("dir_1", "dir_2"), $accu1);
+        $this->assertEquals(array("file_1_1", "file_1_2", "dir_2_1", "file_2_1"), $accu2);
+        $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
+    }
+
     public function test_filterWorks() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();

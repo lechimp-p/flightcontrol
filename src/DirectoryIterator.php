@@ -106,6 +106,16 @@ class DirectoryIterator {
     }
 
     /**
+     * Create a copy of this recursor, but on a different path.
+     *
+     * TODO: I need some real type hint here...
+     */
+    protected function copyOnFDirectory(FDirectory $directory) {
+        $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $directory->fcontents());
+        return new DirectoryIterator($directory);
+    }
+
+    /**
      * Get the subjacent directory.
      *
      * @return Directory
