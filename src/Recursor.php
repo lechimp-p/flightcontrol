@@ -37,7 +37,22 @@ class Recursor extends FSObject {
      * @return Recursor
      */
     public function filter(\Closure $predicate) {
-        return new FilteredRecursor($this, $predicate);
+        $filter = array();
+        $filter[0] = function(FixedFDirectory $dir) use (&$filter, $predicate) {
+            return new GenericFixedFDirectory(
+                $dir->filter($predicate)
+                    ->unfix()->fmap(function(FSObject $obj) use (&$filter) {
+                        $file = $obj->toFile();
+                        if ($file !== null) {
+                            return $file;
+                        }
+                        return $filter[0]($obj);
+                })
+            );
+        };
+        return new Recursor(
+            $filter[0]($this->directory)
+        );
     }
 
     /**
@@ -53,7 +68,7 @@ class Recursor extends FSObject {
             if ($file !== null) {
                 return $file;
             }
-            assert($obj instanceof Directory);
+            assert($obj instanceof FixedFDirectory);
             return $this->copyOnDirectory($obj);
         }, $this->contents());
 
@@ -81,7 +96,7 @@ class Recursor extends FSObject {
             if ($file !== null) {
                 return $trans($file);
             }
-            assert($obj instanceof Directory || $obj instanceof Recursor);
+            assert($obj instanceof FixedFDirectory || $obj instanceof Recursor);
             return $obj->cata($trans);
         }));
     }
@@ -147,7 +162,7 @@ class Recursor extends FSObject {
     /**
      * Create a copy of this recursor, but on a different path.
      */
-    protected function copyOnDirectory(Directory $directory) {
+    protected function copyOnDirectory(FixedFDirectory $directory) {
         return new Recursor($directory);
     }
 
