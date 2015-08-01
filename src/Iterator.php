@@ -9,11 +9,11 @@ class Iterator {
     use NamedFilterTrait;
 
     /**
-     * @var Directory   This should be some interface like Fixed really... 
+     * @var FixedFDirectory a
      */
     protected $directory;
 
-    public function __construct(/*Directory*/ $directory) {
+    public function __construct(FixedFDirectory $directory) {
         $this->directory = $directory;
     }   
 
@@ -31,7 +31,7 @@ class Iterator {
     }
 
     /**
-     * Iterate over the contents of the current iterator.
+     * Iterate on the contents of the this iterator.
      *
      * @return Iterator 
      */
@@ -43,7 +43,7 @@ class Iterator {
      * Get an iterator for every content in the current iterator
      * for which the provided predicate returns true.
      *
-     * @param  \Closure             $predicate  (FSObject -> Bool)
+     * @param  \Closure             $predicate  (a -> Bool)
      * @return Iterator
      */
     public function filter(\Closure $predicate) {
@@ -53,13 +53,15 @@ class Iterator {
     /**
      * Map a function over the objects inside the iterator.
      *
-     * @param   \Closure    $trans      File|Directory -> a
+     * @param   \Closure    $trans      a -> b
      * @return  Iterator
      */
     public function map(\Closure $trans) {
-        $fcontents = $this->directory->unfix()->fmap($trans)->fcontents();
-        $fixed = new GenericFixedFDirectory($this->subjacentDirectory(), $fcontents);
-        return new Iterator($fixed);
+        return new Iterator(
+            new GenericFixedFDirectory(
+                $this->directory->unfix()->fmap($trans)
+            )
+        ); 
     }
 
     /**
