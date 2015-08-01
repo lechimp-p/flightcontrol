@@ -15,7 +15,6 @@ class GenericFixedFDirectory extends FixedFDirectory {
      */
     protected $fdirectory;
 
-    // TODO: This should directly take an FDirectory.
     public function __construct(FDirectory $fdirectory) {
         parent::__construct($fdirectory->flightcontrol, $fdirectory->filesystem, $fdirectory->path);
         $this->fdirectory = $fdirectory;

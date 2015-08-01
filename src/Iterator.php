@@ -18,19 +18,6 @@ class Iterator {
     }   
 
     /**
-     * Get all content included in this iterator.
-     *
-     * @return FSObject[]
-     */
-    public function contents() {
-        $returns = array();
-        $this->with(function($obj) use (&$returns) {
-            $returns[] = $obj;
-        });
-        return $returns;
-    }
-
-    /**
      * Iterate on the contents of the this iterator.
      *
      * @return Iterator 
@@ -122,19 +109,4 @@ class Iterator {
 /*    public function foldFiles() {
         return new RawRecursor($this);
     }*/
-
-    /**
-     * With every content in the iterator do some action.
-     *
-     * @param   \Closure    $action
-     * @return  null
-     */
-//    abstract public function onContents(\Closure $action);
-
-    /**
-     * Get the subjacent directory.
-     *
-     * @return Directory
-     */
-//    abstract public function subjacentDirectory();
 }
