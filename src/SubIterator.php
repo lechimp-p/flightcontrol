@@ -46,29 +46,21 @@ class SubIterator extends Iterator {
      * @inheritdoc 
      */
     public function fold($start_value, $iteration) {
-        return $this->top->map(function($v) use ($start_value, $iteration) {
-            if ($v instanceof FixedFDirectory) {
-                return new GenericFixedFDirectory(
-                    new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
-                );
-            } 
-            assert($v instanceof File);
-            return $v;
+        return $this->mapTopOnNonFiles(function($v) use ($start_value, $iteration) {
+            return new GenericFixedFDirectory(
+                new FDirectory($v, $v->iterateOn()->fold($start_value, $iteration))
+            );
         });
     }
 
     // Helpers
 
-    function mapTop(\Closure $trans) {
+    protected function mapTop(\Closure $trans) {
         return $this->top->map($trans);
     }
 
-    function wrappedMapTop(\Closure $trans) {
-        return new SubIterator($this->mapTop($trans));
-    }
-
-    function wrappedMapTopOnNonFiles(\Closure $trans) {
-        return $this->wrappedMapTop(function($obj) use ($trans) {
+    protected function mapTopOnNonFiles(\Closure $trans) {
+        return $this->mapTop(function($obj) use ($trans) {
             $file = $obj->toFile();
             if ($file !== null) {
                 return $file;
@@ -76,6 +68,18 @@ class SubIterator extends Iterator {
             assert($obj instanceof FixedFDirectory);
             return $trans($obj);
         });
+    }
+
+    protected function wrap(Iterator $iter) {
+        return new SubIterator($iter);
+    }
+
+    protected function wrappedMapTop(\Closure $trans) {
+        return $this->wrap($this->mapTop($trans));
+    }
+
+    protected function wrappedMapTopOnNonFiles(\Closure $trans) {
+        return $this->wrap($this->mapTopOnNonFiles($trans));
     }
 }
 
