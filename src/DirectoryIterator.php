@@ -9,11 +9,11 @@ class DirectoryIterator {
     use NamedFilterTrait;
 
     /**
-     * @var Directory
+     * @var Directory   This should be some interface like Fixed really... 
      */
     protected $directory;
 
-    public function __construct(Directory $directory) {
+    public function __construct(/*Directory*/ $directory) {
         $this->directory = $directory;
     }   
 
@@ -54,7 +54,7 @@ class DirectoryIterator {
      * Define the function to be iterated with and close this level
      * of iteration.
      * 
-     * @param   \Closure    $iteration  a -> File -> a
+     * @param   \Closure    $iteration  a -> File|Directory -> a
      * @return  DirectoryIterator|a
      */
     public function fold($start_value, $iteration) {
@@ -68,11 +68,15 @@ class DirectoryIterator {
     /**
      * Like fold, but with no start value or return.
      *
-     * @param   \Closure    $iteration  File -> () 
+     * @param   \Closure    $iteration  File|Directory -> () 
      * @return  DirectoryIterator|null
      */
     public function with($iteration) {
-        return $this->fold(null, function($_, $f) use ($iteration) { $iteration($f); });
+        return $this->fold(array(), function($a, $f) use ($iteration) { 
+                                        $iteration($f); 
+                                        $a[] = $f; // Do not disturb the structure of
+                                        return $a; // the directory tree.
+                                    });
     }
     
     /**
@@ -89,6 +93,25 @@ class DirectoryIterator {
      */
     public function unfix() {
         return $this->directory->unfix();
+    }
+
+    // Helpers
+    
+    /**
+     * Get the depth of an iterator, that is the level of nested
+     * iterations we're in.
+     */
+    protected function depth() {
+        return 1;
+    }
+
+    /**
+     * Get the subjacent directory.
+     *
+     * @return Directory
+     */
+    public function subjacentDirectory() {
+        return $this->directory;
     }
 
     /**

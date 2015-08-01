@@ -34,4 +34,8 @@ class FilterDirectoryIterator extends DirectoryIterator {
     public function subjacentDirectory() {
         return $this->prev->subjacentDirectory();
     }
+
+    protected function depth() {
+        return $this->previous->depth();
+    }
 }
