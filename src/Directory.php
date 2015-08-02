@@ -51,5 +51,4 @@ class Directory extends FixedFDirectory {
             return $this->contents();
         });
     }
-
 }
