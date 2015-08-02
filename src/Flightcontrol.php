@@ -31,7 +31,7 @@ class Flightcontrol {
     }
 
     /**
-     * @return \League\Flysystem\Filesystem;
+     * @return \League\Flysystem\Filesystem
      */
     public function filesystem() {
         return $this->filesystem;
@@ -111,8 +111,8 @@ class Flightcontrol {
      * @param   \Closure    $contents_lazy
      * @return  FDirectory
      */
-    public function newFDirectory(FSObject $fs_obj, \Closure $contents_lazy) {
-        $fdir = new FDirectory($fs_obj, $contents_lazy);
+    public function newFDirectory(FSObject $fs_object, \Closure $contents_lazy) {
+        $fdir = new FDirectory($fs_object, $contents_lazy);
         if ($this->strict_evaluation) {
             $fdir->fcontents();
         }
