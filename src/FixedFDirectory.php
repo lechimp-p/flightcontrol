@@ -74,7 +74,7 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      */
     public function outer_map(\Closure $trans) {
         return new GenericFixedFDirectory(
-            $this->unfix()->outer_map($trans)
+            $this->unfix()->outer_fmap($trans)
         );
     }
 
