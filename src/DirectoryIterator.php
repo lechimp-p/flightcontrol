@@ -57,11 +57,7 @@ class DirectoryIterator extends Iterator {
      * @return  Iterator|a
      */
     public function fold($start_value, $iteration) {
-        $contents = $this->directory->unfix()->fcontents();
-        foreach($contents as $content) {
-            $start_value = $iteration($start_value, $content);
-        }
-        return $start_value;
+        return $this->directory->fold($start_value, $iteration)->contents();
     }
 
     // Helpers

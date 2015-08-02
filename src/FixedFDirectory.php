@@ -79,6 +79,21 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     }
 
     /**
+     * Fold the contents of this directory with a function.
+     *
+     * Provide a start value that is fed together with the any content
+     * of this directory to the function successively to get a new value.
+     * 
+     * @param   \Closure    $iteration  a -> b -> a
+     * @return  FixedFDirectory
+     */
+    public function fold($start_value, $iteration) {
+        return new GenericFixedFDirectory(
+            $this->unfix()->fold($start_value, $iteration)
+        );
+    }
+
+    /**
      * Get the the things inside this abstract directory.
      *
      * @return mixed[]  should really be any[]

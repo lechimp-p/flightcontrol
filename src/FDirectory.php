@@ -91,6 +91,22 @@ class FDirectory extends FSObject {
     }
 
     /**
+     * Define the function to be iterated with and close this level
+     * of iteration.
+     * 
+     * @param   \Closure    $iteration  a -> File|Directory -> a
+     * @return  Iterator|a
+     */
+    public function fold($start_value, $iteration) {
+        return $this->outer_fmap(function($contents) use ($start_value, $iteration) {
+            foreach($contents as $content) {
+                $start_value = $iteration($start_value, $content);
+            }
+            return $start_value;
+        });
+    }
+
+    /**
      * We could filter the FDirectory by a $predicate-
      *
      * @param   \Closure    $predicate  a -> bool

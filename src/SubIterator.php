@@ -42,9 +42,7 @@ class SubIterator extends Iterator {
         // the transformation on all non files in the iterator above and return
         // something similar to this.
         return $this->wrappedMapTopOnNonFiles(function ($obj) use ($trans) {
-            return new GenericFixedFDirectory(
-                $obj->unfix()->fmap($trans)
-            );
+            return $obj->map($trans);
         });
     }
 
@@ -56,11 +54,7 @@ class SubIterator extends Iterator {
         // function to the things in the iterator above and return something
         // similar to the iterator above.
         return $this->mapTopOnNonFiles(function($v) use ($start_value, $iteration) {
-            return new GenericFixedFDirectory(
-                new FDirectory($v, function() use ($v, $start_value, $iteration) {
-                    return $v->iterateOn()->fold($start_value, $iteration);
-                })
-            );
+            return $v->fold($start_value, $iteration);
         });
     }
 
