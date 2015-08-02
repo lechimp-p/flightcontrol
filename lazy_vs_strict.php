@@ -10,7 +10,7 @@ $flightcontrol_lazy = new \Lechimp\Flightcontrol\Flightcontrol($flysystem, false
 $dir = $flightcontrol->get("");
 $dir_lazy = $flightcontrol_lazy->get("");
 
-function measure($dir) {
+$measure = function($dir) {
     $start = microtime(true);
     $arr = array();
     for ($i = 0; $i < 100; $i++) {
@@ -34,9 +34,9 @@ function measure($dir) {
          "Counted ".count($arr)." elements.\n".
          "Took ".($end - $start)." seconds\n".
          "\n";
-}
+};
 
 echo "STRICT:\n";
-measure($dir);
+$measure($dir);
 echo "\n\nLAZY:\n";
-measure($dir_lazy);
+$measure($dir_lazy);
