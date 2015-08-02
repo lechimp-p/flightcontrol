@@ -49,7 +49,33 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @return  Directory
      */
     public function filter(\Closure $predicate) {
-        return new FilteredDirectory($this, $predicate); 
+        return new GenericFixedFDirectory(
+            $this->unfix()->filter($predicate)
+        );
+    }
+
+    /**
+     * Map over the contents of this directory.
+     *
+     * @param   \Closure    $trans
+     * @return  Directory
+     */
+    public function map(\Closure $trans) {
+        return new GenericFixedFDirectory(
+            $this->unfix()->fmap($trans)
+        );
+    }
+
+    /**
+     * Map the contents this directory.
+     *
+     * @param   \Closure    $trans
+     * @return  Directory
+     */
+    public function outer_map(\Closure $trans) {
+        return new GenericFixedFDirectory(
+            $this->unfix()->outer_map($trans)
+        );
     }
 
     /**

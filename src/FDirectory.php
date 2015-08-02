@@ -18,8 +18,8 @@ namespace Lechimp\Flightcontrol;
  * 
  * There is a datatype for an abstract directory
  *
- *      data FDirectory a = FDirectory Metadata [a]
- *                        | FFile File
+ *      data FDirectory f a = FDirectory Metadata [a]
+ *                          | FFile f
  *
  *
  * where Metadata means path and other filesystem metadata. The F stands
@@ -29,7 +29,7 @@ namespace Lechimp\Flightcontrol;
  *
  * and a real filesystem then is
  *      newtype Fix f = Fix { unfix :: f (Fix f) }
- *      type Directory = Fix FDirectory
+ *      type Directory = Fix (FDirectory File)
  *
  * As a real implementation in PHP the metadata part is captured in the
  * FSObject class. As there are no type parameters in PHP, we define FDirectory
