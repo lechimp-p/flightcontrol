@@ -26,11 +26,25 @@ abstract class FSObject {
      * @param   \League\Flysystem\Filesytem             $filesystem
      * @param   string  $path
      */
-    public function __construct(Flightcontrol $flightcontrol, \League\Flysystem\Filesystem $filesystem, $path) {
+    public function __construct(Flightcontrol $flightcontrol, $path) {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
-        $this->filesystem = $filesystem;
+        //$this->filesystem = $filesystem;
         $this->path = self::normalize($path);
+    }
+
+    /**
+     * @return \League\Flysystem\Filesystem;
+     */
+    public function flightcontrol() {
+        return $this->flightcontrol;
+    }
+
+    /**
+     * @return \League\Flysystem\Filesystem;
+     */
+    public function filesystem() {
+        return $this->flightcontrol->filesystem();
     }
 
     /**

@@ -10,21 +10,21 @@ class File extends FSObject {
      * @return string|int
      */
     public function timestamp() {
-        return $this->filesystem->getTimestamp($this->path);
+        return $this->filesystem()->getTimestamp($this->path);
     }
 
     /**
      * @return string
      */
     public function mimetype() {
-        return $this->filesystem->getMimetype($this->path);
+        return $this->filesystem()->getMimetype($this->path);
     }
 
     /**
      * @return
      */
     public function content() {
-        return $this->filesystem->read($this->path);
+        return $this->filesystem()->read($this->path);
     }
 
     /**

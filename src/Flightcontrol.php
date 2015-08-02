@@ -22,6 +22,13 @@ class Flightcontrol {
     public function __construct(\League\Flysystem\Filesystem $filesystem) {
         $this->filesystem = $filesystem;
     }
+
+    /**
+     * @return \League\Flysystem\Filesystem;
+     */
+    public function filesystem() {
+        return $this->filesystem;
+    }
     
     /**
      * Get an object from the filesystem based on its path.
@@ -40,16 +47,16 @@ class Flightcontrol {
         // For ZipArchiveAdapter this is required to get the directories correctly,
         // as Filesystem::get will raise.
         if ($this->filesystem->listContents($path)) {
-            return new Directory($this, $this->filesystem, $path);
+            return new Directory($this, $path);
         }
 
         try {
             $info = $this->filesystem->getMetadata($path);
             if ($info) {
                 if ($info["type"] == "file") {
-                    return new File($this, $this->filesystem, $path);
+                    return new File($this, $path);
                 }
-                return new Directory($this, $this->filesystem, $path);
+                return new Directory($this, $path);
             }
         }
         catch (\League\Flysystem\FileNotFoundException $e) {

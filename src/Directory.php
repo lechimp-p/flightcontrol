@@ -19,7 +19,7 @@ class Directory extends FixedFDirectory {
      * @return FSObject[]
      */
     public function contents() {
-        $contents = $this->filesystem->listContents($this->path());
+        $contents = $this->filesystem()->listContents($this->path());
         $returns = array();
         foreach ($contents as $content) {
             $returns[] = $this->flightcontrol->get($content["path"]);
