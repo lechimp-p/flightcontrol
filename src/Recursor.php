@@ -37,19 +37,18 @@ class Recursor extends FSObject {
      * @return Recursor
      */
     public function filter(\Closure $predicate) {
-        // This could also be implemented via a top down recursion instead
-        // of bottom up, which is faster for strict evaluation.
-        return new Recursor(
-            $this->cata(function(FSObject $obj) use ($predicate) {
-                if ($obj->isFile()) {
-                    return $obj;
-                }
-
-                return new GenericFixedFDirectory(
-                    $obj->filter($predicate)
-                );
-            })
-        );
+        $filter = array();
+        $filter[0] = function(FixedFDirectory $obj) use ($predicate, &$filter) {
+            return $obj
+                ->filter($predicate)
+                ->map(function(FSObject $obj) use ($predicate, &$filter) {
+                    if ($obj->isFile()) {
+                        return $obj;
+                    }
+                    return $filter[0]($obj);
+                });
+        };
+        return new Recursor($filter[0]($this->directory));
     }
 
     /**
