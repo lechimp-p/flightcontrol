@@ -22,7 +22,7 @@ class Recursor extends FSObject {
     protected $directory;
 
     public function __construct(FixedFDirectory $directory) {
-        parent::__construct($directory->flightcontrol, $directory->filesystem, $directory->path);
+        parent::__construct($directory->flightcontrol(), $directory->path);
         $this->directory = $directory;
     }
 

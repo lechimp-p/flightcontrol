@@ -25,7 +25,7 @@ class FilteredDirectory extends FixedFDirectory {
 
 
     public function __construct(FixedFDirectory $previous, \Closure $predicate) {
-        parent::__construct($previous->flightcontrol, $previous->filesystem, $previous->path);
+        parent::__construct($previous->flightcontrol(), $previous->path);
         $this->previous = $previous;
         $this->predicate = $predicate;
     }

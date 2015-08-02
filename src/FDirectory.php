@@ -53,7 +53,7 @@ class FDirectory extends FSObject {
      */
     public function __construct(FSObject $fs_object, array $contents) {
         //TODO: A thing like lazy content might come in handy...
-        parent::__construct($fs_object->flightcontrol, $fs_object->filesystem, $fs_object->path);
+        parent::__construct($fs_object->flightcontrol(), $fs_object->path);
         $this->fcontents = $contents;
     }
 
