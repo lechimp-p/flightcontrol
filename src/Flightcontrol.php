@@ -88,4 +88,16 @@ class Flightcontrol {
         }
         return null;
     }
+
+    /**
+     * Create an FDirectory with metadata from some FSObject and some content
+     * that could be lazily produced by some function.
+     *
+     * @param   FSObject    $fs_object
+     * @param   \Closure    $lazy_content
+     * @return  FDirectory
+     */
+    public function newFDirectory(FSObject $fs_obj, \Closure $lazy_content) {
+        return new FDirectory($fs_obj, $lazy_contents);
+    }
 }
