@@ -23,7 +23,6 @@ abstract class FSObject {
 
     /**
      * @param   \Lechimp\Flightcontrol\Flightcontrol    $flightcontrol
-     * @param   \League\Flysystem\Filesytem             $filesystem
      * @param   string  $path
      */
     public function __construct(Flightcontrol $flightcontrol, $path) {
@@ -34,14 +33,14 @@ abstract class FSObject {
     }
 
     /**
-     * @return \League\Flysystem\Filesystem;
+     * @return Flightcontrol
      */
     public function flightcontrol() {
         return $this->flightcontrol;
     }
 
     /**
-     * @return \League\Flysystem\Filesystem;
+     * @return \League\Flysystem\Filesystem
      */
     public function filesystem() {
         return $this->flightcontrol->filesystem();
