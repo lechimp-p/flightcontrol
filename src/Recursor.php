@@ -37,6 +37,8 @@ class Recursor extends FSObject {
      * @return Recursor
      */
     public function filter(\Closure $predicate) {
+        // This could also be implemented via a top down recursion instead
+        // of bottom up, which is faster for strict evaluation.
         return new Recursor(
             $this->cata(function(FSObject $obj) use ($predicate) {
                 if ($obj->isFile()) {
