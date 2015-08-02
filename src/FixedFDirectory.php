@@ -96,7 +96,7 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     /**
      * Get the the things inside this abstract directory.
      *
-     * @return mixed[]  should really be any[]
+     * @return mixed
      */
      public function contents() {
         return $this->unfix()->fcontents();

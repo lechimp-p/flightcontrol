@@ -52,7 +52,7 @@ class DirectoryIterator extends Iterator {
      * of iteration.
      * 
      * @param   \Closure    $iteration  a -> File|Directory -> a
-     * @return  Iterator|a
+     * @return  mixed
      */
     public function fold($start_value, $iteration) {
         return $this->directory->fold($start_value, $iteration)->contents();
