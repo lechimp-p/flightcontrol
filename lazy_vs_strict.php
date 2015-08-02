@@ -4,13 +4,14 @@ require_once("tests/autoloader.php");
 
 $adapter = new \League\Flysystem\Adapter\Local(__DIR__);
 $flysystem = new \League\Flysystem\Filesystem($adapter);
-$flightcontrol = new \Lechimp\Flightcontrol\Flightcontrol($flysystem);
+$flightcontrol_strict = new \Lechimp\Flightcontrol\Flightcontrol($flysystem);
 $flightcontrol_lazy = new \Lechimp\Flightcontrol\Flightcontrol($flysystem, false);
 
-$dir = $flightcontrol->get("");
+$dir_strict = $flightcontrol_strict->get("");
 $dir_lazy = $flightcontrol_lazy->get("");
 
-$measure = function($dir) {
+foreach(array("STRICT" => $dir_strict, "LAZY" => $dir_lazy) as $what => $dir) {
+    echo "$what:\n\n";
     $start = microtime(true);
     $arr = array();
     for ($i = 0; $i < 100; $i++) {
@@ -30,13 +31,8 @@ $measure = function($dir) {
         $foo->fcontents();
     } 
     $end = microtime(true);
-    echo "\n\n\n".
-         "Counted ".count($arr)." elements.\n".
-         "Took ".($end - $start)." seconds\n".
-         "\n";
-};
 
-echo "STRICT:\n";
-$measure($dir);
-echo "\n\nLAZY:\n";
-$measure($dir_lazy);
+    echo "Counted ".count($arr)." elements.\n".
+         "Took ".($end - $start)." seconds\n".
+         "\n\n\n";
+}
