@@ -24,7 +24,7 @@ class Flightcontrol {
      *
      * @param   \League\Flysystem\Filesystem    $filesystem
      */
-    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = false) {
+    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = true) {
         assert(is_bool($strict_evaluation));
         $this->strict_evaluation = $strict_evaluation;
         $this->filesystem = $filesystem;
