@@ -71,6 +71,7 @@ class Recursor extends FSObject {
             if ($obj->isFile()) {
                 return $trans($obj);
             }
+            assert($obj instanceof FixedFDirectory);
             return $obj->cata($trans);
         }));
     }
