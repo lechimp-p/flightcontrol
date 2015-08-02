@@ -15,11 +15,18 @@ class Flightcontrol {
     protected $filesystem;
 
     /**
+     * @var bool
+     */
+    protected $strict_evaluation;
+
+    /**
      * Initialize the flightcontrol over a flysystem.
      *
      * @param   \League\Flysystem\Filesystem    $filesystem
      */
-    public function __construct(\League\Flysystem\Filesystem $filesystem) {
+    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = false) {
+        assert(is_bool($strict_evaluation));
+        $this->strict_evaluation = $strict_evaluation;
         $this->filesystem = $filesystem;
     }
 
@@ -105,6 +112,10 @@ class Flightcontrol {
      * @return  FDirectory
      */
     public function newFDirectory(FSObject $fs_obj, \Closure $contents_lazy) {
-        return new FDirectory($fs_obj, $contents_lazy);
+        $fdir = new FDirectory($fs_obj, $contents_lazy);
+        if ($this->strict_evaluation) {
+            $fdir->fcontents();
+        }
+        return $fdir;
     }
 }
