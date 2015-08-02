@@ -43,9 +43,7 @@ class DirectoryIterator extends Iterator {
      */
     public function map(\Closure $trans) {
         return new DirectoryIterator(
-            new GenericFixedFDirectory(
-                $this->directory->unfix()->fmap($trans)
-            )
+            $this->directory->map($trans)
         ); 
     }
 
