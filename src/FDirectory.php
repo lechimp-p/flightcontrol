@@ -102,10 +102,11 @@ class FDirectory extends FSObject {
      */
     public function fold($start_value, $iteration) {
         return $this->outer_fmap(function($contents) use ($start_value, $iteration) {
+            $value = $start_value;
             foreach($contents as $content) {
-                $start_value = $iteration($start_value, $content);
+                $value = $iteration($value, $content);
             }
-            return $start_value;
+            return $value;
         });
     }
 
