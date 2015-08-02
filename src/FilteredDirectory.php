@@ -34,7 +34,7 @@ class FilteredDirectory extends FixedFDirectory {
      * @inheritdoc
      */
     public function unfix() {
-        return new FDirectory($this, function() {
+        return $this->flightcontrol()->newFDirectory($this, function() {
             return array_filter(
                 $this->previous->contents(),
                 $this->predicate

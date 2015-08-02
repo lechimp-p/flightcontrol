@@ -101,10 +101,10 @@ class Flightcontrol {
      * that could be lazily produced by some function.
      *
      * @param   FSObject    $fs_object
-     * @param   \Closure    $lazy_content
+     * @param   \Closure    $contents_lazy
      * @return  FDirectory
      */
-    public function newFDirectory(FSObject $fs_obj, \Closure $lazy_content) {
-        return new FDirectory($fs_obj, $lazy_contents);
+    public function newFDirectory(FSObject $fs_obj, \Closure $contents_lazy) {
+        return new FDirectory($fs_obj, $contents_lazy);
     }
 }

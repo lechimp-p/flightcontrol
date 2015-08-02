@@ -47,7 +47,7 @@ class Directory extends FixedFDirectory {
      * @return FDirectory File
      */
     public function unfix() {
-        return new FDirectory($this, function() {
+        return $this->flightcontrol()->newFDirectory($this, function() {
             return $this->contents();
         });
     }

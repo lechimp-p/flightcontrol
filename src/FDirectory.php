@@ -71,7 +71,7 @@ class FDirectory extends FSObject {
      * @return  FDirectory          
      */
     public function fmap(\Closure $trans) {
-        return new FDirectory($this, function() use ($trans) { 
+        return $this->flightcontrol()->newFDirectory($this, function() use ($trans) { 
             return array_map($trans, $this->fcontents());
         });
     }
@@ -85,7 +85,7 @@ class FDirectory extends FSObject {
      * @return  FDirectory
      */
     public function outer_fmap(\Closure $trans) {
-        return new FDirectory($this, function() use ($trans) {
+        return $this->flightcontrol()->newFDirectory($this, function() use ($trans) {
             return $trans($this->fcontents());
         });
     }
