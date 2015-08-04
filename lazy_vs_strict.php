@@ -7,8 +7,8 @@ $flysystem = new \League\Flysystem\Filesystem($adapter);
 $flightcontrol_strict = new \Lechimp\Flightcontrol\Flightcontrol($flysystem);
 $flightcontrol_lazy = new \Lechimp\Flightcontrol\Flightcontrol($flysystem, false);
 
-$dir_strict = $flightcontrol_strict->get("");
-$dir_lazy = $flightcontrol_lazy->get("");
+$dir_strict = $flightcontrol_strict->directory("");
+$dir_lazy = $flightcontrol_lazy->directory("");
 
 foreach(array("STRICT" => $dir_strict, "LAZY" => $dir_lazy) as $what => $dir) {
     echo "$what:\n\n";
