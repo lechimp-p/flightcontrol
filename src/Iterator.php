@@ -75,25 +75,4 @@ abstract class Iterator {
     public function run() {
         $this->with(function($obj) {});
     }
-
-    // Helpers
-    
-    /**
-     * Recurse into every content of this directory.
-     *
-     * @return Recursor
-     */
-/*    public function recurseOn() {
-        return new RawRecursor($this);
-    }*/
-
-    /**
-     * Get an object that can perform a fold operation on all files in this
-     * iterator. 
-     *
-     * @return  Recursor 
-     */
-/*    public function foldFiles() {
-        return new RawRecursor($this);
-    }*/
 }
