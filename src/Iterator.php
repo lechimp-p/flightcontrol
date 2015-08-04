@@ -39,7 +39,7 @@ abstract class Iterator {
      * of iteration.
      * 
      * @param   \Closure    $iteration  a -> File|Directory -> a
-     * @return  Iterator|a
+     * @return  Iterator|mixed
      */
     abstract public function fold($start_value, $iteration);
 
