@@ -96,6 +96,7 @@ class Flightcontrol {
     }
 
     // Helper
+    // Get an object from fs that either is as file or a dir.
     private function file_or_dir($path, $is_file) {
         assert(is_bool($is_file));
         $obj = $this->get($path);
