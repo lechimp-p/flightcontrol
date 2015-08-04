@@ -28,7 +28,6 @@ abstract class FSObject {
     public function __construct(Flightcontrol $flightcontrol, $path) {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
-        //$this->filesystem = $filesystem;
         $this->path = self::normalize($path);
     }
 
