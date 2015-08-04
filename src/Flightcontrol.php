@@ -82,11 +82,7 @@ class Flightcontrol {
      * @return  Directory|null
      */
     public function directory($path) {
-        $obj = $this->get($path);
-        if ($obj !== null && !$obj->isFile()) {
-            return $obj;
-        }
-        return null;
+        return $this->file_or_dir($path, false);
     }
 
     /**
@@ -96,8 +92,14 @@ class Flightcontrol {
      * @return  File|null
      */
     public function file($path) {
+        return $this->file_or_dir($path, true);
+    }
+
+    // Helper
+    private function file_or_dir($path, $is_file) {
+        assert(is_bool($is_file));
         $obj = $this->get($path);
-        if ($obj !== null && $obj->isFile()) {
+        if ($obj !== null && $is_file === $obj->isFile()) {
             return $obj;
         }
         return null;
