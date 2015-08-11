@@ -43,7 +43,7 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @return  Unfolder
      */
     public function unfold($start_value) {
-        if (!empty($this->contents)) {
+        if (!empty($this->contents())) {
             throw new \LogicException("Can't unfold into non-empty directory '".$this->path()."'.");
         }
         return new Unfolder($this, $start_value);
