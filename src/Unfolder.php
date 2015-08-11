@@ -14,7 +14,7 @@ namespace Lechimp\Flightcontrol;
 */
 class Unfolder {
     /**
-     * @var FixedFDirectory
+     * @var Directory
      */
     protected $directory;
 
@@ -23,7 +23,7 @@ class Unfolder {
      */
     protected $start_value;
 
-    public function __construct(FixedFDirectory $directory, $start_value) {
+    public function __construct(Directory $directory, $start_value) {
         $this->directory = $directory;
         $this->start_value = $start_value;
     }
@@ -36,5 +36,6 @@ class Unfolder {
      * @return  null
      */
     public function with(\Closure $unfolder) {
+        $this->directory->insertByAna($unfolder, $this->start_value);
     }
 }

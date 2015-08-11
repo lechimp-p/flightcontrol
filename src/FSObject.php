@@ -80,5 +80,4 @@ abstract class FSObject {
      * @return bool
      */
     abstract public function isFile();
-
 }

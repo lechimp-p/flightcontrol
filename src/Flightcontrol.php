@@ -109,7 +109,30 @@ class Flightcontrol {
         return $this->file_or_dir($path, true);
     }
 
+    /**
+     * Make a directory when unfolding a directory structure via Directory::unfold.
+     *
+     * @param   string  $name
+     * @param   array   $content
+     * @return  FDirectory a 
+     */
+    public function makeFDirectory($name, array $content) {
+        return Directory::makeFDirectory($this, $name, $content);
+    }
+
+    /**
+     * Make a file when unfolding a directory structure via Directory::unfold.
+     *
+     * @param   string  $name
+     * @param   string  $content
+     * @return  File 
+     */
+    public function makeFile($name, $content) {
+        return Directory::makeFile($this, $name, $content);
+    }
+
     // Helper
+
     // Get an object from fs that either is as file or a dir.
     private function file_or_dir($path, $is_file) {
         assert(is_bool($is_file));

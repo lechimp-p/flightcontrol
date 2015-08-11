@@ -150,4 +150,32 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     public function foldFiles($start_value, \Closure $fold_with) {
         return $this->recurseOn()->foldFiles($start_value, $fold_with);
     }
+
+    /**
+     * As we have an unfix and an underlying fmap from FDirectory, we could
+     * also implement the anamorphism.
+     *
+     * An anamorphism creates a structure from a start value and thus somehow
+     * is the reverse of cata.
+     *
+     * You need to provide a function from a to File or FDirectory a. This
+     * function then is recursively applied on the contents it produces,
+     * starting with the start value.
+     *
+     * @param   \Closure    $unfolder   a -> File|FDirectory a
+     * @param   mixed       $start_value
+     * @return  FixedFDirectory 
+     */
+    public static final function ana(\Closure $unfolder, $start_value) {
+        $unfolded = $unfolder($start_value);
+        if ($unfolded->isFile()) {
+            return $unfolded;
+        }
+
+        return new GenericFixedFDirectory(
+            $unfolded->fmap(function($value) use ($unfolder) {
+                return self::ana($unfolder, $value);
+            })
+        ); 
+    }
 }

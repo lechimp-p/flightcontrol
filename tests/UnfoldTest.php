@@ -30,32 +30,36 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
                 }
                 // the file:
                 $this->assertEquals(0, $layer);
-                return $this->flightcontrol->newFile("file", "content");
+                return $this->flightcontrol->makeFile("file", "content");
             });
+    }
+
+    protected function listContents($path = null) {
+        return array_map(function($info) {
+            return $info["filename"];
+        }, $this->flysystem->listContents($path));
     }
 
     public function test_unfoldWritesFile() {
         $this->writeFile();
 
         $content = $this->flysystem->read("write/file");
-        $this->assertEquals("content");
+        $this->assertEquals("content", $content);
+        $this->assertEquals(array("file"), $this->listContents("write"));
     }
 
     public function test_unfoldLeavesOtherDirsUntouched() {
         $this->writeFile();
 
-        $dirs = $this->flysystem->listContents();
+        $dirs  = $this->listContents();
         $this->assertCount(2, $dirs);
         $this->assertContains("write", $dirs);
         $this->assertContains("no_write", $dirs);
 
-        $dirs2 = $this->flysystem->listContents("no_write");
+        $dirs2 = $this->listContents("no_write");
         $this->assertEquals(array("untouched"), $dirs2);
         
-        $this->assertEquals(array(), $this->flysystem->listContents("no_write/untouched"));
-
-        $this->assertEquals(array("file"), $this->flysystem->listContents("write"));
-        $this->assertEquals("content", $this->flysystem->read("write/file"));
+        $this->assertEquals(array(), $this->listContents("no_write/untouched"));
     }
 
     /**
