@@ -36,6 +36,20 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     }
 
     /**
+     * Get an object that can unfold a directory structure in this directory.
+     *
+     * @param   mixed   $start_value
+     * @throws  \LogicException          If the directory is not empty.
+     * @return  Unfolder
+     */
+    public function unfold($start_value) {
+        if (!empty($this->contents)) {
+            throw new \LogicException("Can't unfold into non-empty directory '".$this->path()."'.");
+        }
+        return new Unfolder($this, $start_value);
+    }
+
+    /**
      * @inheritdoc
      */
     public function isFile() {
