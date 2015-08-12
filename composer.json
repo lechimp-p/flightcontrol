@@ -1,6 +1,6 @@
 {
     "name": "lechimp-p/flightcontrol",
-    "version": "0.11.1",
+    "version": "0.12.0",
     "description": "An interface for iterationr and recursion in directories over the leagues flysystem.",
     "keywords": ["filesystem", "flysystem"],
     "type": "library",

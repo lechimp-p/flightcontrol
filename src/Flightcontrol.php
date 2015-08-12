@@ -38,20 +38,6 @@ class Flightcontrol {
     }
 
     /**
-     * Get the topmost directory in the flightcontrol.
-     *
-     * @return Directory
-     */
-    public function root() {
-        $contents = $this->filesystem->listContents();
-        assert(count($contents) == 1);
-        assert($contents[0]["type"] == "dir");
-        $dir = $this->directory("/".$contents[0]["path"]);
-        assert($dir instanceof Directory);
-        return $dir;
-    }
-    
-    /**
      * Get an object from the filesystem based on its path.
      *
      * Dependening on the adapter in the underlying flysystem, this might treat

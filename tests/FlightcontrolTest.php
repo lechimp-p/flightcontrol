@@ -48,8 +48,4 @@ class FlightcontrolTest extends _TestCaseBase {
         $this->assertNotNull($this->flightcontrol->file("/root/dir_2/dir_2_1/file_2_1_2"));
         $this->assertNotNull($this->flightcontrol->file("/root/dir_2/file_2_1"));
     }
-
-    public function test_root() {
-        $this->assertEquals($this->flightcontrol->get("/root"), $this->flightcontrol->root());
-    }
 }
