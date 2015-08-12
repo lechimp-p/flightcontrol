@@ -60,10 +60,15 @@ class Directory extends FixedFDirectory {
      *
      * @param   \Closure  $unfolder
      * @param   mixed     $start_value
+     * @throws  \LogicException         When generated root node is a file.
      * @return  null
      */
     public function insertByAna(\Closure $unfolder, $start_value) {
         $insert = FixedFDirectory::ana($unfolder, $start_value);
+
+        if ($insert->isFile()) {
+            throw new \LogicException("Expected generated root node to be a directory, not a file.");
+        }
 
         $inserter = array();
         $inserter[0] = function($path, FixedFDirectory $directory) use (&$inserter) {

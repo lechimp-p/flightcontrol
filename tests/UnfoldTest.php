@@ -19,14 +19,14 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
         $this->flysystem->createDir("no_write/untouched");
     }
 
-    protected function writeFile() {
+    protected function writeFile($dir_name = "write") {
         $write_to = $this->flightcontrol->get("write");
         $write_to
             ->unfold(1)
-            ->with(function($layer) {
+            ->with(function($layer) use ($dir_name) {
                 //content of the write directory
                 if ($layer == 1) {
-                    return $this->flightcontrol->makeFDirectory("write", array(0)); 
+                    return $this->flightcontrol->makeFDirectory($dir_name, array(0)); 
                 }
                 // the file:
                 $this->assertEquals(0, $layer);
@@ -68,5 +68,26 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
     public function test_unfoldInEmptyDirsOnly() {
         $no_write_to = $this->flightcontrol->get("no_write");
         $no_write_to->unfold(1);
+    }
+
+    public function test_ignoreRootNodeName() {
+        $this->writeFile("another_name");
+
+        $dirs  = $this->listContents();
+        $this->assertCount(2, $dirs);
+        $this->assertContains("write", $dirs);
+        $this->assertContains("no_write", $dirs);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function test_expectsFDirectoryAsRootNode() {
+        $write_to = $this->flightcontrol->get("write");
+        $write_to
+            ->unfold(0)
+            ->with(function($layer) {
+                return $this->flightcontrol->makeFile("file", "content");
+            });
     }
 }

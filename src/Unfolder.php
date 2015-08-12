@@ -33,6 +33,7 @@ class Unfolder {
      * the unfold operation.
      *
      * @param   \Closure    $unfolder  a -> File|FDirectory a -> a 
+     * @throws  \LogicException         When generated root node is a file.
      * @return  null
      */
     public function with(\Closure $unfolder) {
