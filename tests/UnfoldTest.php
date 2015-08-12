@@ -36,7 +36,7 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
 
     protected function listContents($path = null) {
         return array_map(function($info) {
-            return $info["filename"];
+            return $info["basename"];
         }, $this->flysystem->listContents($path));
     }
 
@@ -108,7 +108,7 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
                 // contents of subdirectories
                 if ($layer >= 1) {
                     $this->layer1++;
-                    $dir_name = str_replace(".", "_", "dir$layer"); // as '.x' get swallowed somehow
+                    $dir_name = "dir$layer";
                     return $this->flightcontrol->makeFDirectory($dir_name, array(0)); 
                 }
                 // the file:
@@ -123,12 +123,12 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
 
         $dirs  = $this->listContents("write");
         $this->assertCount(3, $dirs);
-        $this->assertContains("dir1_1", $dirs);
-        $this->assertContains("dir1_2", $dirs);
-        $this->assertContains("dir1_3", $dirs);
+        $this->assertContains("dir1.1", $dirs);
+        $this->assertContains("dir1.2", $dirs);
+        $this->assertContains("dir1.3", $dirs);
 
-        $this->assertEquals(array("file"), $this->listContents("write/dir1_1"));
-        $this->assertEquals(array("file"), $this->listContents("write/dir1_2"));
-        $this->assertEquals(array("file"), $this->listContents("write/dir1_3"));
+        $this->assertEquals(array("file"), $this->listContents("write/dir1.1"));
+        $this->assertEquals(array("file"), $this->listContents("write/dir1.2"));
+        $this->assertEquals(array("file"), $this->listContents("write/dir1.3"));
     }
 }
