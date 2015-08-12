@@ -79,7 +79,7 @@ class Directory extends FixedFDirectory {
                 }
                 else {
                     $this->filesystem()->createDir($new_path);
-                    $inserter[0]($new_path, $content->contents());
+                    $inserter[0]($new_path, $content);
                 }
             } 
         };

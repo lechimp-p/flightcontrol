@@ -90,4 +90,45 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
                 return $this->flightcontrol->makeFile("file", "content");
             });
     }
+
+    public function test_multiLayers() {
+        $this->layer2 = 0;
+        $this->layer1 = 0;
+        $this->layer0 = 0;
+
+        $write_to = $this->flightcontrol->get("write");
+        $write_to
+            ->unfold(2.0)
+            ->with(function($layer) {
+                //content of the write directory
+                if ($layer >= 2) {
+                    $this->layer2++;
+                    return $this->flightcontrol->makeFDirectory("write", array(1.1,1.2,1.3));
+                }
+                // contents of subdirectories
+                if ($layer >= 1) {
+                    $this->layer1++;
+                    $dir_name = str_replace(".", "_", "dir$layer"); // as '.x' get swallowed somehow
+                    return $this->flightcontrol->makeFDirectory($dir_name, array(0)); 
+                }
+                // the file:
+                $this->layer0++;
+                $this->assertEquals(0, $layer);
+                return $this->flightcontrol->makeFile("file", "content");
+            });
+
+        $this->assertEquals(1, $this->layer2);
+        $this->assertEquals(3, $this->layer1);
+        $this->assertEquals(3, $this->layer0);
+
+        $dirs  = $this->listContents("write");
+        $this->assertCount(3, $dirs);
+        $this->assertContains("dir1_1", $dirs);
+        $this->assertContains("dir1_2", $dirs);
+        $this->assertContains("dir1_3", $dirs);
+
+        $this->assertEquals(array("file"), $this->listContents("write/dir1_1"));
+        $this->assertEquals(array("file"), $this->listContents("write/dir1_2"));
+        $this->assertEquals(array("file"), $this->listContents("write/dir1_3"));
+    }
 }
