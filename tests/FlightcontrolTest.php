@@ -48,4 +48,9 @@ class FlightcontrolTest extends _TestCaseBase {
         $this->assertNotNull($this->flightcontrol->file("/root/dir_2/dir_2_1/file_2_1_2"));
         $this->assertNotNull($this->flightcontrol->file("/root/dir_2/file_2_1"));
     }
+
+    public function test_makeFDirectoryWithDottedName() {
+        $fdir = $this->flightcontrol->makeFDirectory("dir.foo", array());
+        $this->assertEquals("dir.foo", $fdir->name());
+    }
 }
