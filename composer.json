@@ -4,7 +4,7 @@
     "description": "An interface for iterationr and recursion in directories over the leagues flysystem.",
     "keywords": ["filesystem", "flysystem"],
     "type": "library",
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "homepage": "https://github.com/lechimp-p/flightcontrol",
     "authors": [
         {

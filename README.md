@@ -10,7 +10,7 @@
 
 *This README.md is also a literate PHP-file.*
 
-*This code is released under the [MIT License](LICENSE.md)*
+*This code is released under the [GPLv3 License](LICENSE)*
 
 ## Usage
 
