@@ -13,29 +13,33 @@ namespace Lechimp\Flightcontrol;
  * This represents a File-like object that is required during
  * unfolding a directory structure.
  */
-class VirtualFile extends VirtualFSObject {
+class VirtualFile extends VirtualFSObject
+{
     /**
      * @var string
      */
     protected $content;
 
-    public function __construct(Flightcontrol $flightcontrol, $path, $content) {
+    public function __construct(Flightcontrol $flightcontrol, $path, $content)
+    {
         parent::__construct($flightcontrol, $path);
         assert(is_string($content));
-        $this->content = $content; 
+        $this->content = $content;
     }
 
     /**
      * @return bool
      */
-    public function isFile() {
+    public function isFile()
+    {
         return true;
     }
 
     /**
      * @return
      */
-    public function content() {
+    public function content()
+    {
         return $this->content;
     }
 }

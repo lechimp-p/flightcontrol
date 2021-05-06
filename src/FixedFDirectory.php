@@ -9,11 +9,12 @@
 
 namespace Lechimp\Flightcontrol;
 
-abstract class FixedFDirectory /* a */ extends FSObject {
+abstract class FixedFDirectory /* a */ extends FSObject
+{
     /**
      * See documentation of FDirectory.
-     * 
-     * @return FDirectory a 
+     *
+     * @return FDirectory a
      */
     abstract public function unfix();
 
@@ -22,7 +23,8 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * @return Iterator
      */
-    public function iterateOn() {
+    public function iterateOn()
+    {
         return new DirectoryIterator($this);
     }
 
@@ -31,7 +33,8 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * @return Recursor
      */
-    public function recurseOn() {
+    public function recurseOn()
+    {
         return new Recursor($this);
     }
 
@@ -42,9 +45,10 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @throws  \LogicException          If the directory is not empty.
      * @return  Unfolder
      */
-    public function unfold($start_value) {
+    public function unfold($start_value)
+    {
         if (count($this->contents()) > 0) {
-            throw new \LogicException("Can't unfold into non-empty directory '".$this->path()."'.");
+            throw new \LogicException("Can't unfold into non-empty directory '" . $this->path() . "'.");
         }
         return new Unfolder($this, $start_value);
     }
@@ -52,17 +56,19 @@ abstract class FixedFDirectory /* a */ extends FSObject {
     /**
      * @inheritdoc
      */
-    public function isFile() {
+    public function isFile()
+    {
         return false;
     }
 
     /**
      * Only regard contents that match the predicate.
-     * 
+     *
      * @param   \Closure    $predicate  File|Directory -> bool
      * @return  Directory
      */
-    public function filter(\Closure $predicate) {
+    public function filter(\Closure $predicate)
+    {
         return new GenericFixedFDirectory(
             $this->unfix()->filter($predicate)
         );
@@ -74,7 +80,8 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @param   \Closure    $trans
      * @return  Directory
      */
-    public function map(\Closure $trans) {
+    public function map(\Closure $trans)
+    {
         return new GenericFixedFDirectory(
             $this->unfix()->fmap($trans)
         );
@@ -86,7 +93,8 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      * @param   \Closure    $trans
      * @return  Directory
      */
-    public function outer_map(\Closure $trans) {
+    public function outer_map(\Closure $trans)
+    {
         return new GenericFixedFDirectory(
             $this->unfix()->outer_fmap($trans)
         );
@@ -97,11 +105,12 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * Provide a start value that is fed together with the any content
      * of this directory to the function successively to get a new value.
-     * 
+     *
      * @param   \Closure    $iteration  a -> b -> a
      * @return  FixedFDirectory
      */
-    public function fold($start_value, $iteration) {
+    public function fold($start_value, $iteration)
+    {
         return new GenericFixedFDirectory(
             $this->unfix()->fold($start_value, $iteration)
         );
@@ -112,26 +121,28 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * @return mixed
      */
-     public function contents() {
+    public function contents()
+    {
         return $this->unfix()->fcontents();
-     } 
+    }
 
     /**
      * We could also use the catamorphism on this to do recursion, as we
      * have an unfix and an underlying fmap from the FDirectory.
      *
-     * Supply a function $trans from File|FDirectory a to a that flattens 
-     * (folds) a directory. Will start the directories where only files are 
+     * Supply a function $trans from File|FDirectory a to a that flattens
+     * (folds) a directory. Will start the directories where only files are
      * included, folds them and then proceeds upwards.
-     * 
-     * The return type should be 'a' (from the function $trans) instead 
+     *
+     * The return type should be 'a' (from the function $trans) instead
      * of mixed, but we can't express that fact correctly in the docstring
      * typing.
      *
      * @param   \Closure    $trans      File|FDirectory a -> a
      * @return  mixed
      */
-    public function cata(\Closure $trans) {
+    public function cata(\Closure $trans)
+    {
         return $this->recurseOn()->cata($trans);
     }
 
@@ -145,9 +156,10 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * @param   mixed       $start_value
      * @param   \Closure    $fold_with      a -> File -> a
-     * @return  Recursor 
+     * @return  Recursor
      */
-    public function foldFiles($start_value, \Closure $fold_with) {
+    public function foldFiles($start_value, \Closure $fold_with)
+    {
         return $this->recurseOn()->foldFiles($start_value, $fold_with);
     }
 
@@ -164,18 +176,19 @@ abstract class FixedFDirectory /* a */ extends FSObject {
      *
      * @param   \Closure    $unfolder   a -> File|FDirectory a
      * @param   mixed       $start_value
-     * @return  FixedFDirectory 
+     * @return  FixedFDirectory
      */
-    public static final function ana(\Closure $unfolder, $start_value) {
+    final public static function ana(\Closure $unfolder, $start_value)
+    {
         $unfolded = $unfolder($start_value);
         if ($unfolded->isFile()) {
             return $unfolded;
         }
 
         return new GenericFixedFDirectory(
-            $unfolded->fmap(function($value) use ($unfolder) {
+            $unfolded->fmap(function ($value) use ($unfolder) {
                 return self::ana($unfolder, $value);
             })
-        ); 
+        );
     }
 }

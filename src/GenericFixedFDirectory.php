@@ -9,23 +9,26 @@
 
 namespace Lechimp\Flightcontrol;
 
-class GenericFixedFDirectory extends FixedFDirectory {
+class GenericFixedFDirectory extends FixedFDirectory
+{
     /**
      * @var FDirectory
      */
     protected $fdirectory;
 
-    public function __construct(FDirectory $fdirectory) {
+    public function __construct(FDirectory $fdirectory)
+    {
         parent::__construct($fdirectory->flightcontrol(), $fdirectory->path());
         $this->fdirectory = $fdirectory;
     }
 
-    public function unfix() {
+    public function unfix()
+    {
         return $this->fdirectory;
     }
 
-    public function isFile() {
+    public function isFile()
+    {
         return false;
-    } 
+    }
 }
-

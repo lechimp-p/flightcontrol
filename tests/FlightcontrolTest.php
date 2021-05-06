@@ -9,8 +9,10 @@
 
 namespace Lechimp\Flightcontrol\Tests;
 
-class FlightcontrolTest extends Base {
-    public function test_getExisting() {
+class FlightcontrolTest extends Base
+{
+    public function test_getExisting()
+    {
         $this->assertNotNull($this->flightcontrol->get("/root"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1/file_1_1"));
@@ -22,12 +24,14 @@ class FlightcontrolTest extends Base {
         $this->assertNotNull($this->flightcontrol->get("/root/dir_2/file_2_1"));
     }
 
-    public function test_nonExisting() {
+    public function test_nonExisting()
+    {
         $this->assertNull($this->flightcontrol->get("/rootz/"));
         $this->assertNull($this->flightcontrol->get("/root/dir_1/foo_file"));
-    } 
+    }
 
-    public function test_directory() {
+    public function test_directory()
+    {
         $this->assertNotNull($this->flightcontrol->directory("/root"));
         $this->assertNotNull($this->flightcontrol->directory("/root/dir_1"));
         $this->assertNull($this->flightcontrol->directory("/root/dir_1/file_1_1"));
@@ -39,7 +43,8 @@ class FlightcontrolTest extends Base {
         $this->assertNull($this->flightcontrol->directory("/root/dir_2/file_2_1"));
     }
 
-    public function test_file() {
+    public function test_file()
+    {
         $this->assertNull($this->flightcontrol->file("/root"));
         $this->assertNull($this->flightcontrol->file("/root/dir_1"));
         $this->assertNotNull($this->flightcontrol->file("/root/dir_1/file_1_1"));
@@ -51,7 +56,8 @@ class FlightcontrolTest extends Base {
         $this->assertNotNull($this->flightcontrol->file("/root/dir_2/file_2_1"));
     }
 
-    public function test_makeFDirectoryWithDottedName() {
+    public function test_makeFDirectoryWithDottedName()
+    {
         $fdir = $this->flightcontrol->makeFDirectory("dir.foo", array());
         $this->assertEquals("dir.foo", $fdir->name());
     }

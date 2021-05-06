@@ -13,22 +13,25 @@ use \League\Flysystem\Memory\MemoryAdapter;
 use \League\Flysystem\Filesystem;
 use \Lechimp\Flightcontrol\Flightcontrol;
 
-class UnfoldTest extends \PHPUnit\Framework\TestCase {
-    public function setUp() : void {
+class UnfoldTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp() : void
+    {
         $this->flysystem = new Filesystem(new MemoryAdapter());
         $this->flightcontrol = new FlightControl($this->flysystem);
         $this->flysystem->createDir("write");
         $this->flysystem->createDir("no_write/untouched");
     }
 
-    protected function writeFile($dir_name = "write") {
+    protected function writeFile($dir_name = "write")
+    {
         $write_to = $this->flightcontrol->get("write");
         $write_to
             ->unfold(1)
-            ->with(function($layer) use ($dir_name) {
+            ->with(function ($layer) use ($dir_name) {
                 //content of the write directory
                 if ($layer == 1) {
-                    return $this->flightcontrol->makeFDirectory($dir_name, array(0)); 
+                    return $this->flightcontrol->makeFDirectory($dir_name, array(0));
                 }
                 // the file:
                 $this->assertEquals(0, $layer);
@@ -36,13 +39,15 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
             });
     }
 
-    protected function listContents($path = null) {
-        return array_map(function($info) {
+    protected function listContents($path = null)
+    {
+        return array_map(function ($info) {
             return $info["basename"];
         }, $this->flysystem->listContents($path));
     }
 
-    public function test_unfoldWritesFile() {
+    public function test_unfoldWritesFile()
+    {
         $this->writeFile();
 
         $content = $this->flysystem->read("write/file");
@@ -50,10 +55,11 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(array("file"), $this->listContents("write"));
     }
 
-    public function test_unfoldLeavesOtherDirsUntouched() {
+    public function test_unfoldLeavesOtherDirsUntouched()
+    {
         $this->writeFile();
 
-        $dirs  = $this->listContents();
+        $dirs = $this->listContents();
         $this->assertCount(2, $dirs);
         $this->assertContains("write", $dirs);
         $this->assertContains("no_write", $dirs);
@@ -64,32 +70,36 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(array(), $this->listContents("no_write/untouched"));
     }
 
-    public function test_unfoldInEmptyDirsOnly() {
+    public function test_unfoldInEmptyDirsOnly()
+    {
         $this->expectException(\LogicException::class);
         $no_write_to = $this->flightcontrol->get("no_write");
         $no_write_to->unfold(1);
     }
 
-    public function test_ignoreRootNodeName() {
+    public function test_ignoreRootNodeName()
+    {
         $this->writeFile("another_name");
 
-        $dirs  = $this->listContents();
+        $dirs = $this->listContents();
         $this->assertCount(2, $dirs);
         $this->assertContains("write", $dirs);
         $this->assertContains("no_write", $dirs);
     }
 
-    public function test_expectsFDirectoryAsRootNode() {
+    public function test_expectsFDirectoryAsRootNode()
+    {
         $this->expectException(\LogicException::class);
         $write_to = $this->flightcontrol->get("write");
         $write_to
             ->unfold(0)
-            ->with(function($layer) {
+            ->with(function ($layer) {
                 return $this->flightcontrol->makeFile("file", "content");
             });
     }
 
-    public function test_multiLayers() {
+    public function test_multiLayers()
+    {
         $this->layer2 = 0;
         $this->layer1 = 0;
         $this->layer0 = 0;
@@ -97,7 +107,7 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
         $write_to = $this->flightcontrol->get("write");
         $write_to
             ->unfold(2.0)
-            ->with(function($layer) {
+            ->with(function ($layer) {
                 //content of the write directory
                 if ($layer >= 2) {
                     $this->layer2++;
@@ -107,7 +117,7 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
                 if ($layer >= 1) {
                     $this->layer1++;
                     $dir_name = "dir$layer";
-                    return $this->flightcontrol->makeFDirectory($dir_name, array(0)); 
+                    return $this->flightcontrol->makeFDirectory($dir_name, array(0));
                 }
                 // the file:
                 $this->layer0++;
@@ -119,7 +129,7 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(3, $this->layer1);
         $this->assertEquals(3, $this->layer0);
 
-        $dirs  = $this->listContents("write");
+        $dirs = $this->listContents("write");
         $this->assertCount(3, $dirs);
         $this->assertContains("dir1.1", $dirs);
         $this->assertContains("dir1.2", $dirs);

@@ -12,22 +12,25 @@ namespace Lechimp\Flightcontrol;
 /**
 * An iterator on a directory.
 */
-class DirectoryIterator extends Iterator {
+class DirectoryIterator extends Iterator
+{
     /**
      * @var FixedFDirectory a
      */
     protected $directory;
 
-    public function __construct(FixedFDirectory $directory) {
+    public function __construct(FixedFDirectory $directory)
+    {
         $this->directory = $directory;
-    }   
+    }
 
     /**
      * Iterate on the contents of the this iterator.
      *
-     * @return Iterator 
+     * @return Iterator
      */
-    public function iterateOn() {
+    public function iterateOn()
+    {
         return new SubIterator($this);
     }
 
@@ -38,7 +41,8 @@ class DirectoryIterator extends Iterator {
      * @param  \Closure             $predicate  (a -> Bool)
      * @return Iterator
      */
-    public function filter(\Closure $predicate) {
+    public function filter(\Closure $predicate)
+    {
         return new DirectoryIterator($this->directory->filter($predicate));
     }
 
@@ -48,20 +52,22 @@ class DirectoryIterator extends Iterator {
      * @param   \Closure    $trans      a -> b
      * @return  Iterator
      */
-    public function map(\Closure $trans) {
+    public function map(\Closure $trans)
+    {
         return new DirectoryIterator(
             $this->directory->map($trans)
-        ); 
+        );
     }
 
     /**
      * Define the function to be iterated with and close this level
      * of iteration.
-     * 
+     *
      * @param   \Closure    $iteration  a -> File|Directory -> a
      * @return  mixed
      */
-    public function fold($start_value, $iteration) {
+    public function fold($start_value, $iteration)
+    {
         return $this->directory->fold($start_value, $iteration)->contents();
     }
 }

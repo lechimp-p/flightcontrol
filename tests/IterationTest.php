@@ -9,32 +9,36 @@
 
 namespace Lechimp\Flightcontrol\Tests;
 
-class IterationTest extends Base {
-    public function test_correctContents() {
+class IterationTest extends Base
+{
+    public function test_correctContents()
+    {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
         $root->iterateOn()
-             ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use(&$accu) {
-                $accu[] = $obj->name();
+             ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                 $accu[] = $obj->name();
              });
         $this->assertCount(2, $accu);
         $this->assertContains("dir_1", $accu);
         $this->assertContains("dir_2", $accu);
     }
 
-    public function test_correctContents2() {
+    public function test_correctContents2()
+    {
         $dir_2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
         $dir_2->iterateOn()
               ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
-                $accu[] = $obj->name();
+                  $accu[] = $obj->name();
               });
         $this->assertCount(2, $accu);
         $this->assertContains("dir_2_1", $accu);
         $this->assertContains("file_2_1", $accu);
     }
 
-    public function test_correctContents3() {
+    public function test_correctContents3()
+    {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
         $root
@@ -51,7 +55,8 @@ class IterationTest extends Base {
         $this->assertContains("file_2_1", $accu);
     }
 
-    public function test_layeredIteration() {
+    public function test_layeredIteration()
+    {
         $root = $this->flightcontrol->directory("/root");
         $accu1 = array();
         $accu2 = array();
@@ -63,18 +68,18 @@ class IterationTest extends Base {
             ->iterateOn()
                 ->iterateOn()
                     ->iterateOn()
-                    ->with(function($obj) use (&$accu3, &$in3) {
+                    ->with(function ($obj) use (&$accu3, &$in3) {
                         $in3[0] = true;
                         $accu3[] = $obj->name();
                     })
-                ->with(function($obj) use (&$accu2, &$in2) {
+                ->with(function ($obj) use (&$accu2, &$in2) {
                     $in2[0] = true;
                     $accu2[] = $obj->name();
                 })
-            ->with(function($obj) use (&$accu1, &$in1) {
+            ->with(function ($obj) use (&$accu1, &$in1) {
                 $in1[0] = true;
                 $accu1[] = $obj->name();
-            });    
+            });
         $this->assertTrue($in1[0]);
         $this->assertTrue($in2[0]);
         $this->assertTrue($in3[0]);
@@ -83,83 +88,87 @@ class IterationTest extends Base {
         $this->assertEquals(array("file_2_1_1", "file_2_1_2"), $accu3);
     }
 
-    public function test_filteredLayeredIteration() {
+    public function test_filteredLayeredIteration()
+    {
         $root = $this->flightcontrol->directory("/root");
         $accu1 = array();
         $accu2 = array();
         $accu3 = array();
         $root
             ->iterateOn()
-            ->filter(function($obj) {
+            ->filter(function ($obj) {
                 return substr($obj->name(), -1) == "1";
             })
                 ->iterateOn()
-                ->filter(function($obj) {
+                ->filter(function ($obj) {
                     return substr($obj->name(), -1) == "1";
                 })
                     ->iterateOn()
-                    ->filter(function($obj) {
+                    ->filter(function ($obj) {
                         return substr($obj->name(), -1) == "1";
                     })
-                    ->with(function($obj) use (&$accu3) {
+                    ->with(function ($obj) use (&$accu3) {
                         $accu3[] = $obj->name();
                     })
-                ->with(function($obj) use (&$accu2) {
+                ->with(function ($obj) use (&$accu2) {
                     $accu2[] = $obj->name();
                 })
-            ->with(function($obj) use (&$accu1) {
+            ->with(function ($obj) use (&$accu1) {
                 $accu1[] = $obj->name();
-            });    
+            });
         $this->assertEquals(array("dir_1"), $accu1);
         $this->assertEquals(array("file_1_1"), $accu2);
         $this->assertEquals(array(), $accu3);
     }
 
-    public function test_filterWorks() {
+    public function test_filterWorks()
+    {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();
         $root
             ->iterateOn()
-            ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
+            ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name() == "dir_1";
             })
-            ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+            ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
                 $accu[] = $obj->name();
             });
         $this->assertEquals(array("dir_1"), $accu);
-    } 
+    }
 
-    public function test_filterDirectories() {
+    public function test_filterDirectories()
+    {
         $dir_2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
         $dir_2->iterateOn()
               ->directoriesOnly()
-              ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
-                $accu[] = $obj->name();
+              ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                  $accu[] = $obj->name();
               });
         $this->assertEquals(array("dir_2_1"), $accu);
     }
 
-    public function test_filterFiles() {
+    public function test_filterFiles()
+    {
         $dir_2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
         $dir_2->iterateOn()
               ->filesOnly()
-              ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
-                $accu[] = $obj->name();
+              ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                  $accu[] = $obj->name();
               });
         $this->assertEquals(array("file_2_1"), $accu);
     }
 
-    public function test_filterNamed() {
+    public function test_filterNamed()
+    {
         $dir2 = $this->flightcontrol->directory("/root/dir_2");
         $accu = array();
         $dir2->iterateOn()
              ->named("dir.*")
-             ->with(function(\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
-                $accu[] = $obj->name();
+             ->with(function (\Lechimp\Flightcontrol\FSObject $obj) use (&$accu) {
+                 $accu[] = $obj->name();
              });
         $this->assertEquals(array("dir_2_1"), $accu);
     }
-
 }

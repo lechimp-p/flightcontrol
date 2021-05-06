@@ -12,33 +12,37 @@ namespace Lechimp\Flightcontrol;
 /**
  * An iterator on each of the contents of another iterator.
  */
-class SubIterator extends Iterator {
+class SubIterator extends Iterator
+{
     /**
      * @var Iterator
      */
     protected $top;
 
-    public function __construct(Iterator $top) {
-        $this->top= $top;
+    public function __construct(Iterator $top)
+    {
+        $this->top = $top;
     }
 
     /**
-     * @inheritdoc 
+     * @inheritdoc
      */
-    public function filter(\Closure $predicate) {
+    public function filter(\Closure $predicate)
+    {
         // As we are working somewhere down the iteration, we have to apply
         // the filter on all non files in the iterator above and return
         // something similar to this.
-        return $this->wrappedMapTopOnNonFiles(function($obj) use ($predicate) {
+        return $this->wrappedMapTopOnNonFiles(function ($obj) use ($predicate) {
             return $obj->filter($predicate);
         });
     }
 
     /**
-     * @inheritdoc 
+     * @inheritdoc
      */
-    public function map(\Closure $trans) {
-        // As we are working somewhere down the iteration, we have to map 
+    public function map(\Closure $trans)
+    {
+        // As we are working somewhere down the iteration, we have to map
         // the transformation on all non files in the iterator above and return
         // something similar to this.
         return $this->wrappedMapTopOnNonFiles(function ($obj) use ($trans) {
@@ -47,25 +51,28 @@ class SubIterator extends Iterator {
     }
 
     /**
-     * @inheritdoc 
+     * @inheritdoc
      */
-    public function fold($start_value, $iteration) {
+    public function fold($start_value, $iteration)
+    {
         // As this unwraps one layer of the iteration, we need to apply the fold
         // function to the things in the iterator above and return something
         // similar to the iterator above.
-        return $this->mapTopOnNonFiles(function($v) use ($start_value, $iteration) {
+        return $this->mapTopOnNonFiles(function ($v) use ($start_value, $iteration) {
             return $v->fold($start_value, $iteration);
         });
     }
 
     // Helpers
 
-    protected function mapTop(\Closure $trans) {
+    protected function mapTop(\Closure $trans)
+    {
         return $this->top->map($trans);
     }
 
-    protected function mapTopOnNonFiles(\Closure $trans) {
-        return $this->mapTop(function($obj) use ($trans) {
+    protected function mapTopOnNonFiles(\Closure $trans)
+    {
+        return $this->mapTop(function ($obj) use ($trans) {
             if ($obj->isFile()) {
                 return $obj;
             }
@@ -73,16 +80,18 @@ class SubIterator extends Iterator {
         });
     }
 
-    protected function wrap(Iterator $iter) {
+    protected function wrap(Iterator $iter)
+    {
         return new SubIterator($iter);
     }
 
-    protected function wrappedMapTop(\Closure $trans) {
+    protected function wrappedMapTop(\Closure $trans)
+    {
         return $this->wrap($this->mapTop($trans));
     }
 
-    protected function wrappedMapTopOnNonFiles(\Closure $trans) {
+    protected function wrappedMapTopOnNonFiles(\Closure $trans)
+    {
         return $this->wrap($this->mapTopOnNonFiles($trans));
     }
 }
-

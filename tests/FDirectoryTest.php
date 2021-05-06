@@ -9,11 +9,13 @@
 
 namespace Lechimp\Flightcontrol\Tests;
 
-class FDirectoryTest extends Base {
-    public function test_fmap() {
+class FDirectoryTest extends Base
+{
+    public function test_fmap()
+    {
         $root = $this->flightcontrol->directory("/root");
         $f_root = $root->unfix()
-            ->fmap(function(\Lechimp\Flightcontrol\FSObject $obj) {
+            ->fmap(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name();
             });
 
@@ -24,13 +26,15 @@ class FDirectoryTest extends Base {
         $this->assertContains("dir_2", $names);
     }
 
-    public function test_fmap2() {
+    public function test_fmap2()
+    {
         $root = $this->flightcontrol->directory("/root/dir_2");
         $f_root = $root->unfix()
-            ->fmap(function(\Lechimp\Flightcontrol\FSObject $obj) {
-                $this->assertTrue(  $obj instanceof \Lechimp\Flightcontrol\File
+            ->fmap(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                $this->assertTrue(
+                    $obj instanceof \Lechimp\Flightcontrol\File
                                  || $obj instanceof \Lechimp\Flightcontrol\Directory
-                                 );
+                );
                 return $obj->name();
             });
 
@@ -41,30 +45,33 @@ class FDirectoryTest extends Base {
         $this->assertContains("file_2_1", $names);
     }
 
-    public function test_outer_fmap() {
+    public function test_outer_fmap()
+    {
         $root = $this->flightcontrol->directory("/root/dir_2");
         $f_root = $root->unfix()
-            ->outer_fmap(function(array $content) {
+            ->outer_fmap(function (array $content) {
                 return array();
             });
         $fcontents = $f_root->fcontents();
         $this->assertEquals(array(), $fcontents);
     }
 
-    public function test_filter() {
+    public function test_filter()
+    {
         $root = $this->flightcontrol->directory("/root/dir_2");
         $f_root = $root->unfix()
-            ->filter(function(\Lechimp\Flightcontrol\FSObject $obj) {
-                return $obj->mimetype() == "directory"; 
+            ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
+                return $obj->mimetype() == "directory";
             })
-            ->fmap(function(\Lechimp\Flightcontrol\FSObject $obj) {
+            ->fmap(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 return $obj->name();
             });
         $fcontents = $f_root->fcontents();
         $this->assertEquals(array("dir_2_1"), $fcontents);
     }
 
-    public function test_fsObjectProps() {
+    public function test_fsObjectProps()
+    {
         $obj = $this->flightcontrol->get("/root/dir_2/");
         $this->assertEquals("/root/dir_2", $obj->path());
         $this->assertEquals("dir_2", $obj->name());

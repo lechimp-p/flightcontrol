@@ -12,7 +12,8 @@ namespace Lechimp\Flightcontrol;
 /**
 * This object can unfold a directory structure into an directory.
 */
-class Unfolder {
+class Unfolder
+{
     /**
      * @var Directory
      */
@@ -23,7 +24,8 @@ class Unfolder {
      */
     protected $start_value;
 
-    public function __construct(Directory $directory, $start_value) {
+    public function __construct(Directory $directory, $start_value)
+    {
         $this->directory = $directory;
         $this->start_value = $start_value;
     }
@@ -32,11 +34,12 @@ class Unfolder {
      * Define the function to unfold the directory structure and perform
      * the unfold operation.
      *
-     * @param   \Closure    $unfolder  a -> File|FDirectory a -> a 
+     * @param   \Closure    $unfolder  a -> File|FDirectory a -> a
      * @throws  \LogicException         When generated root node is a file.
      * @return  null
      */
-    public function with(\Closure $unfolder) {
+    public function with(\Closure $unfolder)
+    {
         $this->directory->insertByAna($unfolder, $this->start_value);
     }
 }

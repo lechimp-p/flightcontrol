@@ -13,9 +13,9 @@ namespace Lechimp\Flightcontrol;
  * This class represents a directory with any content, not spefically files
  * or other directories.
  *
- * This is used to define and implement recursion. The directory structure 
+ * This is used to define and implement recursion. The directory structure
  * could be viewed as such (in Haskellish notation):
- * 
+ *
  * There is a datatype for an abstract directory
  *
  *      data FDirectory a = FDirectory Metadata a
@@ -38,11 +38,12 @@ namespace Lechimp\Flightcontrol;
  * for FDirectory a and FDirectory [a]. That is FDirectory::outer_fmap is the 'real'
  * fmap from the functor FDirectory.
  */
-class FDirectory extends FSObject {
+class FDirectory extends FSObject
+{
     /**
      * @var \Closure
      */
-    protected $contents_lazy; 
+    protected $contents_lazy;
 
     /**
      * @var mixed
@@ -59,7 +60,8 @@ class FDirectory extends FSObject {
      * @param   FSObject    $fs_object
      * @param   \Closure    $contents_lazy
      */
-    public function __construct(FSObject $fs_object, \Closure $contents_lazy) {
+    public function __construct(FSObject $fs_object, \Closure $contents_lazy)
+    {
         parent::__construct($fs_object->flightcontrol(), $fs_object->path());
         $this->contents_lazy = $contents_lazy;
     }
@@ -71,10 +73,11 @@ class FDirectory extends FSObject {
      * function.
      *
      * @param   \Closure    $trans   a -> b
-     * @return  FDirectory          
+     * @return  FDirectory
      */
-    public function fmap(\Closure $trans) {
-        return $this->flightcontrol()->newFDirectory($this, function() use ($trans) { 
+    public function fmap(\Closure $trans)
+    {
+        return $this->flightcontrol()->newFDirectory($this, function () use ($trans) {
             return array_map($trans, $this->fcontents());
         });
     }
@@ -87,8 +90,9 @@ class FDirectory extends FSObject {
      * @throws  UnexpectedValueException    in case $trans returns no error
      * @return  FDirectory
      */
-    public function outer_fmap(\Closure $trans) {
-        return $this->flightcontrol()->newFDirectory($this, function() use ($trans) {
+    public function outer_fmap(\Closure $trans)
+    {
+        return $this->flightcontrol()->newFDirectory($this, function () use ($trans) {
             return $trans($this->fcontents());
         });
     }
@@ -96,14 +100,15 @@ class FDirectory extends FSObject {
     /**
      * Define the function to be iterated with and close this level
      * of iteration.
-     * 
+     *
      * @param   \Closure    $iteration  a -> File|Directory -> a
      * @return  Iterator|a
      */
-    public function fold($start_value, $iteration) {
-        return $this->outer_fmap(function($contents) use ($start_value, $iteration) {
+    public function fold($start_value, $iteration)
+    {
+        return $this->outer_fmap(function ($contents) use ($start_value, $iteration) {
             $value = $start_value;
-            foreach($contents as $content) {
+            foreach ($contents as $content) {
                 $value = $iteration($value, $content);
             }
             return $value;
@@ -116,10 +121,11 @@ class FDirectory extends FSObject {
      * @param   \Closure    $predicate  a -> bool
      * @return  FDirectory
      */
-    public function filter(\Closure $predicate) {
-        return 
-        $this->outer_fmap(function($fcontents) use ($predicate) {
-            return array_filter($fcontents, $predicate); 
+    public function filter(\Closure $predicate)
+    {
+        return
+        $this->outer_fmap(function ($fcontents) use ($predicate) {
+            return array_filter($fcontents, $predicate);
         });
     }
 
@@ -132,7 +138,8 @@ class FDirectory extends FSObject {
      *
      * @return  mixed[]     for an FDirectory a
      */
-    public function fcontents() {
+    public function fcontents()
+    {
         if ($this->contents === null) {
             $cl = $this->contents_lazy;
             $this->contents = $cl();
@@ -143,7 +150,8 @@ class FDirectory extends FSObject {
     /**
      * @inheritdoc
      */
-    public function isFile() {
+    public function isFile()
+    {
         return false;
     }
 }

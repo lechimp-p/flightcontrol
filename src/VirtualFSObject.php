@@ -13,25 +13,29 @@ namespace Lechimp\Flightcontrol;
  * This represents an FSObject-like object that is required during
  * unfolding a directory structure.
  */
-class VirtualFSObject extends FSObject {
+class VirtualFSObject extends FSObject
+{
     /**
      * @return string
      */
-    public function name() {
+    public function name()
+    {
         return $this->path();
     }
 
     /**
      * @return string
      */
-    public function mimetype() {
+    public function mimetype()
+    {
         return new \LogicException("Don't use mimetype on VirtualFSObjects.");
     }
 
     /**
      * @return bool
      */
-    public function isFile() {
+    public function isFile()
+    {
         return false;
     }
 }

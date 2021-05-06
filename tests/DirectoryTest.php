@@ -9,26 +9,31 @@
 
 namespace Lechimp\Flightcontrol\Tests;
 
-class DirectoryTest extends Base {
-    public function test_directory() {
+class DirectoryTest extends Base
+{
+    public function test_directory()
+    {
         $dir = $this->flightcontrol->directory("/root");
         $this->assertEquals("/root", $dir->path());
         $this->assertEquals("root", $dir->name());
     }
 
-    public function test_directory2() {
+    public function test_directory2()
+    {
         $obj = $this->flightcontrol->directory("/root/dir_2/dir_2_1");
         $this->assertEquals("/root/dir_2/dir_2_1", $obj->path());
         $this->assertEquals("dir_2_1", $obj->name());
     }
 
-    public function test_directoryNaming() {
+    public function test_directoryNaming()
+    {
         $obj = $this->flightcontrol->directory("/root/dir_2/");
         $this->assertEquals("/root/dir_2", $obj->path());
         $this->assertEquals("dir_2", $obj->name());
     }
 
-    public function test_contents() {
+    public function test_contents()
+    {
         $dir = $this->flightcontrol->directory("/root");
         $contents = $dir->contents();
         $this->assertCount(2, $contents);
@@ -36,14 +41,14 @@ class DirectoryTest extends Base {
             $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\Directory", $content);
             if ($content->name() != "dir_1") {
                 $this->assertEquals("dir_2", $content->name());
-            }
-            else {
+            } else {
                 $this->assertEquals("dir_1", $content->name());
             }
         }
     }
 
-    public function test_contents2() {
+    public function test_contents2()
+    {
         $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir->contents();
         $this->assertCount(2, $contents);
@@ -51,15 +56,15 @@ class DirectoryTest extends Base {
             if ($content->name() != "dir_2_1") {
                 $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\File", $content);
                 $this->assertEquals("file_2_1", $content->name());
-            }
-            else {
+            } else {
                 $this->assertInstanceOf("\\Lechimp\\Flightcontrol\\Directory", $content);
                 $this->assertEquals("dir_2_1", $content->name());
             }
         }
     }
 
-    public function test_filterContents() {
+    public function test_filterContents()
+    {
         $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
@@ -67,11 +72,14 @@ class DirectoryTest extends Base {
             })
             ->contents();
 
-        $contents = array_map(function($obj) { return $obj->name(); }, $contents);
+        $contents = array_map(function ($obj) {
+            return $obj->name();
+        }, $contents);
         $this->assertEquals(array("dir_2_1"), $contents);
     }
 
-    public function test_filterContents2() {
+    public function test_filterContents2()
+    {
         $dir = $this->flightcontrol->directory("/root/dir_2");
         $contents = $dir
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
@@ -84,7 +92,8 @@ class DirectoryTest extends Base {
         $this->assertEquals(array(), $contents);
     }
 
-    public function test_isFile() {
+    public function test_isFile()
+    {
         $dir = $this->flightcontrol->get("/root");
         $this->assertFalse($dir->isFile());
     }

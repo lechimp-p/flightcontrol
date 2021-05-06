@@ -15,7 +15,8 @@ namespace Lechimp\Flightcontrol;
  * The interface consists of objects for files and directories means
  * to iterate over the directories.
  */
-class Flightcontrol {
+class Flightcontrol
+{
     /**
      * @var \League\Flysystem\Filesystem
      */
@@ -31,7 +32,8 @@ class Flightcontrol {
      *
      * @param   \League\Flysystem\Filesystem    $filesystem
      */
-    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = true) {
+    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = true)
+    {
         assert(is_bool($strict_evaluation));
         $this->strict_evaluation = $strict_evaluation;
         $this->filesystem = $filesystem;
@@ -40,7 +42,8 @@ class Flightcontrol {
     /**
      * @return \League\Flysystem\Filesystem
      */
-    public function filesystem() {
+    public function filesystem()
+    {
         return $this->filesystem;
     }
 
@@ -53,7 +56,8 @@ class Flightcontrol {
      * @param   string  $path
      * @return  FSObject|null
      */
-    public function get($path) {
+    public function get($path)
+    {
         // TODO: This does not deal with ~ for home directory.
 
         assert(is_string($path));
@@ -72,8 +76,7 @@ class Flightcontrol {
                 }
                 return new Directory($this, $path);
             }
-        }
-        catch (\League\Flysystem\FileNotFoundException $e) {
+        } catch (\League\Flysystem\FileNotFoundException $e) {
             return null;
         }
         return null;
@@ -88,7 +91,8 @@ class Flightcontrol {
      * @param   string $path
      * @return  Directory|null
      */
-    public function directory($path) {
+    public function directory($path)
+    {
         return $this->file_or_dir($path, false);
     }
 
@@ -98,7 +102,8 @@ class Flightcontrol {
      * @param   string $path
      * @return  File|null
      */
-    public function file($path) {
+    public function file($path)
+    {
         return $this->file_or_dir($path, true);
     }
 
@@ -107,9 +112,10 @@ class Flightcontrol {
      *
      * @param   string  $name
      * @param   array   $content
-     * @return  FDirectory a 
+     * @return  FDirectory a
      */
-    public function makeFDirectory($name, array $content) {
+    public function makeFDirectory($name, array $content)
+    {
         return Directory::makeFDirectory($this, $name, $content);
     }
 
@@ -118,16 +124,18 @@ class Flightcontrol {
      *
      * @param   string  $name
      * @param   string  $content
-     * @return  File 
+     * @return  File
      */
-    public function makeFile($name, $content) {
+    public function makeFile($name, $content)
+    {
         return Directory::makeFile($this, $name, $content);
     }
 
     // Helper
 
     // Get an object from fs that either is as file or a dir.
-    private function file_or_dir($path, $is_file) {
+    private function file_or_dir($path, $is_file)
+    {
         assert(is_bool($is_file));
         $obj = $this->get($path);
         if ($obj !== null && $is_file === $obj->isFile()) {
@@ -144,7 +152,8 @@ class Flightcontrol {
      * @param   \Closure    $contents_lazy
      * @return  FDirectory
      */
-    public function newFDirectory(FSObject $fs_object, \Closure $contents_lazy) {
+    public function newFDirectory(FSObject $fs_object, \Closure $contents_lazy)
+    {
         $fdir = new FDirectory($fs_object, $contents_lazy);
         if ($this->strict_evaluation) {
             $fdir->fcontents();

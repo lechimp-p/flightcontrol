@@ -12,13 +12,15 @@ namespace Lechimp\Flightcontrol;
 /**
  * This class represents a directory in the FS.
  */
-class Directory extends FixedFDirectory {
+class Directory extends FixedFDirectory
+{
     /**
      * Get the objects inside the directory.
      *
      * @return FSObject[]
      */
-    public function contents() {
+    public function contents()
+    {
         $contents = $this->filesystem()->listContents($this->path());
         $returns = array();
         foreach ($contents as $content) {
@@ -30,24 +32,27 @@ class Directory extends FixedFDirectory {
     /**
      * @inheritdoc
      */
-    public function mimetype() {
+    public function mimetype()
+    {
         return "directory";
     }
 
     /**
      * @inheritdoc
      */
-    public function toDirectory() {
+    public function toDirectory()
+    {
         return $this;
     }
 
     /**
      * See documentation of FDirectory.
-     * 
+     *
      * @return FDirectory File
      */
-    public function unfix() {
-        return $this->flightcontrol()->newFDirectory($this, function() {
+    public function unfix()
+    {
+        return $this->flightcontrol()->newFDirectory($this, function () {
             return $this->contents();
         });
     }
@@ -63,7 +68,8 @@ class Directory extends FixedFDirectory {
      * @throws  \LogicException         When generated root node is a file.
      * @return  null
      */
-    public function insertByAna(\Closure $unfolder, $start_value) {
+    public function insertByAna(\Closure $unfolder, $start_value)
+    {
         $insert = FixedFDirectory::ana($unfolder, $start_value);
 
         if ($insert->isFile()) {
@@ -71,17 +77,16 @@ class Directory extends FixedFDirectory {
         }
 
         $inserter = array();
-        $inserter[0] = function($path, FixedFDirectory $directory) use (&$inserter) {
+        $inserter[0] = function ($path, FixedFDirectory $directory) use (&$inserter) {
             foreach ($directory->contents() as $content) {
-                $new_path = $path."/".$content->name();
+                $new_path = $path . "/" . $content->name();
                 if ($content->isFile()) {
                     $this->filesystem()->write($new_path, $content->content());
-                }
-                else {
+                } else {
                     $this->filesystem()->createDir($new_path);
                     $inserter[0]($new_path, $content);
                 }
-            } 
+            }
         };
         $inserter[0]($this->path(), $insert);
     }
@@ -94,10 +99,14 @@ class Directory extends FixedFDirectory {
      * @param   array           $content
      * @return  FDirectory a
      */
-    public static function makeFDirectory(Flightcontrol $flightcontrol, $name, array $content) {
-        return new FDirectory( new VirtualFSObject($flightcontrol, $name)
-                             , function() use($content) { return $content; }
-                             );
+    public static function makeFDirectory(Flightcontrol $flightcontrol, $name, array $content)
+    {
+        return new FDirectory(
+            new VirtualFSObject($flightcontrol, $name),
+            function () use ($content) {
+                                 return $content;
+                             }
+        );
     }
 
     /**
@@ -108,9 +117,8 @@ class Directory extends FixedFDirectory {
      * @param   string  $content
      * @return  File
      */
-    public static function makeFile(Flightcontrol $flightcontrol, $name, $content) {
+    public static function makeFile(Flightcontrol $flightcontrol, $name, $content)
+    {
         return new VirtualFile($flightcontrol, $name, $content);
     }
-
-
 }

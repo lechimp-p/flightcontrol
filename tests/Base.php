@@ -12,9 +12,11 @@ namespace Lechimp\Flightcontrol\Tests;
 /**
  * Sets up an adapter to the test_fs.zip, a flysystem and a flightcontrol.
  */
-class Base extends \PHPUnit\Framework\TestCase {
-    public function setUp() : void {
-        $adapter = new \League\Flysystem\ZipArchive\ZipArchiveAdapter(__DIR__."/test_fs.zip");
+class Base extends \PHPUnit\Framework\TestCase
+{
+    public function setUp() : void
+    {
+        $adapter = new \League\Flysystem\ZipArchive\ZipArchiveAdapter(__DIR__ . "/test_fs.zip");
         /* test_fs.zip:
          *  root
          *      dir_1

@@ -12,15 +12,17 @@ namespace Lechimp\Flightcontrol;
 /**
 * An iterator on a directory.
 */
-abstract class Iterator {
+abstract class Iterator
+{
     use FilterTrait;
 
     /**
      * Iterate on the contents of the this iterator.
      *
-     * @return Iterator 
+     * @return Iterator
      */
-    public function iterateOn() {
+    public function iterateOn()
+    {
         return new SubIterator($this);
     }
 
@@ -44,7 +46,7 @@ abstract class Iterator {
     /**
      * Define the function to be iterated with and close this level
      * of iteration.
-     * 
+     *
      * @param   \Closure    $iteration  a -> File|Directory -> a
      * @return  Iterator|mixed
      */
@@ -53,15 +55,16 @@ abstract class Iterator {
     /**
      * Like fold, but with no start value or return.
      *
-     * @param   \Closure    $iteration  File|Directory -> () 
+     * @param   \Closure    $iteration  File|Directory -> ()
      * @return  Iterator|null
      */
-    public function with($iteration) {
+    public function with($iteration)
+    {
         return $this
         ->fold(
-            array(), 
-            function($a, $f) use ($iteration) { 
-                $iteration($f); 
+            array(),
+            function ($a, $f) use ($iteration) {
+                $iteration($f);
                 // As the subjacent FDirectory is lazy, we need to evaluate
                 // the contents, as there might be additional computations
                 // hidden.
@@ -79,7 +82,9 @@ abstract class Iterator {
      *
      * @return  Iterator|null
      */
-    public function run() {
-        $this->with(function($obj) {});
+    public function run()
+    {
+        $this->with(function ($obj) {
+        });
     }
 }

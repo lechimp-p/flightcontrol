@@ -12,9 +12,10 @@ namespace Lechimp\Flightcontrol;
 /**
  * Some object on the filesystem.
  */
-abstract class FSObject {
+abstract class FSObject
+{
     /**
-     * @var Flightcontrol 
+     * @var Flightcontrol
      */
     protected $flightcontrol;
 
@@ -32,7 +33,8 @@ abstract class FSObject {
      * @param   \Lechimp\Flightcontrol\Flightcontrol    $flightcontrol
      * @param   string  $path
      */
-    public function __construct(Flightcontrol $flightcontrol, $path) {
+    public function __construct(Flightcontrol $flightcontrol, $path)
+    {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
         $this->path = self::normalize($path);
@@ -41,28 +43,32 @@ abstract class FSObject {
     /**
      * @return Flightcontrol
      */
-    public function flightcontrol() {
+    public function flightcontrol()
+    {
         return $this->flightcontrol;
     }
 
     /**
      * @return \League\Flysystem\Filesystem
      */
-    public function filesystem() {
+    public function filesystem()
+    {
         return $this->flightcontrol->filesystem();
     }
 
     /**
      * @return  string
      */
-    public function path() {
+    public function path()
+    {
         return $this->path;
     }
 
     /**
      * @return string
      */
-    public function name() {
+    public function name()
+    {
         $parts = explode("/", $this->path);
         return end($parts);
     }
@@ -70,13 +76,15 @@ abstract class FSObject {
     /**
      * @return string
      */
-    public function mimetype() {
+    public function mimetype()
+    {
         return $this->filesystem->getMimetype($this->path);
     }
 
     // Helper
 
-    private static function normalize($path) {
+    private static function normalize($path)
+    {
         if (substr($path, -1) == "/") {
             $path = substr($path, 0, strlen($path) - 1);
         }
