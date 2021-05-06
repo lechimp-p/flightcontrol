@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lechimp-p/flightcontrol.svg?branch=master)](https://travis-ci.org/lechimp-p/flightcontrol)
+[![Build Status](https://github.com/lechimp-p/flightcontrol/actions/workflows/checks.yml/badge.svg?branch=master)](https://github.com/lechimp-p/flightcontrol/actions/workflows/checks.yml)
 [![Scrutinizer](https://scrutinizer-ci.com/g/lechimp-p/flightcontrol/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/lechimp-p/flightcontrol)
 [![Coverage](https://scrutinizer-ci.com/g/lechimp-p/flightcontrol/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/lechimp-p/flightcontrol)
 
@@ -21,7 +21,7 @@ The flightcontrol is initialized over a flysystem, e.g. as such:
 ```php
 <?php
 
-require_once("tests/autoloader.php");
+require_once("vendor/autoload.php");
 
 use \League\Flysystem\Adapter\Local;
 use \League\Flysystem\Filesystem;
