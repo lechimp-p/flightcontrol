@@ -7,12 +7,14 @@
  * a copy of the along with the code.
  */
 
+namespace Lechimp\Flightcontrol\Tests;
+
 use \League\Flysystem\Memory\MemoryAdapter;
 use \League\Flysystem\Filesystem;
 use \Lechimp\Flightcontrol\Flightcontrol;
 
-class UnfoldTest extends PHPUnit_Framework_TestCase {
-    public function setUp() {
+class UnfoldTest extends \PHPUnit\Framework\TestCase {
+    public function setUp() : void {
         $this->flysystem = new Filesystem(new MemoryAdapter());
         $this->flightcontrol = new FlightControl($this->flysystem);
         $this->flysystem->createDir("write");
@@ -62,10 +64,8 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(array(), $this->listContents("no_write/untouched"));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function test_unfoldInEmptyDirsOnly() {
+        $this->expectException(\LogicException::class);
         $no_write_to = $this->flightcontrol->get("no_write");
         $no_write_to->unfold(1);
     }
@@ -79,10 +79,8 @@ class UnfoldTest extends PHPUnit_Framework_TestCase {
         $this->assertContains("no_write", $dirs);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function test_expectsFDirectoryAsRootNode() {
+        $this->expectException(\LogicException::class);
         $write_to = $this->flightcontrol->get("write");
         $write_to
             ->unfold(0)

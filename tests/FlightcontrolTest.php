@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class FlightcontrolTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class FlightcontrolTest extends Base {
     public function test_getExisting() {
         $this->assertNotNull($this->flightcontrol->get("/root"));
         $this->assertNotNull($this->flightcontrol->get("/root/dir_1"));

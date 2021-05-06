@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class DirectoryTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class DirectoryTest extends Base {
     public function test_directory() {
         $dir = $this->flightcontrol->directory("/root");
         $this->assertEquals("/root", $dir->path());

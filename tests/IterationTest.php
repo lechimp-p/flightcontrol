@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class IterationTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class IterationTest extends Base {
     public function test_correctContents() {
         $root = $this->flightcontrol->directory("/root");
         $accu = array();

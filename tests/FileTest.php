@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class FileTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class FileTest extends Base {
     public function test_file() {
         $file = $this->flightcontrol->file("/root/dir_1/file_1_1");
         $this->assertEquals("/root/dir_1/file_1_1", $file->path());

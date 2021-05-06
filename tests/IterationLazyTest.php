@@ -7,8 +7,10 @@
  * a copy of the along with the code.
  */
 
-class IterationLazyTest extends _TestCaseBase {
-    public function setUp() {
+namespace Lechimp\Flightcontrol\Tests;
+
+class IterationLazyTest extends Base {
+    public function setUp() : void {
         parent::setUp();
         $this->flightcontrol = new \Lechimp\Flightcontrol\Flightcontrol($this->flysystem, false);
     }

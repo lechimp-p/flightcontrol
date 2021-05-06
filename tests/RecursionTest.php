@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class RecursionTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class RecursionTest extends Base {
     public function test_allFiles() {
         $root = $this->flightcontrol->directory("/root");
         $all_files = array_map( function($obj) { return $obj->name();}

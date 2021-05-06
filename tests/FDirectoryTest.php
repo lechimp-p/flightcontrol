@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class FDirectoryTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class FDirectoryTest extends Base {
     public function test_fmap() {
         $root = $this->flightcontrol->directory("/root");
         $f_root = $root->unfix()

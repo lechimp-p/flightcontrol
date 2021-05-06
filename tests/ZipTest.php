@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class ZipTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class ZipTest extends Base {
     public function test_zipStructure() {
         $this->assertCount(2, $this->flysystem->listContents("/root/"));
         $this->assertCount(2, $this->flysystem->listContents("/root/dir_1"));

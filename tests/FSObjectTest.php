@@ -7,7 +7,9 @@
  * a copy of the along with the code.
  */
 
-class FSObjectTest extends _TestCaseBase {
+namespace Lechimp\Flightcontrol\Tests;
+
+class FSObjectTest extends Base {
     public function test_directory() {
         $obj = $this->flightcontrol->get("/root");
         $this->assertEquals("/root", $obj->path());
