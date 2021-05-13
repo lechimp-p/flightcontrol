@@ -27,18 +27,12 @@ class VirtualFile extends VirtualFSObject
         $this->content = $content;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFile()
+    public function isFile() : bool
     {
         return true;
     }
 
-    /**
-     * @return
-     */
-    public function content()
+    public function content() : string
     {
         return $this->content;
     }

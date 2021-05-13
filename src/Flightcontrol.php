@@ -29,57 +29,33 @@ class Flightcontrol
 
     /**
      * Initialize the flightcontrol over a flysystem.
-     *
-     * @param   \League\Flysystem\Filesystem    $filesystem
      */
-    public function __construct(\League\Flysystem\Filesystem $filesystem, $strict_evaluation = true)
-    {
+    public function __construct(
+        \League\Flysystem\Filesystem $filesystem,
+        bool $strict_evaluation = true
+    ) {
         assert(is_bool($strict_evaluation));
         $this->strict_evaluation = $strict_evaluation;
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @return \League\Flysystem\Filesystem
-     */
-    public function filesystem()
+    public function filesystem() : \League\Flysystem\Filesystem
     {
         return $this->filesystem;
     }
 
     /**
      * Get an object from the filesystem based on its path.
-     *
-     * Dependening on the adapter in the underlying flysystem, this might treat
-     * empty directories as if they would not exist (e.g. for ZipArchiveAdapter).
-     *
-     * @param   string  $path
-     * @return  FSObject|null
      */
-    public function get($path)
+    public function get(string $path) : FSObject
     {
         // TODO: This does not deal with ~ for home directory.
 
-        assert(is_string($path));
-
-        // For ZipArchiveAdapter this is required to get the directories correctly,
-        // as Filesystem::get will raise.
-        if ($this->filesystem->listContents($path)) {
-            return new Directory($this, $path);
+        if ($this->filesystem->fileExists($path)) {
+            return new File($this, $path);
         }
 
-        try {
-            $info = $this->filesystem->getMetadata($path);
-            if ($info) {
-                if ($info["type"] == "file") {
-                    return new File($this, $path);
-                }
-                return new Directory($this, $path);
-            }
-        } catch (\League\Flysystem\FileNotFoundException $e) {
-            return null;
-        }
-        return null;
+        return new Directory($this, $path);
     }
 
     /**
@@ -87,46 +63,32 @@ class Flightcontrol
      *
      * Dependening on the adapter in the underlying flysystem, this might treat
      * empty directories as if they would not exist (e.g. for ZipArchiveAdapter).
-     *
-     * @param   string $path
-     * @return  Directory|null
      */
-    public function directory($path)
+    public function directory(string $path) : ?Directory
     {
         return $this->file_or_dir($path, false);
     }
 
     /**
      * Get a file from the filesystem.
-     *
-     * @param   string $path
-     * @return  File|null
      */
-    public function file($path)
+    public function file(string $path) : ?File
     {
         return $this->file_or_dir($path, true);
     }
 
     /**
      * Make a directory when unfolding a directory structure via Directory::unfold.
-     *
-     * @param   string  $name
-     * @param   array   $content
-     * @return  FDirectory a
      */
-    public function makeFDirectory($name, array $content)
+    public function makeFDirectory(string $name, array $content) : FDirectory
     {
         return Directory::makeFDirectory($this, $name, $content);
     }
 
     /**
      * Make a file when unfolding a directory structure via Directory::unfold.
-     *
-     * @param   string  $name
-     * @param   string  $content
-     * @return  File
      */
-    public function makeFile($name, $content)
+    public function makeFile(string $name, string $content) : VirtualFile
     {
         return Directory::makeFile($this, $name, $content);
     }
@@ -134,9 +96,8 @@ class Flightcontrol
     // Helper
 
     // Get an object from fs that either is as file or a dir.
-    private function file_or_dir($path, $is_file)
+    private function file_or_dir(string $path, bool $is_file) : ?FSObject
     {
-        assert(is_bool($is_file));
         $obj = $this->get($path);
         if ($obj !== null && $is_file === $obj->isFile()) {
             return $obj;
@@ -147,12 +108,8 @@ class Flightcontrol
     /**
      * Create an FDirectory with metadata from some FSObject and some content
      * that could be lazily produced by some function.
-     *
-     * @param   FSObject    $fs_object
-     * @param   \Closure    $contents_lazy
-     * @return  FDirectory
      */
-    public function newFDirectory(FSObject $fs_object, \Closure $contents_lazy)
+    public function newFDirectory(FSObject $fs_object, \Closure $contents_lazy) : FDirectory
     {
         $fdir = new FDirectory($fs_object, $contents_lazy);
         if ($this->strict_evaluation) {

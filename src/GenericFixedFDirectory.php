@@ -22,12 +22,12 @@ class GenericFixedFDirectory extends FixedFDirectory
         $this->fdirectory = $fdirectory;
     }
 
-    public function unfix()
+    public function unfix() : FDirectory
     {
         return $this->fdirectory;
     }
 
-    public function isFile()
+    public function isFile() : bool
     {
         return false;
     }

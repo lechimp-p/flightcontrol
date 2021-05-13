@@ -27,7 +27,7 @@ class SubIterator extends Iterator
     /**
      * @inheritdoc
      */
-    public function filter(\Closure $predicate)
+    public function filter(\Closure $predicate) : Iterator
     {
         // As we are working somewhere down the iteration, we have to apply
         // the filter on all non files in the iterator above and return
@@ -40,7 +40,7 @@ class SubIterator extends Iterator
     /**
      * @inheritdoc
      */
-    public function map(\Closure $trans)
+    public function map(\Closure $trans) : Iterator
     {
         // As we are working somewhere down the iteration, we have to map
         // the transformation on all non files in the iterator above and return

@@ -19,7 +19,7 @@ class Directory extends FixedFDirectory
      *
      * @return FSObject[]
      */
-    public function contents()
+    public function contents() : array
     {
         $contents = $this->filesystem()->listContents($this->path());
         $returns = array();
@@ -32,7 +32,7 @@ class Directory extends FixedFDirectory
     /**
      * @inheritdoc
      */
-    public function mimetype()
+    public function mimetype() : ?string
     {
         return "directory";
     }
@@ -48,9 +48,9 @@ class Directory extends FixedFDirectory
     /**
      * See documentation of FDirectory.
      *
-     * @return FDirectory File
+     * @return FDirectory<File>
      */
-    public function unfix()
+    public function unfix() : FDirectory
     {
         return $this->flightcontrol()->newFDirectory($this, function () {
             return $this->contents();
@@ -63,12 +63,10 @@ class Directory extends FixedFDirectory
      *
      * This is for INTERNAL use, use unfold($start_value)->with($unfolder) instead.
      *
-     * @param   \Closure  $unfolder
      * @param   mixed     $start_value
      * @throws  \LogicException         When generated root node is a file.
-     * @return  null
      */
-    public function insertByAna(\Closure $unfolder, $start_value)
+    public function insertByAna(\Closure $unfolder, $start_value) : void
     {
         $insert = FixedFDirectory::ana($unfolder, $start_value);
 
@@ -83,7 +81,7 @@ class Directory extends FixedFDirectory
                 if ($content->isFile()) {
                     $this->filesystem()->write($new_path, $content->content());
                 } else {
-                    $this->filesystem()->createDir($new_path);
+                    $this->filesystem()->createDirectory($new_path);
                     $inserter[0]($new_path, $content);
                 }
             }
@@ -97,15 +95,15 @@ class Directory extends FixedFDirectory
      * @param   Flightcontrol   $flightcontrol
      * @param   string          $name
      * @param   array           $content
-     * @return  FDirectory a
+     * @return  FDirectory<a>
      */
-    public static function makeFDirectory(Flightcontrol $flightcontrol, $name, array $content)
+    public static function makeFDirectory(Flightcontrol $flightcontrol, string $name, array $content) : FDirectory
     {
         return new FDirectory(
             new VirtualFSObject($flightcontrol, $name),
             function () use ($content) {
-                                 return $content;
-                             }
+                return $content;
+            }
         );
     }
 
@@ -117,7 +115,7 @@ class Directory extends FixedFDirectory
      * @param   string  $content
      * @return  File
      */
-    public static function makeFile(Flightcontrol $flightcontrol, $name, $content)
+    public static function makeFile(Flightcontrol $flightcontrol, string $name, string $content) : VirtualFile
     {
         return new VirtualFile($flightcontrol, $name, $content);
     }

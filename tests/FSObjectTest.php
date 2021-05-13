@@ -38,9 +38,9 @@ class FSObjectTest extends Base
 
     public function test_file()
     {
-        $obj = $this->flightcontrol->get("/root/dir_1/file_1_1");
-        $this->assertEquals("/root/dir_1/file_1_1", $obj->path());
-        $this->assertEquals("file_1_1", $obj->name());
+        $obj = $this->flightcontrol->get("/root/dir_1/file_1_1.txt");
+        $this->assertEquals("/root/dir_1/file_1_1.txt", $obj->path());
+        $this->assertEquals("file_1_1.txt", $obj->name());
         $this->assertEquals("text/plain", $obj->mimetype());
         $this->assertTrue($obj->isFile());
     }

@@ -18,10 +18,8 @@ abstract class Iterator
 
     /**
      * Iterate on the contents of the this iterator.
-     *
-     * @return Iterator
      */
-    public function iterateOn()
+    public function iterateOn() : Iterator
     {
         return new SubIterator($this);
     }
@@ -31,17 +29,15 @@ abstract class Iterator
      * for which the provided predicate returns true.
      *
      * @param  \Closure             $predicate  (a -> Bool)
-     * @return Iterator
      */
-    abstract public function filter(\Closure $predicate);
+    abstract public function filter(\Closure $predicate) : Iterator;
 
     /**
      * Map a function over the objects inside the iterator.
      *
      * @param   \Closure    $trans      a -> b
-     * @return  Iterator
      */
-    abstract public function map(\Closure $trans);
+    abstract public function map(\Closure $trans) : Iterator;
 
     /**
      * Define the function to be iterated with and close this level
@@ -56,7 +52,7 @@ abstract class Iterator
      * Like fold, but with no start value or return.
      *
      * @param   \Closure    $iteration  File|Directory -> ()
-     * @return  Iterator|null
+     * @return  Iterator|mixed
      */
     public function with($iteration)
     {
@@ -80,7 +76,7 @@ abstract class Iterator
     /**
      * Close a level of iteration without an iteration function.
      *
-     * @return  Iterator|null
+     * @return  Iterator|mixed
      */
     public function run()
     {

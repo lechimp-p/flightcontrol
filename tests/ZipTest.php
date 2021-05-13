@@ -17,11 +17,11 @@ class ZipTest extends Base
         $this->assertCount(2, $this->flysystem->listContents("/root/dir_1"));
         $this->assertCount(2, $this->flysystem->listContents("/root/dir_2"));
         $this->assertCount(2, $this->flysystem->listContents("/root/dir_2/dir_2_1"));
-        $this->assertEmpty($this->flysystem->listContents("/root/dir_3"));
-        $this->assertTrue($this->flysystem->has("/root/dir_1/file_1_1"));
-        $this->assertTrue($this->flysystem->has("/root/dir_1/file_1_2"));
-        $this->assertTrue($this->flysystem->has("/root/dir_2/file_2_1"));
-        $this->assertTrue($this->flysystem->has("/root/dir_2/dir_2_1/file_2_1_1"));
-        $this->assertTrue($this->flysystem->has("/root/dir_2/dir_2_1/file_2_1_2"));
+        $this->assertEmpty(iterator_to_array($this->flysystem->listContents("/root/dir_3")));
+        $this->assertTrue($this->flysystem->fileExists("/root/dir_1/file_1_1.txt"));
+        $this->assertTrue($this->flysystem->fileExists("/root/dir_1/file_1_2.txt"));
+        $this->assertTrue($this->flysystem->fileExists("/root/dir_2/file_2_1"));
+        $this->assertTrue($this->flysystem->fileExists("/root/dir_2/dir_2_1/file_2_1_1"));
+        $this->assertTrue($this->flysystem->fileExists("/root/dir_2/dir_2_1/file_2_1_2"));
     }
 }

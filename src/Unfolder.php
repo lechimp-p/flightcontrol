@@ -24,6 +24,9 @@ class Unfolder
      */
     protected $start_value;
 
+    /**
+     * @param mixed $start_value
+     */
     public function __construct(Directory $directory, $start_value)
     {
         $this->directory = $directory;
@@ -36,9 +39,8 @@ class Unfolder
      *
      * @param   \Closure    $unfolder  a -> File|FDirectory a -> a
      * @throws  \LogicException         When generated root node is a file.
-     * @return  null
      */
-    public function with(\Closure $unfolder)
+    public function with(\Closure $unfolder) : void
     {
         $this->directory->insertByAna($unfolder, $this->start_value);
     }

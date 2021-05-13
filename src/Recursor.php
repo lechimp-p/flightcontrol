@@ -36,9 +36,8 @@ class Recursor extends FSObject
      * Won't recurse over directories that do not match the predicate!
      *
      * @param  \Closure             $predicate  (FSObject -> Bool)
-     * @return Recursor
      */
-    public function filter(\Closure $predicate)
+    public function filter(\Closure $predicate) : Recursor
     {
         $filter = array();
         $filter[0] = function (FixedFDirectory $obj) use ($predicate, &$filter) {
@@ -100,7 +99,7 @@ class Recursor extends FSObject
      *
      * @param   mixed       $start_value
      * @param   \Closure    $fold_with      a -> File -> a
-     * @return  Recursor
+     * @return Recursor|array
      */
     public function foldFiles($start_value, \Closure $fold_with)
     {
@@ -115,7 +114,7 @@ class Recursor extends FSObject
      *
      * @return File[]
      */
-    public function allFiles()
+    public function allFiles() : array
     {
         return $this->cata(function (FSObject $obj) {
             if ($obj->isFile()) {
@@ -135,7 +134,7 @@ class Recursor extends FSObject
     /**
      * @inheritdoc
      */
-    public function isFile()
+    public function isFile() : bool
     {
         return false;
     }

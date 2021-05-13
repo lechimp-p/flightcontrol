@@ -26,10 +26,8 @@ class DirectoryIterator extends Iterator
 
     /**
      * Iterate on the contents of the this iterator.
-     *
-     * @return Iterator
      */
-    public function iterateOn()
+    public function iterateOn() : Iterator
     {
         return new SubIterator($this);
     }
@@ -39,9 +37,8 @@ class DirectoryIterator extends Iterator
      * for which the provided predicate returns true.
      *
      * @param  \Closure             $predicate  (a -> Bool)
-     * @return Iterator
      */
-    public function filter(\Closure $predicate)
+    public function filter(\Closure $predicate) : Iterator
     {
         return new DirectoryIterator($this->directory->filter($predicate));
     }
@@ -50,9 +47,8 @@ class DirectoryIterator extends Iterator
      * Map a function over the objects inside the iterator.
      *
      * @param   \Closure    $trans      a -> b
-     * @return  Iterator
      */
-    public function map(\Closure $trans)
+    public function map(\Closure $trans) : Iterator
     {
         return new DirectoryIterator(
             $this->directory->map($trans)

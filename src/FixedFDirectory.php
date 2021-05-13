@@ -14,26 +14,22 @@ abstract class FixedFDirectory /* a */ extends FSObject
     /**
      * See documentation of FDirectory.
      *
-     * @return FDirectory a
+     * @return FDirectory<a>
      */
-    abstract public function unfix();
+    abstract public function unfix() : FDirectory;
 
     /**
      * Get an iterator over the content of this directory.
-     *
-     * @return Iterator
      */
-    public function iterateOn()
+    public function iterateOn() : Iterator
     {
         return new DirectoryIterator($this);
     }
 
     /**
      * Get an recursor over the content of this directory.
-     *
-     * @return Recursor
      */
-    public function recurseOn()
+    public function recurseOn() : Recursor
     {
         return new Recursor($this);
     }
@@ -43,9 +39,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      *
      * @param   mixed   $start_value
      * @throws  \LogicException          If the directory is not empty.
-     * @return  Unfolder
      */
-    public function unfold($start_value)
+    public function unfold($start_value) : Unfolder
     {
         if (count($this->contents()) > 0) {
             throw new \LogicException("Can't unfold into non-empty directory '" . $this->path() . "'.");
@@ -56,7 +51,7 @@ abstract class FixedFDirectory /* a */ extends FSObject
     /**
      * @inheritdoc
      */
-    public function isFile()
+    public function isFile() : bool
     {
         return false;
     }
@@ -65,9 +60,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      * Only regard contents that match the predicate.
      *
      * @param   \Closure    $predicate  File|Directory -> bool
-     * @return  Directory
      */
-    public function filter(\Closure $predicate)
+    public function filter(\Closure $predicate) : FixedFDirectory
     {
         return new GenericFixedFDirectory(
             $this->unfix()->filter($predicate)
@@ -78,9 +72,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      * Map over the contents of this directory.
      *
      * @param   \Closure    $trans
-     * @return  Directory
      */
-    public function map(\Closure $trans)
+    public function map(\Closure $trans) : FixedFDirectory
     {
         return new GenericFixedFDirectory(
             $this->unfix()->fmap($trans)
@@ -91,9 +84,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      * Map the contents this directory.
      *
      * @param   \Closure    $trans
-     * @return  Directory
      */
-    public function outer_map(\Closure $trans)
+    public function outer_map(\Closure $trans) : Directory
     {
         return new GenericFixedFDirectory(
             $this->unfix()->outer_fmap($trans)
@@ -107,9 +99,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      * of this directory to the function successively to get a new value.
      *
      * @param   \Closure    $iteration  a -> b -> a
-     * @return  FixedFDirectory
      */
-    public function fold($start_value, $iteration)
+    public function fold($start_value, $iteration) : FixedFDirectory
     {
         return new GenericFixedFDirectory(
             $this->unfix()->fold($start_value, $iteration)
@@ -156,7 +147,7 @@ abstract class FixedFDirectory /* a */ extends FSObject
      *
      * @param   mixed       $start_value
      * @param   \Closure    $fold_with      a -> File -> a
-     * @return  Recursor
+     * @return Recursor|array
      */
     public function foldFiles($start_value, \Closure $fold_with)
     {
@@ -176,9 +167,8 @@ abstract class FixedFDirectory /* a */ extends FSObject
      *
      * @param   \Closure    $unfolder   a -> File|FDirectory a
      * @param   mixed       $start_value
-     * @return  FixedFDirectory
      */
-    final public static function ana(\Closure $unfolder, $start_value)
+    final public static function ana(\Closure $unfolder, $start_value) : FSObject
     {
         $unfolded = $unfolder($start_value);
         if ($unfolded->isFile()) {

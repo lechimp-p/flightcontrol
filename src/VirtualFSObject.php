@@ -15,26 +15,17 @@ namespace Lechimp\Flightcontrol;
  */
 class VirtualFSObject extends FSObject
 {
-    /**
-     * @return string
-     */
-    public function name()
+    public function name() : string
     {
         return $this->path();
     }
 
-    /**
-     * @return string
-     */
-    public function mimetype()
+    public function mimetype() : ?string
     {
-        return new \LogicException("Don't use mimetype on VirtualFSObjects.");
+        return null;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFile()
+    public function isFile() : bool
     {
         return false;
     }

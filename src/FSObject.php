@@ -29,61 +29,42 @@ abstract class FSObject
      */
     protected $path;
 
-    /**
-     * @param   \Lechimp\Flightcontrol\Flightcontrol    $flightcontrol
-     * @param   string  $path
-     */
-    public function __construct(Flightcontrol $flightcontrol, $path)
+    public function __construct(Flightcontrol $flightcontrol, string $path)
     {
         assert(is_string($path));
         $this->flightcontrol = $flightcontrol;
         $this->path = self::normalize($path);
     }
 
-    /**
-     * @return Flightcontrol
-     */
-    public function flightcontrol()
+    public function flightcontrol() : Flightcontrol
     {
         return $this->flightcontrol;
     }
 
-    /**
-     * @return \League\Flysystem\Filesystem
-     */
-    public function filesystem()
+    public function filesystem() : \League\Flysystem\Filesystem
     {
         return $this->flightcontrol->filesystem();
     }
 
-    /**
-     * @return  string
-     */
-    public function path()
+    public function path() : string
     {
         return $this->path;
     }
 
-    /**
-     * @return string
-     */
-    public function name()
+    public function name() : string
     {
         $parts = explode("/", $this->path);
         return end($parts);
     }
 
-    /**
-     * @return string
-     */
-    public function mimetype()
+    public function mimetype() : ?string
     {
-        return $this->filesystem->getMimetype($this->path);
+        return $this->filesystem->mimetype($this->path);
     }
 
     // Helper
 
-    private static function normalize($path)
+    private static function normalize(string $path) : string
     {
         if (substr($path, -1) == "/") {
             $path = substr($path, 0, strlen($path) - 1);
@@ -91,8 +72,5 @@ abstract class FSObject
         return $path;
     }
 
-    /**
-     * @return bool
-     */
-    abstract public function isFile();
+    abstract public function isFile() : bool;
 }

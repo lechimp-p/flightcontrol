@@ -9,7 +9,7 @@
 
 namespace Lechimp\Flightcontrol\Tests;
 
-use \League\Flysystem\Memory\MemoryAdapter;
+use \League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use \League\Flysystem\Filesystem;
 use \Lechimp\Flightcontrol\Flightcontrol;
 
@@ -17,10 +17,10 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() : void
     {
-        $this->flysystem = new Filesystem(new MemoryAdapter());
+        $this->flysystem = new Filesystem(new InMemoryFilesystemAdapter());
         $this->flightcontrol = new FlightControl($this->flysystem);
-        $this->flysystem->createDir("write");
-        $this->flysystem->createDir("no_write/untouched");
+        $this->flysystem->createDirectory("write");
+        $this->flysystem->createDirectory("no_write/untouched");
     }
 
     protected function writeFile($dir_name = "write")
@@ -39,11 +39,12 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase
             });
     }
 
-    protected function listContents($path = null)
+    protected function listContents($path)
     {
         return array_map(function ($info) {
-            return $info["basename"];
-        }, $this->flysystem->listContents($path));
+            $path = explode("/", $info->path());
+            return $path[count($path) - 1];
+        }, iterator_to_array($this->flysystem->listContents($path)));
     }
 
     public function test_unfoldWritesFile()
@@ -59,7 +60,7 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase
     {
         $this->writeFile();
 
-        $dirs = $this->listContents();
+        $dirs = $this->listContents("/");
         $this->assertCount(2, $dirs);
         $this->assertContains("write", $dirs);
         $this->assertContains("no_write", $dirs);
@@ -81,7 +82,7 @@ class UnfoldTest extends \PHPUnit\Framework\TestCase
     {
         $this->writeFile("another_name");
 
-        $dirs = $this->listContents();
+        $dirs = $this->listContents("/");
         $this->assertCount(2, $dirs);
         $this->assertContains("write", $dirs);
         $this->assertContains("no_write", $dirs);

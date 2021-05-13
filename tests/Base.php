@@ -16,12 +16,16 @@ class Base extends \PHPUnit\Framework\TestCase
 {
     public function setUp() : void
     {
-        $adapter = new \League\Flysystem\ZipArchive\ZipArchiveAdapter(__DIR__ . "/test_fs.zip");
+        $adapter = new \League\Flysystem\ZipArchive\ZipArchiveAdapter(
+            new \League\Flysystem\ZipArchive\FilesystemZipArchiveProvider(
+                __DIR__ . "/test_fs.zip"
+            )
+        );
         /* test_fs.zip:
          *  root
          *      dir_1
-         *          file_1_1
-         *          file_1_2
+         *          file_1_1.txt
+         *          file_1_2.txt
          *      dir_2
          *          dir_2_1
          *              file_2_1_1

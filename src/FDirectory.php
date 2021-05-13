@@ -56,9 +56,6 @@ class FDirectory extends FSObject
      *
      * Actually the second param should have a type like any, as we expect
      * a list from things of the same type.
-     *
-     * @param   FSObject    $fs_object
-     * @param   \Closure    $contents_lazy
      */
     public function __construct(FSObject $fs_object, \Closure $contents_lazy)
     {
@@ -73,9 +70,8 @@ class FDirectory extends FSObject
      * function.
      *
      * @param   \Closure    $trans   a -> b
-     * @return  FDirectory
      */
-    public function fmap(\Closure $trans)
+    public function fmap(\Closure $trans) : FDirectory
     {
         return $this->flightcontrol()->newFDirectory($this, function () use ($trans) {
             return array_map($trans, $this->fcontents());
@@ -88,9 +84,8 @@ class FDirectory extends FSObject
      *
      * @param   \Closure    $trans  [a] -> [b]
      * @throws  UnexpectedValueException    in case $trans returns no error
-     * @return  FDirectory
      */
-    public function outer_fmap(\Closure $trans)
+    public function outer_fmap(\Closure $trans) : FDirectory
     {
         return $this->flightcontrol()->newFDirectory($this, function () use ($trans) {
             return $trans($this->fcontents());
@@ -102,9 +97,8 @@ class FDirectory extends FSObject
      * of iteration.
      *
      * @param   \Closure    $iteration  a -> File|Directory -> a
-     * @return  Iterator|a
      */
-    public function fold($start_value, $iteration)
+    public function fold($start_value, $iteration) : FDirectory
     {
         return $this->outer_fmap(function ($contents) use ($start_value, $iteration) {
             $value = $start_value;
@@ -119,9 +113,8 @@ class FDirectory extends FSObject
      * We could filter the FDirectory by a $predicate-
      *
      * @param   \Closure    $predicate  a -> bool
-     * @return  FDirectory
      */
-    public function filter(\Closure $predicate)
+    public function filter(\Closure $predicate) : FDirectory
     {
         return
         $this->outer_fmap(function ($fcontents) use ($predicate) {
@@ -138,7 +131,7 @@ class FDirectory extends FSObject
      *
      * @return  mixed[]     for an FDirectory a
      */
-    public function fcontents()
+    public function fcontents() : array
     {
         if ($this->contents === null) {
             $cl = $this->contents_lazy;
@@ -150,7 +143,7 @@ class FDirectory extends FSObject
     /**
      * @inheritdoc
      */
-    public function isFile()
+    public function isFile() : bool
     {
         return false;
     }

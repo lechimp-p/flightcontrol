@@ -23,12 +23,12 @@
         }
     },
     "require": {
-        "league/flysystem": "^1.0",
-        "php": ">=7.3"
+        "php": ">=7.3",
+        "league/flysystem": "^2.0"
     },
     "require-dev": {
-        "league/flysystem-ziparchive": "^1.0",
-        "league/flysystem-memory": "^1.0",
+        "league/flysystem-ziparchive": "^2.0",
+        "league/flysystem-memory": "^2.0",
         "phpunit/phpunit": "^9.5",
         "friendsofphp/php-cs-fixer": "^3.0"
     }

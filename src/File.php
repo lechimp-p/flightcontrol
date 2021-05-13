@@ -19,21 +19,19 @@ class File extends FSObject
      */
     public function timestamp()
     {
-        return $this->filesystem()->getTimestamp($this->path);
+        return $this->filesystem()->lastModified($this->path);
     }
 
-    /**
-     * @return string
-     */
-    public function mimetype()
+    public function mimetype() : ?string
     {
-        return $this->filesystem()->getMimetype($this->path);
+        try {
+            return $this->filesystem()->mimetype($this->path);
+        } catch (\League\Flysystem\UnableToRetrieveMetadata $e) {
+            return null;
+        }
     }
 
-    /**
-     * @return
-     */
-    public function content()
+    public function content() : string
     {
         return $this->filesystem()->read($this->path);
     }
@@ -41,7 +39,7 @@ class File extends FSObject
     /**
      * @inheritdoc
      */
-    public function isFile()
+    public function isFile() : bool
     {
         return true;
     }

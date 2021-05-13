@@ -22,13 +22,13 @@ class RecursionLazyTest extends Base
         $root = $this->flightcontrol->directory("/root");
         $all_files = array_map(
             function ($obj) {
-            return $obj->name();
-        },
+                return $obj->name();
+            },
             $root->recurseOn()->allFiles()
         );
         $this->assertCount(5, $all_files);
-        $this->assertContains("file_1_1", $all_files);
-        $this->assertContains("file_1_2", $all_files);
+        $this->assertContains("file_1_1.txt", $all_files);
+        $this->assertContains("file_1_2.txt", $all_files);
         $this->assertContains("file_2_1_1", $all_files);
         $this->assertContains("file_2_1_2", $all_files);
         $this->assertContains("file_2_1", $all_files);
@@ -40,19 +40,22 @@ class RecursionLazyTest extends Base
         $all_files = $root
             ->recurseOn()
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
-                return substr($obj->name(), -1) != "1"
-                    || !$obj->isFile()
-                    ;
+                return
+                    (
+                        substr($obj->name(), -1) != "1"
+                        && substr($obj->name(), -5, 1) != "1"
+                    )
+                    || !$obj->isFile();
             })
             ->allFiles();
         $all_files = array_map(
             function ($obj) {
-            return $obj->name();
-        },
+                return $obj->name();
+            },
             $all_files
         );
         $this->assertCount(2, $all_files);
-        $this->assertContains("file_1_2", $all_files);
+        $this->assertContains("file_1_2.txt", $all_files);
         $this->assertContains("file_2_1_2", $all_files);
     }
 
@@ -60,14 +63,14 @@ class RecursionLazyTest extends Base
     {
         $root = $this->flightcontrol->directory("/root");
         $result = $root
-            ->foldFiles(array(), function ($accu, \Lechimp\Flightcontrol\File $file) {
+            ->foldFiles([], function ($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name();
                 return $accu;
             });
 
         $this->assertCount(5, $result);
-        $this->assertContains("file_1_1", $result);
-        $this->assertContains("file_1_2", $result);
+        $this->assertContains("file_1_1.txt", $result);
+        $this->assertContains("file_1_2.txt", $result);
         $this->assertContains("file_2_1_1", $result);
         $this->assertContains("file_2_1_2", $result);
         $this->assertContains("file_2_1", $result);
@@ -79,17 +82,20 @@ class RecursionLazyTest extends Base
         $result = $root
             ->recurseOn()
             ->filter(function (\Lechimp\Flightcontrol\FSObject $obj) {
-                return substr($obj->name(), -1) != "1"
-                    || !$obj->isFile()
-                    ;
+                return
+                    (
+                        substr($obj->name(), -1) != "1"
+                        && substr($obj->name(), -5, 1) != "1"
+                    )
+                    || !$obj->isFile();
             })
-            ->foldFiles(array(), function ($accu, \Lechimp\Flightcontrol\File $file) {
+            ->foldFiles([], function ($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name();
                 return $accu;
             });
 
         $this->assertCount(2, $result);
-        $this->assertContains("file_1_2", $result);
+        $this->assertContains("file_1_2.txt", $result);
         $this->assertContains("file_2_1_2", $result);
     }
 
@@ -98,14 +104,14 @@ class RecursionLazyTest extends Base
         $root = $this->flightcontrol->directory("/root");
         $result = $root
             ->recurseOn()
-            ->named(".*_1")
-            ->foldFiles(array(), function ($accu, \Lechimp\Flightcontrol\File $file) {
+            ->named(".*_1([.]txt)?")
+            ->foldFiles([], function ($accu, \Lechimp\Flightcontrol\File $file) {
                 $accu[] = $file->name();
                 return $accu;
             });
 
         $this->assertCount(1, $result);
-        $this->assertContains("file_1_1", $result);
+        $this->assertContains("file_1_1.txt", $result);
     }
 
     /*    public function test_iteratorHasRecursor() {
@@ -126,23 +132,27 @@ class RecursionLazyTest extends Base
         $result = $root
             ->cata(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 if ($obj->isFile()) {
-                    return array( $obj->name() => $obj->name() );
+                    return [$obj->name() => $obj->name()];
                 }
                 $merged = call_user_func_array("array_merge", $obj->fcontents());
-                return array( $obj->name() => $merged);
+                return [$obj->name() => $merged];
             });
         
-        $expected = array( "root" => array( "dir_1" => array( "file_1_1" => "file_1_1"
-                    , "file_1_2" => "file_1_2"
-                    )
-                , "dir_2" => array( "dir_2_1" => array( "file_2_1_1" => "file_2_1_1"
-                        , "file_2_1_2" => "file_2_1_2"
-                        )
-                    , "file_2_1" => "file_2_1"
-                    )
-                )
-            );
-
+        $expected = [
+            "root" => [
+                "dir_1" => [
+                    "file_1_1.txt" => "file_1_1.txt",
+                    "file_1_2.txt" => "file_1_2.txt"
+                ],
+                "dir_2" => [
+                    "dir_2_1" => [
+                        "file_2_1_1" => "file_2_1_1",
+                        "file_2_1_2" => "file_2_1_2"
+                    ],
+                    "file_2_1" => "file_2_1"
+                ]
+            ]
+        ];
         $this->assertEquals($expected, $result);
     }
 
@@ -153,23 +163,27 @@ class RecursionLazyTest extends Base
             ->recurseOn()
             ->with(function (\Lechimp\Flightcontrol\FSObject $obj) {
                 if ($obj->isFile()) {
-                    return array($obj->name() => $obj->name());
+                    return [$obj->name() => $obj->name()];
                 }
                 $merged = call_user_func_array("array_merge", $obj->fcontents());
-                return array( $obj->name() => $merged);
+                return [$obj->name() => $merged];
             });
         
-        $expected = array( "root" => array( "dir_1" => array( "file_1_1" => "file_1_1"
-                    , "file_1_2" => "file_1_2"
-                    )
-                , "dir_2" => array( "dir_2_1" => array( "file_2_1_1" => "file_2_1_1"
-                        , "file_2_1_2" => "file_2_1_2"
-                        )
-                    , "file_2_1" => "file_2_1"
-                    )
-                )
-            );
-
+        $expected = [
+            "root" => [
+                "dir_1" => [
+                    "file_1_1.txt" => "file_1_1.txt",
+                    "file_1_2.txt" => "file_1_2.txt"
+                ],
+                "dir_2" => [
+                    "dir_2_1" => [
+                        "file_2_1_1" => "file_2_1_1",
+                        "file_2_1_2" => "file_2_1_2"
+                    ],
+                    "file_2_1" => "file_2_1"
+                ]
+            ]
+        ];
         $this->assertEquals($expected, $result);
     }
 
@@ -190,14 +204,17 @@ class RecursionLazyTest extends Base
                 } else {
                     $merged = call_user_func_array("array_merge", $fcontents);
                 }
-                return array( $obj->name() => $merged);
+                return [$obj->name() => $merged];
             });
         
-        $expected = array( "root" => array( "dir_1" => array()
-                , "dir_2" => array( "dir_2_1" => array()
-                    )
-                )
-            );
+        $expected = [
+            "root" => [
+                "dir_1" => [] ,
+                "dir_2" => [
+                    "dir_2_1" => []
+                ]
+            ]
+        ];
 
         $this->assertEquals($expected, $result);
     }
