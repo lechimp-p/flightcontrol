@@ -7,7 +7,7 @@ build:
     tests:
         override:
             -
-                command: 'phpunit --bootstrap vendor/autoload.php --coverage-clover=coverage-file tests'
+                command: './run_tests.sh --coverage-clover=coverage-file --coverage-filter=src'
                 coverage:
                     file: 'coverage-file'
                     format: 'php-clover'
